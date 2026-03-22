@@ -1,0 +1,10 @@
+.env
+__pycache__/
+*.pyc
+*.png
+.venv/
+venv/
+agent_memory.json
+conversation_history.json
+cost_tracker.json
+config/user_data.json

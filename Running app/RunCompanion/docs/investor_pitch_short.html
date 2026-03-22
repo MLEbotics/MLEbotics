@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Running Companion — Short Investor Pitch</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: #f4f7fb;
+      color: #0f172a;
+      padding: 24px;
+    }
+
+    .toolbar {
+      position: sticky;
+      top: 10px;
+      z-index: 20;
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 12px;
+    }
+
+    .btn {
+      border: none;
+      background: #0f766e;
+      color: #fff;
+      border-radius: 999px;
+      padding: 10px 16px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.18);
+    }
+
+    .deck {
+      display: grid;
+      gap: 18px;
+      max-width: 1080px;
+      margin: 0 auto;
+    }
+
+    .slide {
+      background: #fff;
+      border-radius: 14px;
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+      padding: 36px 40px;
+      min-height: 640px;
+      page-break-after: always;
+      break-after: page;
+      border: 1px solid #e5e7eb;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .top h1 {
+      font-size: 42px;
+      letter-spacing: 0.3px;
+      margin-bottom: 10px;
+      color: #0f766e;
+    }
+
+    .top h2 {
+      font-size: 28px;
+      margin-bottom: 10px;
+      color: #0f172a;
+    }
+
+    .top p {
+      font-size: 20px;
+      color: #334155;
+      max-width: 90%;
+      line-height: 1.45;
+    }
+
+    .tag {
+      display: inline-block;
+      margin-top: 14px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: #ccfbf1;
+      color: #0f766e;
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-top: 16px;
+    }
+
+    .card {
+      background: #f8fafc;
+      border-left: 5px solid #0f766e;
+      border-radius: 10px;
+      padding: 14px 16px;
+    }
+
+    .card h3 {
+      margin-bottom: 8px;
+      color: #0f172a;
+      font-size: 20px;
+    }
+
+    .card ul {
+      padding-left: 18px;
+    }
+
+    .card li {
+      margin-bottom: 7px;
+      font-size: 17px;
+      color: #1e293b;
+      line-height: 1.4;
+    }
+
+    .table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 14px;
+      font-size: 16px;
+    }
+
+    .table th {
+      background: #0f766e;
+      color: #fff;
+      text-align: left;
+      padding: 10px;
+    }
+
+    .table td {
+      border: 1px solid #dbe2ea;
+      padding: 10px;
+      vertical-align: top;
+      color: #1e293b;
+    }
+
+    .table tr:nth-child(even) td {
+      background: #f8fafc;
+    }
+
+    .kpis {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .kpi {
+      background: #0f172a;
+      color: #fff;
+      border-radius: 10px;
+      padding: 16px;
+      text-align: center;
+    }
+
+    .kpi .value {
+      font-size: 34px;
+      font-weight: 800;
+      color: #5eead4;
+      line-height: 1;
+    }
+
+    .kpi .label {
+      margin-top: 8px;
+      font-size: 14px;
+      opacity: 0.9;
+    }
+
+    .footer {
+      font-size: 13px;
+      color: #64748b;
+      margin-top: 20px;
+    }
+
+    @media print {
+      body {
+        background: #fff;
+        padding: 0;
+      }
+
+      .toolbar {
+        display: none;
+      }
+
+      .deck {
+        gap: 0;
+        max-width: none;
+      }
+
+      .slide {
+        border: none;
+        border-radius: 0;
+        box-shadow: none;
+        min-height: 100vh;
+        padding: 28px 32px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="toolbar">
+    <button class="btn" onclick="window.print()">Export to PDF</button>
+  </div>
+
+  <div class="deck">
+    <section class="slide">
+      <div class="top">
+        <h1>Running Companion</h1>
+        <p>AI-powered pacing robot for safer, smarter outdoor training.</p>
+        <span class="tag">Investor Pitch • Short Version</span>
+      </div>
+      <div class="footer">Prepared February 27, 2026</div>
+    </section>
+
+    <section class="slide">
+      <div class="top">
+        <h2>1) Problem</h2>
+        <p>Outdoor runners train alone without real-time pacing support, safe crowd signaling, or interactive coaching
+          that adapts live to conditions.</p>
+        <div class="grid-2">
+          <div class="card">
+            <h3>Pain Points</h3>
+            <ul>
+              <li>Pace drift and inconsistent training quality</li>
+              <li>Unsafe path interactions in crowded routes</li>
+              <li>No hands-free way to control devices while running</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>Market Gap</h3>
+            <ul>
+              <li>Wearables track data but do not physically pace</li>
+              <li>Coaching apps are mostly passive and reactive</li>
+              <li>No integrated robot + app solution in this category</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="footer">Slide 2</div>
+    </section>
+
+    <section class="slide">
+      <div class="top">
+        <h2>2) Solution</h2>
+        <p>A small ESP32 robot physically leads the runner while a Flutter app provides pace control, voice interaction,
+          and AI coaching.</p>
+        <div class="grid-2">
+          <div class="card">
+            <h3>Core Experience</h3>
+            <ul>
+              <li>Set target pace and route waypoints</li>
+              <li>Robot leads and adapts to runner distance</li>
+              <li>Obstacle detection and automatic safe behavior</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>Connected Features</h3>
+            <ul>
+              <li>Garmin BLE telemetry: HR, cadence, speed, distance</li>
+              <li>Voice commands: stop, speed, resume, return</li>
+              <li>AI coach with spoken feedback during runs</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="footer">Slide 3</div>
+    </section>
+
+    <section class="slide">
+      <div class="top">
+        <h2>3) Voice + Public Alerting Differentiator</h2>
+        <p>The system can proactively clear route space and reduce friction in live environments.</p>
+        <table class="table">
+          <tr>
+            <th>Capability</th>
+            <th>What Happens</th>
+            <th>Value</th>
+          </tr>
+          <tr>
+            <td>Voice Command</td>
+            <td>Runner says alert ahead / clear left / clear right</td>
+            <td>Hands-free operation</td>
+          </tr>
+          <tr>
+            <td>Speaker Announcement</td>
+            <td>Robot announces runner approaching</td>
+            <td>Immediate local awareness</td>
+          </tr>
+          <tr>
+            <td>SMS Broadcast</td>
+            <td>App notifies saved route-ahead contacts with ETA</td>
+            <td>Coordinated route clearance</td>
+          </tr>
+        </table>
+      </div>
+      <div class="footer">Slide 4</div>
+    </section>
+
+    <section class="slide">
+      <div class="top">
+        <h2>4) Speed and Safety Logic</h2>
+        <table class="table">
+          <tr>
+            <th>Condition</th>
+            <th>Robot Behavior</th>
+          </tr>
+          <tr>
+            <td>Runner 0–5 m behind</td>
+            <td>Maintain full target pace</td>
+          </tr>
+          <tr>
+            <td>Runner 5–8 m behind</td>
+            <td>Reduce to 60% pace</td>
+          </tr>
+          <tr>
+            <td>Runner more than 8 m behind for 3+ sec</td>
+            <td>Stop and wait</td>
+          </tr>
+          <tr>
+            <td>Obstacle under 50 cm</td>
+            <td>Stop, scan left/right, reroute</td>
+          </tr>
+          <tr>
+            <td>Final waypoint reached</td>
+            <td>Stop and complete workout</td>
+          </tr>
+        </table>
+        <div class="kpis">
+          <div class="kpi">
+            <div class="value">30</div>
+            <div class="label">km/h max supported speed</div>
+          </div>
+          <div class="kpi">
+            <div class="value">500ms</div>
+            <div class="label">status polling interval</div>
+          </div>
+          <div class="kpi">
+            <div class="value">2x</div>
+            <div class="label">ultrasonic safety zones</div>
+          </div>
+          <div class="kpi">
+            <div class="value">Voice</div>
+            <div class="label">owner-only command control</div>
+          </div>
+        </div>
+      </div>
+      <div class="footer">Slide 5</div>
+    </section>
+
+    <section class="slide">
+      <div class="top">
+        <h2>5) 🧩 Hybrid Frameworks Loading Cloud Modules</h2>
+        <p>This is a middle ground: a native app that loads UI or logic from the cloud.</p>
+        <div class="grid-2">
+          <div class="card">
+            <h3>How it Works</h3>
+            <ul>
+              <li>The app is built with Flutter, React Native, or Ionic.</li>
+              <li>Most screens or logic are fetched from the cloud.</li>
+              <li>The app updates itself by pulling new modules from your server.</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>Pros</h3>
+            <ul>
+              <li>Better performance than WebView.</li>
+              <li>Still supports cloud-based updates.</li>
+              <li>App stores accept these more easily.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="grid-2">
+          <div class="card">
+            <h3>Cons</h3>
+            <ul>
+              <li>More complex architecture.</li>
+              <li>You must design a module-loading system.</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>Examples</h3>
+            <ul>
+              <li>Tesla app</li>
+              <li>Airbnb app (older versions)</li>
+              <li>Many enterprise apps</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="footer">Slide 6</div>
+    </section>
+
+    <section class="slide">
+      <div class="top">
+        <h2>6) Hardware Build Plan</h2>
+        <table class="table">
+          <tr>
+            <th>Item</th>
+            <th>Purpose</th>
+            <th>Est. Cost</th>
+          </tr>
+          <tr>
+            <td>Freenove 4WD ESP32 kit</td>
+            <td>Base robot platform</td>
+            <td>$45</td>
+          </tr>
+          <tr>
+            <td>NEO-6M GPS</td>
+            <td>Navigation and speed</td>
+            <td>$10</td>
+          </tr>
+          <tr>
+            <td>SG90 servo</td>
+            <td>Sensor sweep for avoidance</td>
+            <td>$3</td>
+          </tr>
+          <tr>
+            <td>2x quality 18650 cells</td>
+            <td>Power runtime</td>
+            <td>$12</td>
+          </tr>
+          <tr>
+            <td>Wires/mounting extras</td>
+            <td>Assembly</td>
+            <td>$5–$15</td>
+          </tr>
+        </table>
+        <div class="card">
+          <h3>Execution Timeline</h3>
+          <ul>
+            <li>Week 1: procure and assemble hardware</li>
+            <li>Week 2: flash firmware and complete integration tests</li>
+            <li>Week 3: field validation with pacing + alerting + voice loop</li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer">Slide 7</div>
+    </section>
+
+    <section class="slide">
+      <div class="top">
+        <h2>7) Current Readiness</h2>
+        <table class="table">
+          <tr>
+            <th>Workstream</th>
+            <th>Status</th>
+            <th>Note</th>
+          </tr>
+          <tr>
+            <td>Flutter app flow</td>
+            <td>Done</td>
+            <td>Screens and services in place</td>
+          </tr>
+          <tr>
+            <td>Voice + AI interaction</td>
+            <td>Done</td>
+            <td>TTS/STT plus command parsing</td>
+          </tr>
+          <tr>
+            <td>Runner alerting</td>
+            <td>Done</td>
+            <td>Contact list and SMS flow implemented</td>
+          </tr>
+          <tr>
+            <td>Garmin telemetry</td>
+            <td>Done</td>
+            <td>BLE HR, cadence, speed, distance</td>
+          </tr>
+          <tr>
+            <td>Firebase production config</td>
+            <td>Pending</td>
+            <td>Needs final project credentials</td>
+          </tr>
+          <tr>
+            <td>Physical robot build</td>
+            <td>Pending</td>
+            <td>Awaiting part procurement</td>
+          </tr>
+        </table>
+      </div>
+      <div class="footer">Slide 8</div>
+    </section>
+
+    <section class="slide">
+      <div class="top">
+        <h2>8) Ask and Next Milestones</h2>
+        <div class="grid-2">
+          <div class="card">
+            <h3>What We Need</h3>
+            <ul>
+              <li>Initial hardware and test budget</li>
+              <li>Pilot partner access for route trials</li>
+              <li>Advisory support for go-to-market and partnerships</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>What You Get</h3>
+            <ul>
+              <li>90-day pilot-ready product package</li>
+              <li>Demo runs with measurable safety and pacing outcomes</li>
+              <li>Clear roadmap to scalable hybrid architecture</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="footer">Slide 9</div>
+    </section>
+  </div>
+</body>
+
+</html>

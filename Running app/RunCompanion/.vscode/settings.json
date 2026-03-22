@@ -1,0 +1,22 @@
+{
+  "explorer.decorations.colors": false,
+  "git.decorations.enabled": true,
+  "git.decorations.badges": true,
+  "workbench.colorTheme": "High Contrast",
+  "workbench.iconTheme": "vs-seti",
+  "workbench.accessibilitySupport": "on"
+}{
+  "[javascript]": {
+    "editor.formatOnSave": false
+  },
+  "files.associations": {
+    "flutter_bootstrap.js": "plaintext"
+  },
+  "python-envs.pythonProjects": [
+    {
+      "path": ".",
+      "envManager": "ms-python.python:venv",
+      "packageManager": "ms-python.python:pip"
+    }
+  ]
+}

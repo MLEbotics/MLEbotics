@@ -1,0 +1,64 @@
+{
+    "folders": [
+        {
+            "name": "AutoFormFiller",
+            "path": "AutoFormFiller"
+        },
+        {
+            "name": "hey-girl",
+            "path": "hey-girl"
+        },
+        {
+            "name": "mlebotics.com",
+            "path": "mlebotics.com"
+        },
+        {
+            "name": "RunCompanion",
+            "path": "Running app/RunCompanion"
+        },
+        {
+            "name": "Computer-Use",
+            "path": "Computer-Use"
+        },
+        {
+            "name": "mlebotics-hub",
+            "path": "mlebotics-hub"
+        }
+    ],
+    "settings": {
+        "files.exclude": {
+            "**/.git": true,
+            "**/__pycache__": true,
+            "**/*.pyc": true,
+            "**/.DS_Store": true,
+            "**/Thumbs.db": true
+        },
+        "search.exclude": {
+            "**/__pycache__": true,
+            "**/*.pyc": true,
+            "**/node_modules": true,
+            "**/.dart_tool": true,
+            "**/build": true,
+            "**/dist": true
+        },
+        "files.watcherExclude": {
+            "**/__pycache__/**": true,
+            "**/.dart_tool/**": true,
+            "**/node_modules/**": true,
+            "**/build/**": true,
+            "**/dist/**": true
+        }
+    },
+    "extensions": {
+        "recommendations": [
+            "ms-python.python",
+            "ms-python.vscode-pylance",
+            "esbenp.prettier-vscode",
+            "dbaeumer.vscode-eslint",
+            "dart-code.dart-code",
+            "dart-code.flutter",
+            "ms-vscode.powershell",
+            "ms-vscode-remote.remote-ssh"
+        ]
+    }
+}

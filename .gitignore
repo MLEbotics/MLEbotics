@@ -1,0 +1,31 @@
+# Subprojects with their own git repos
+claude-pc-control/
+pacer-pro/pacer-pro/
+mlebotics.com/website/
+
+# VS Code workspace file — ignore individual project ones, track the main one
+*.code-workspace
+!MLEbotics.code-workspace
+
+# Windows / OS
+desktop.ini
+Thumbs.db
+$RECYCLE.BIN/
+
+# Build outputs and packaging artifacts
+build/
+dist/
+*.zip
+*.log
+build_log.txt
+
+# Python virtual environments and caches
+hub_venv/
+**/__pycache__/
+*.pyc
+
+# Generated website download artifacts
+mlebotics.com/downloads/
+
+# Python virtual environment
+.venv/

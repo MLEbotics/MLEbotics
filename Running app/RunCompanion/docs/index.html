@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Running Companion</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: linear-gradient(135deg, #e0f2f1 0%, #ffffff 100%);
+      color: #333;
+      min-height: 100vh;
+    }
+
+    header {
+      background: #00897b;
+      color: white;
+      padding: 60px 20px 40px;
+      text-align: center;
+    }
+
+    header .icon {
+      font-size: 64px;
+      display: block;
+      margin-bottom: 16px;
+    }
+
+    header h1 {
+      font-size: 2.8rem;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+
+    header p {
+      font-size: 1.2rem;
+      margin-top: 10px;
+      opacity: 0.9;
+    }
+
+    .download-btn {
+      display: inline-block;
+      margin-top: 28px;
+      background: white;
+      color: #00897b;
+      font-weight: 700;
+      font-size: 1.1rem;
+      padding: 14px 36px;
+      border-radius: 50px;
+      text-decoration: none;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .download-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .features {
+      max-width: 800px;
+      margin: 60px auto;
+      padding: 0 20px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 24px;
+    }
+
+    .feature-card {
+      background: white;
+      border-radius: 16px;
+      padding: 28px 20px;
+      text-align: center;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.07);
+    }
+
+    .feature-card .emoji {
+      font-size: 2.5rem;
+    }
+
+    .feature-card h3 {
+      margin: 12px 0 8px;
+      font-size: 1.1rem;
+      color: #00897b;
+    }
+
+    .feature-card p {
+      font-size: 0.95rem;
+      color: #666;
+      line-height: 1.5;
+    }
+
+    .install-section {
+      max-width: 600px;
+      margin: 0 auto 60px;
+      padding: 0 20px;
+      text-align: center;
+    }
+
+    .install-section h2 {
+      font-size: 1.8rem;
+      color: #00897b;
+      margin-bottom: 20px;
+    }
+
+    .steps {
+      text-align: left;
+      background: white;
+      border-radius: 16px;
+      padding: 28px;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.07);
+    }
+
+    .steps ol {
+      padding-left: 20px;
+    }
+
+    .steps li {
+      margin-bottom: 12px;
+      font-size: 1rem;
+      line-height: 1.5;
+    }
+
+    footer {
+      text-align: center;
+      padding: 30px;
+      color: #aaa;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <span class="icon">🏃</span>
+    <h1>Running Companion</h1>
+    <p>Your smart robot companion for every run</p>
+    <!-- UPDATE this link with your actual Google Drive APK share link -->
+    <a class="download-btn" href="#" id="downloadBtn">⬇ Download for Android</a>
+  </header>
+
+  <section class="features">
+    <div class="feature-card">
+      <div class="emoji">🤖</div>
+      <h3>Robot Control</h3>
+      <p>Control your running robot companion directly from your phone or PC.</p>
+    </div>
+    <div class="feature-card">
+      <div class="emoji">📊</div>
+      <h3>Run History</h3>
+      <p>Track every run session with mode, date, and time — synced to the cloud.</p>
+    </div>
+    <div class="feature-card">
+      <div class="emoji">🔄</div>
+      <h3>Cross-Platform</h3>
+      <p>Works on Android phones and Windows PCs — same account, same data.</p>
+    </div>
+    <div class="feature-card">
+      <div class="emoji">🔒</div>
+      <h3>Secure Login</h3>
+      <p>Your personal account keeps your data private and accessible anywhere.</p>
+    </div>
+  </section>
+
+  <section class="install-section">
+    <h2>How to Install</h2>
+    <div class="steps">
+      <ol>
+        <li>Tap the <strong>"Download for Android"</strong> button above.</li>
+        <li>Open the downloaded <code>.apk</code> file on your Android phone.</li>
+        <li>If prompted, allow <strong>"Install unknown apps"</strong>.</li>
+        <li>Tap <strong>Install</strong> — done!</li>
+      </ol>
+    </div>
+  </section>
+
+  <footer>
+    &copy; 2026 Running Companion &mdash; Built with Flutter
+  </footer>
+
+  <script>
+    // Update this with your Google Drive APK direct download link
+    // To get the link: right-click APK in Drive → Share → Anyone with link → Copy link
+    // Then replace /file/d/FILE_ID/view with /uc?export=download&id=FILE_ID
+    document.getElementById('downloadBtn').href = '#'; // TODO: paste your Drive link here
+  </script>
+
+</body>
+
+</html>

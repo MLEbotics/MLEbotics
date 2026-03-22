@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Auto Form Filler — Marquee Tile 1400×560</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            width: 1400px;
+            height: 560px;
+            overflow: hidden;
+            background: #06080f;
+            font-family: 'Segoe UI', Arial, sans-serif;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(0, 212, 255, 0.035) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 212, 255, 0.035) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+
+        /* Glow orbs */
+        .orb1 {
+            position: absolute;
+            width: 700px;
+            height: 700px;
+            background: radial-gradient(circle, rgba(0, 212, 255, 0.09) 0%, transparent 65%);
+            top: -250px;
+            left: 50px;
+        }
+
+        .orb2 {
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(0, 255, 136, 0.07) 0%, transparent 65%);
+            bottom: -200px;
+            right: 200px;
+        }
+
+        .orb3 {
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(157, 78, 221, 0.06) 0%, transparent 65%);
+            top: -100px;
+            right: 300px;
+        }
+
+        .layout {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            height: 100%;
+            padding: 0 80px;
+            gap: 0;
+        }
+
+        /* LEFT — branding */
+        .left {
+            flex: 0 0 420px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding-right: 60px;
+            border-right: 1px solid rgba(30, 41, 59, 0.8);
+        }
+
+        .badge {
+            font-size: 11px;
+            font-family: 'Courier New', monospace;
+            color: #00d4ff;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+        }
+
+        .icon {
+            font-size: 56px;
+            margin-bottom: 14px;
+            filter: drop-shadow(0 0 20px rgba(0, 212, 255, 0.8));
+        }
+
+        h1 {
+            font-size: 44px;
+            font-weight: 900;
+            color: #ffffff;
+            line-height: 1.1;
+            margin-bottom: 14px;
+            text-shadow: 0 0 50px rgba(0, 212, 255, 0.25);
+        }
+
+        h1 .accent {
+            color: #00d4ff;
+        }
+
+        h1 .accent2 {
+            color: #00ff88;
+        }
+
+        .tagline {
+            font-size: 15px;
+            color: #94a3b8;
+            line-height: 1.5;
+            margin-bottom: 24px;
+        }
+
+        .models {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .model-pill {
+            font-size: 11px;
+            font-family: 'Courier New', monospace;
+            padding: 5px 14px;
+            border-radius: 20px;
+            border: 1px solid;
+        }
+
+        .pill-free {
+            background: rgba(0, 255, 136, 0.1);
+            border-color: rgba(0, 255, 136, 0.4);
+            color: #00ff88;
+        }
+
+        .pill-claude {
+            background: rgba(0, 212, 255, 0.08);
+            border-color: rgba(0, 212, 255, 0.3);
+            color: #00d4ff;
+        }
+
+        .pill-gpt {
+            background: rgba(157, 78, 221, 0.1);
+            border-color: rgba(157, 78, 221, 0.4);
+            color: #b77bff;
+        }
+
+        /* MIDDLE — features */
+        .middle {
+            flex: 0 0 420px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 0 60px;
+            border-right: 1px solid rgba(30, 41, 59, 0.8);
+        }
+
+        .section-label {
+            font-size: 10px;
+            font-family: 'Courier New', monospace;
+            color: #00ff88;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+        }
+
+        .feature-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+        }
+
+        .feature-icon {
+            font-size: 20px;
+            flex-shrink: 0;
+            margin-top: 1px;
+            filter: drop-shadow(0 0 6px rgba(0, 212, 255, 0.5));
+        }
+
+        .feature-info {}
+
+        .feature-title {
+            font-size: 13px;
+            color: #f1f5f9;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .feature-desc {
+            font-size: 11.5px;
+            color: #64748b;
+            line-height: 1.4;
+        }
+
+        /* RIGHT — popup visual */
+        .right {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding-left: 60px;
+        }
+
+        .browser-chrome {
+            width: 320px;
+            background: #1e2433;
+            border-radius: 10px;
+            box-shadow:
+                0 0 80px rgba(0, 212, 255, 0.15),
+                0 30px 80px rgba(0, 0, 0, 0.7);
+            border: 1px solid rgba(0, 212, 255, 0.15);
+            overflow: hidden;
+        }
+
+        .browser-bar {
+            background: #262d3d;
+            padding: 10px 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-bottom: 1px solid #1e293b;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+
+        .dot-r {
+            background: #ff5f57;
+        }
+
+        .dot-y {
+            background: #febc2e;
+        }
+
+        .dot-g {
+            background: #28c840;
+        }
+
+        .url-bar {
+            flex: 1;
+            background: #1a2234;
+            border-radius: 4px;
+            padding: 4px 10px;
+            font-size: 10px;
+            color: #64748b;
+            font-family: 'Courier New', monospace;
+            margin-left: 8px;
+        }
+
+        .page-content {
+            background: #fff;
+            padding: 16px;
+        }
+
+        .page-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 12px;
+        }
+
+        .form-row {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-field {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .form-label {
+            font-size: 9px;
+            color: #6b7280;
+        }
+
+        .form-input {
+            border: 1.5px solid #d1d5db;
+            border-radius: 4px;
+            padding: 5px 9px;
+            font-size: 11px;
+            color: #1f2937;
+        }
+
+        .form-input.filled {
+            border-color: #22c55e;
+            background: #f0fdf4;
+            color: #15803d;
+        }
+
+        .overlay-popup {
+            position: absolute;
+            top: 28px;
+            right: -30px;
+            width: 210px;
+            background: #f5f5f5;
+            border-radius: 8px;
+            box-shadow: 0 0 30px rgba(0, 212, 255, 0.3), 0 10px 30px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            overflow: hidden;
+        }
+
+        .popup-header {
+            background: #fff;
+            padding: 8px 10px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .popup-header span {
+            font-size: 10px;
+            font-weight: 700;
+            color: #1f2937;
+        }
+
+        .popup-tabs {
+            display: flex;
+            background: #fff;
+            border-bottom: 2px solid #e5e7eb;
+        }
+
+        .ptab {
+            flex: 1;
+            padding: 5px 0;
+            font-size: 9px;
+            font-weight: 700;
+            text-align: center;
+            color: #9ca3af;
+        }
+
+        .ptab.active {
+            color: #22c55e;
+            border-bottom: 2px solid #22c55e;
+            margin-bottom: -2px;
+        }
+
+        .popup-body {
+            padding: 10px;
+        }
+
+        .pfield {
+            margin-bottom: 7px;
+        }
+
+        .plabel {
+            font-size: 8px;
+            color: #6b7280;
+            margin-bottom: 2px;
+        }
+
+        .pvalue {
+            background: #f0fdf4;
+            border: 1px solid #22c55e;
+            border-radius: 3px;
+            padding: 4px 7px;
+            font-size: 9px;
+            color: #15803d;
+        }
+
+        .pbtn {
+            background: linear-gradient(135deg, #22c55e, #16a34a);
+            color: #fff;
+            border: none;
+            width: 100%;
+            padding: 7px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: 700;
+            text-align: center;
+            margin-top: 3px;
+        }
+
+        .page-wrapper {
+            position: relative;
+        }
+
+        .brand {
+            position: absolute;
+            bottom: 18px;
+            right: 80px;
+            font-size: 10px;
+            font-family: 'Courier New', monospace;
+            color: #1e293b;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="orb1"></div>
+    <div class="orb2"></div>
+    <div class="orb3"></div>
+
+    <div class="layout">
+
+        <!-- LEFT: Branding -->
+        <div class="left">
+            <div class="badge">Chrome Extension · Free</div>
+            <div class="icon">⚡</div>
+            <h1>Auto <span class="accent">Form</span><br><span class="accent2">Filler</span></h1>
+            <p class="tagline">Fill any web form in one click using AI.<br>Save time. Stay private.</p>
+            <div class="models">
+                <div class="model-pill pill-free">Gemini Free</div>
+                <div class="model-pill pill-claude">Claude</div>
+                <div class="model-pill pill-gpt">GPT-4</div>
+            </div>
+        </div>
+
+        <!-- MIDDLE: Features -->
+        <div class="middle">
+            <div class="section-label">Why use it</div>
+            <div class="feature-list">
+                <div class="feature-item">
+                    <div class="feature-icon">💾</div>
+                    <div class="feature-info">
+                        <div class="feature-title">Save once, fill anywhere</div>
+                        <div class="feature-desc">Store your profile. Use it on every site.</div>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">🤖</div>
+                    <div class="feature-info">
+                        <div class="feature-title">AI-powered field matching</div>
+                        <div class="feature-desc">Understands any form structure automatically.</div>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">🔒</div>
+                    <div class="feature-info">
+                        <div class="feature-title">Your data stays on your device</div>
+                        <div class="feature-desc">No tracking. Stored locally in Chrome only.</div>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">🆓</div>
+                    <div class="feature-info">
+                        <div class="feature-title">Free tier included</div>
+                        <div class="feature-desc">Start with Gemini free — no API key needed.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- RIGHT: Visual -->
+        <div class="right">
+            <div class="browser-chrome">
+                <div class="browser-bar">
+                    <div class="dot dot-r"></div>
+                    <div class="dot dot-y"></div>
+                    <div class="dot dot-g"></div>
+                    <div class="url-bar">careers.example.com/apply</div>
+                </div>
+                <div class="page-wrapper">
+                    <div class="page-content">
+                        <div class="page-title">📋 Job Application</div>
+                        <div class="form-row">
+                            <div class="form-field">
+                                <div class="form-label">Full Name *</div>
+                                <div class="form-input filled">Eddie Chongtham</div>
+                            </div>
+                            <div class="form-field">
+                                <div class="form-label">Email Address *</div>
+                                <div class="form-input filled">eddie@mlebotics.com</div>
+                            </div>
+                            <div class="form-field">
+                                <div class="form-label">Phone Number</div>
+                                <div class="form-input filled">+1 (403) 555-0192</div>
+                            </div>
+                            <div class="form-field">
+                                <div class="form-label">City / Location</div>
+                                <div class="form-input filled">Calgary, AB</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="overlay-popup">
+                        <div class="popup-header">
+                            <span>⚡</span><span>Auto Form Filler</span>
+                        </div>
+                        <div class="popup-tabs">
+                            <div class="ptab active">Fill Form</div>
+                            <div class="ptab">PDF</div>
+                            <div class="ptab">Settings</div>
+                        </div>
+                        <div class="popup-body">
+                            <div class="pfield">
+                                <div class="plabel">AI Model</div>
+                                <div class="pvalue">Gemini (Free)</div>
+                            </div>
+                            <div class="pfield">
+                                <div class="plabel">Status</div>
+                                <div class="pvalue">✓ 4 fields filled</div>
+                            </div>
+                            <div class="pbtn">⚡ Fill Form</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="brand">mlebotics.com</div>
+</body>
+
+</html>

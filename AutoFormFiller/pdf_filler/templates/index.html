@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PDF Filler</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #fafafa;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      color: #333;
+    }
+
+    .card {
+      width: 520px;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 24px rgba(0,0,0,.10);
+      overflow: hidden;
+    }
+
+    /* ── Header ── */
+    .header {
+      background: linear-gradient(135deg, #e65100, #ff6d00);
+      color: white;
+      padding: 28px 32px 22px;
+    }
+    .header h1 {
+      font-size: 26px;
+      font-weight: 700;
+      letter-spacing: -.3px;
+    }
+    .header p {
+      margin-top: 5px;
+      font-size: 14px;
+      opacity: .85;
+    }
+
+    /* ── Body ── */
+    .body { padding: 28px 32px 32px; }
+
+    /* ── Tabs ── */
+    .tabs {
+      display: flex;
+      gap: 0;
+      border: 2px solid #e65100;
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 22px;
+    }
+    .tab {
+      flex: 1;
+      padding: 9px 0;
+      background: white;
+      border: none;
+      font-size: 14px;
+      font-weight: 600;
+      color: #e65100;
+      cursor: pointer;
+      transition: background .15s, color .15s;
+    }
+    .tab:hover:not(.active) { background: #fff3e0; }
+    .tab.active {
+      background: #e65100;
+      color: white;
+    }
+
+    /* ── Panels ── */
+    .panel { display: none; }
+    .panel.active { display: block; }
+
+    .url-input {
+      width: 100%;
+      padding: 11px 14px;
+      border: 1.5px solid #ddd;
+      border-radius: 8px;
+      font-size: 14px;
+      transition: border-color .2s;
+    }
+    .url-input:focus { border-color: #e65100; outline: none; }
+    .url-hint {
+      margin-top: 6px;
+      font-size: 12px;
+      color: #888;
+    }
+
+    /* ── Drop zone ── */
+    .drop-zone {
+      border: 2.5px dashed #ddd;
+      border-radius: 10px;
+      padding: 36px 20px;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color .2s, background .2s;
+      position: relative;
+    }
+    .drop-zone:hover, .drop-zone.drag-over {
+      border-color: #e65100;
+      background: #fff8f5;
+    }
+    .drop-zone input[type="file"] {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+      width: 100%;
+      height: 100%;
+    }
+    .drop-icon { font-size: 36px; margin-bottom: 10px; }
+    .drop-label {
+      font-size: 15px;
+      font-weight: 600;
+      color: #555;
+    }
+    .drop-sub {
+      font-size: 12px;
+      color: #999;
+      margin-top: 4px;
+    }
+    .drop-zone.has-file .drop-label { color: #e65100; }
+
+    /* ── Fill button ── */
+    .fill-btn {
+      margin-top: 22px;
+      width: 100%;
+      padding: 13px;
+      background: #e65100;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      transition: background .15s, opacity .15s;
+    }
+    .fill-btn:hover { background: #bf360c; }
+    .fill-btn:disabled { opacity: .55; cursor: not-allowed; }
+
+    /* ── Status ── */
+    .status {
+      margin-top: 18px;
+      padding: 13px 16px;
+      border-radius: 8px;
+      font-size: 14px;
+      line-height: 1.5;
+      display: none;
+    }
+    .status.loading {
+      background: #fff3e0;
+      color: #e65100;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .status.success {
+      background: #e8f5e9;
+      color: #2e7d32;
+      display: block;
+    }
+    .status.error {
+      background: #fce4ec;
+      color: #b71c1c;
+      display: block;
+    }
+
+    /* ── Spinner ── */
+    .spinner {
+      width: 18px;
+      height: 18px;
+      border: 3px solid #ffccbc;
+      border-top-color: #e65100;
+      border-radius: 50%;
+      flex-shrink: 0;
+      animation: spin .7s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── Details section ── */
+    .details-toggle {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: none;
+      border: 1.5px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #555;
+      cursor: pointer;
+      margin-top: 14px;
+      transition: border-color .2s, color .2s;
+    }
+    .details-toggle:hover { border-color: #e65100; color: #e65100; }
+    .details-toggle.open { border-color: #e65100; color: #e65100; }
+    .details-toggle .arrow { transition: transform .2s; font-style: normal; }
+    .details-toggle.open .arrow { transform: rotate(180deg); }
+    .details-body { display: none; padding: 14px 0 4px; }
+    .details-body.open { display: block; }
+    .details-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px 12px;
+    }
+    .details-grid label {
+      font-size: 11px;
+      font-weight: 600;
+      color: #888;
+      text-transform: uppercase;
+      letter-spacing: .4px;
+      display: block;
+      margin-bottom: 2px;
+    }
+    .details-grid input {
+      width: 100%;
+      padding: 7px 10px;
+      border: 1.5px solid #ddd;
+      border-radius: 6px;
+      font-size: 13px;
+    }
+    .details-grid input:focus { border-color: #e65100; outline: none; }
+    .details-grid .full { grid-column: 1 / -1; }
+
+    /* ── Footer ── */
+    .footer {
+      text-align: center;
+      font-size: 11px;
+      color: #bbb;
+      padding: 0 32px 18px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="card">
+  <div class="header">
+    <h1>&#128196; PDF Filler</h1>
+    <p>Fill any PDF form instantly using AI &mdash; web or local file</p>
+  </div>
+
+  <div class="body">
+    <div class="tabs">
+      <button class="tab active" id="tab-url">&#127760; Web URL</button>
+      <button class="tab" id="tab-upload">&#128193; Upload File</button>
+    </div>
+
+    <form id="fillForm" autocomplete="off">
+
+      <!-- URL panel -->
+      <div class="panel active" id="panel-url">
+        <input
+          class="url-input"
+          type="url"
+          id="urlInput"
+          placeholder="https://example.com/form.pdf"
+          spellcheck="false"
+        >
+        <p class="url-hint">Paste a direct link to any web-hosted PDF form.</p>
+      </div>
+
+      <!-- Upload panel -->
+      <div class="panel" id="panel-upload">
+        <div class="drop-zone" id="dropZone">
+          <input type="file" id="fileInput" accept=".pdf">
+          <div class="drop-icon">&#128196;</div>
+          <div class="drop-label" id="dropLabel">Drop PDF here or click to browse</div>
+          <div class="drop-sub">Only .pdf files are accepted</div>
+        </div>
+      </div>
+
+      <div style="margin-bottom:10px;margin-top:14px;">
+        <label style="font-size:11px;font-weight:bold;color:#666;text-transform:uppercase;letter-spacing:.4px;display:block;margin-bottom:4px;">AI Model</label>
+        <select id="modelSelect" style="width:100%;padding:6px 8px;border:1px solid #ccc;border-radius:4px;font-size:13px;background:white;">
+          <optgroup label="Free (no API key needed)">
+            <option value="gemini-1.5-flash" selected>Gemini Flash &mdash; Free</option>
+          </optgroup>
+          <optgroup label="Claude (paid &mdash; add key below)">
+            <option value="claude-haiku-4-5-20251001">Claude Haiku 4.5 (Fastest)</option>
+            <option value="claude-sonnet-4-6">Claude Sonnet 4.6 (Best)</option>
+          </optgroup>
+        </select>
+      </div>
+
+      <!-- Your Details -->
+      <button type="button" class="details-toggle" id="detailsToggle" aria-expanded="false">
+        <span>&#128100; Your Details <span style="font-weight:400;color:#aaa;font-size:12px;">(enter your info to fill the form)</span></span>
+        <span class="arrow">&#9660;</span>
+      </button>
+      <div class="details-body" id="detailsBody">
+        <div class="details-grid">
+          <div>
+            <label>First Name</label>
+            <input type="text" id="d-first_name" placeholder="Jane">
+          </div>
+          <div>
+            <label>Last Name</label>
+            <input type="text" id="d-last_name" placeholder="Smith">
+          </div>
+          <div class="full">
+            <label>Email</label>
+            <input type="email" id="d-email" placeholder="jane@example.com">
+          </div>
+          <div>
+            <label>Phone</label>
+            <input type="text" id="d-phone" placeholder="555-123-4567">
+          </div>
+          <div>
+            <label>Date of Birth</label>
+            <input type="text" id="d-date_of_birth" placeholder="1990-01-15">
+          </div>
+          <div class="full">
+            <label>Address</label>
+            <input type="text" id="d-address" placeholder="123 Main Street">
+          </div>
+          <div>
+            <label>City</label>
+            <input type="text" id="d-city" placeholder="Calgary">
+          </div>
+          <div>
+            <label>Province / State</label>
+            <input type="text" id="d-state" placeholder="AB">
+          </div>
+          <div>
+            <label>ZIP / Postal Code</label>
+            <input type="text" id="d-zip" placeholder="T2P 1A1">
+          </div>
+          <div>
+            <label>Country</label>
+            <input type="text" id="d-country" placeholder="Canada">
+          </div>
+          <div class="full">
+            <label>Company (optional)</label>
+            <input type="text" id="d-company" placeholder="">
+          </div>
+        </div>
+      </div>
+
+      <button class="fill-btn" type="submit" id="fillBtn">
+        <span id="btnIcon">&#9889;</span>
+        <span id="btnText">Fill PDF</span>
+      </button>
+    </form>
+
+    <div class="status" id="status">
+      <div class="spinner" id="spinner"></div>
+      <span id="statusMsg"></span>
+    </div>
+  </div>
+
+  <div class="footer">
+    Powered by Gemini &amp; Claude AI &bull; Free to use &bull; Data is not stored
+  </div>
+</div>
+
+<script>
+  // ── Tab switching ─────────────────────────────────────────────────────────
+  const tabUrl    = document.getElementById('tab-url');
+  const tabUpload = document.getElementById('tab-upload');
+  const panelUrl    = document.getElementById('panel-url');
+  const panelUpload = document.getElementById('panel-upload');
+  let activeTab = 'url';
+
+  tabUrl.addEventListener('click', () => {
+    activeTab = 'url';
+    tabUrl.classList.add('active');    tabUpload.classList.remove('active');
+    panelUrl.classList.add('active');  panelUpload.classList.remove('active');
+  });
+  tabUpload.addEventListener('click', () => {
+    activeTab = 'upload';
+    tabUpload.classList.add('active');  tabUrl.classList.remove('active');
+    panelUpload.classList.add('active'); panelUrl.classList.remove('active');
+  });
+
+  // ── Drag-and-drop ─────────────────────────────────────────────────────────
+  const dropZone  = document.getElementById('dropZone');
+  const fileInput = document.getElementById('fileInput');
+  const dropLabel = document.getElementById('dropLabel');
+
+  dropZone.addEventListener('dragover',  e => { e.preventDefault(); dropZone.classList.add('drag-over'); });
+  dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
+  dropZone.addEventListener('drop', e => {
+    e.preventDefault();
+    dropZone.classList.remove('drag-over');
+    const file = e.dataTransfer.files[0];
+    if (file && file.name.toLowerCase().endsWith('.pdf')) {
+      setFile(file);
+    } else {
+      setStatus('error', 'Please drop a PDF file.');
+    }
+  });
+
+  fileInput.addEventListener('change', () => {
+    if (fileInput.files[0]) setFile(fileInput.files[0]);
+  });
+
+  // ── Details toggle ────────────────────────────────────────────────────────
+  const detailsToggle = document.getElementById('detailsToggle');
+  const detailsBody   = document.getElementById('detailsBody');
+  detailsToggle.addEventListener('click', () => {
+    const open = detailsBody.classList.toggle('open');
+    detailsToggle.classList.toggle('open', open);
+    detailsToggle.setAttribute('aria-expanded', String(open));
+  });
+
+  function getUserData() {
+    const fields = ['first_name','last_name','email','phone','date_of_birth','address','city','state','zip','country','company'];
+    const data = {};
+    fields.forEach(f => {
+      const val = (document.getElementById('d-' + f) || {}).value || '';
+      if (val.trim()) data[f] = val.trim();
+    });
+    if (data.first_name || data.last_name) {
+      data.name = [data.first_name, data.last_name].filter(Boolean).join(' ');
+    }
+    return data;
+  }
+
+  function setFile(file) {
+    // Attach to the fileInput so FormData picks it up
+    const dt = new DataTransfer();
+    dt.items.add(file);
+    fileInput.files = dt.files;
+    dropLabel.textContent = '✔ ' + file.name;
+    dropZone.classList.add('has-file');
+    clearStatus();
+  }
+
+  // ── Status helpers ────────────────────────────────────────────────────────
+  const statusEl  = document.getElementById('status');
+  const statusMsg = document.getElementById('statusMsg');
+  const spinner   = document.getElementById('spinner');
+
+  function setStatus(type, msg) {
+    statusEl.className = 'status ' + type;
+    statusMsg.textContent = msg;
+    spinner.style.display = (type === 'loading') ? 'block' : 'none';
+  }
+  function clearStatus() { statusEl.className = 'status'; }
+
+  // ── Form submit ───────────────────────────────────────────────────────────
+  const fillBtn  = document.getElementById('fillBtn');
+  const btnText  = document.getElementById('btnText');
+
+  document.getElementById('fillForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    clearStatus();
+
+    const formData = new FormData();
+
+    if (activeTab === 'url') {
+      const url = document.getElementById('urlInput').value.trim();
+      if (!url) { setStatus('error', 'Please enter a PDF URL.'); return; }
+      formData.append('source', 'url');
+      formData.append('url', url);
+    } else {
+      const file = fileInput.files[0];
+      if (!file) { setStatus('error', 'Please select a PDF file.'); return; }
+      formData.append('source', 'upload');
+      formData.append('file', file);
+    }
+
+    formData.append('model', document.getElementById('modelSelect').value);
+
+    const userData = getUserData();
+    if (!userData.name && !userData.email) {
+      setStatus('error', 'Please open "Your Details" and enter at least your name or email.');
+      return;
+    }
+    formData.append('user_data_json', JSON.stringify(userData));
+
+    fillBtn.disabled = true;
+    btnText.textContent = 'Filling…';
+    setStatus('loading', 'Analyzing form fields with AI…');
+
+    try {
+      const res = await fetch('/fill', { method: 'POST', body: formData });
+      const contentType = res.headers.get('content-type') || '';
+
+      if (res.ok && contentType.includes('pdf')) {
+        const blob     = await res.blob();
+        const rawName  = res.headers.get('X-Download-Name') || 'filled.pdf';
+        const count    = res.headers.get('X-Fields-Filled') || '?';
+        const dlUrl    = URL.createObjectURL(blob);
+        const anchor   = document.createElement('a');
+        anchor.href     = dlUrl;
+        anchor.download = rawName;
+        document.body.appendChild(anchor);
+        anchor.click();
+        anchor.remove();
+        URL.revokeObjectURL(dlUrl);
+        setStatus('success', `✔ Done! Filled ${count} field(s). Downloading "${rawName}"…`);
+      } else {
+        const data = await res.json().catch(() => ({}));
+        setStatus('error', data.error || `Server error (${res.status})`);
+      }
+    } catch (err) {
+      setStatus('error', 'Network error: ' + err.message);
+    } finally {
+      fillBtn.disabled = false;
+      btnText.textContent = 'Fill PDF';
+    }
+  });
+</script>
+</body>
+</html>

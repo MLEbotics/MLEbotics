@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Running Companion — Project Plan</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      font-size: 13px;
+      color: #1a1a2e;
+      background: #fff;
+      padding: 40px 50px;
+      max-width: 900px;
+      margin: auto;
+    }
+
+    /* ── Header ── */
+    .header {
+      background: linear-gradient(135deg, #00796b, #004d40);
+      color: white;
+      padding: 28px 32px;
+      border-radius: 10px;
+      margin-bottom: 32px;
+    }
+
+    .header h1 {
+      font-size: 26px;
+      letter-spacing: 1px;
+    }
+
+    .header p {
+      margin-top: 6px;
+      opacity: 0.85;
+      font-size: 13px;
+    }
+
+    /* ── Section titles ── */
+    h2 {
+      font-size: 15px;
+      color: #00796b;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      border-bottom: 2px solid #00796b;
+      padding-bottom: 5px;
+      margin: 28px 0 12px;
+    }
+
+    h3 {
+      font-size: 13px;
+      font-weight: 700;
+      margin: 12px 0 4px;
+      color: #333;
+    }
+
+    /* ── Cards ── */
+    .card {
+      background: #f5f5f5;
+      border-left: 4px solid #00796b;
+      border-radius: 6px;
+      padding: 14px 18px;
+      margin-bottom: 12px;
+    }
+
+    .card.warn {
+      border-left-color: #e65100;
+      background: #fff8f5;
+    }
+
+    .card.info {
+      border-left-color: #1565c0;
+      background: #f0f4ff;
+    }
+
+    /* ── Tables ── */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 10px 0 20px;
+      font-size: 12.5px;
+    }
+
+    th {
+      background: #00796b;
+      color: white;
+      padding: 7px 10px;
+      text-align: left;
+    }
+
+    td {
+      padding: 6px 10px;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    tr:nth-child(even) td {
+      background: #f9f9f9;
+    }
+
+    /* ── Status pills ── */
+    .pill {
+      display: inline-block;
+      padding: 2px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .done {
+      background: #c8e6c9;
+      color: #1b5e20;
+    }
+
+    .pending {
+      background: #ffe0b2;
+      color: #e65100;
+    }
+
+    .blocked {
+      background: #ffcdd2;
+      color: #b71c1c;
+    }
+
+    /* ── Code blocks ── */
+    code {
+      font-family: Consolas, monospace;
+      background: #e8f5e9;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 12px;
+      color: #2e7d32;
+    }
+
+    pre {
+      background: #1a1a2e;
+      color: #a5d6a7;
+      padding: 14px 18px;
+      border-radius: 8px;
+      font-family: Consolas, monospace;
+      font-size: 12px;
+      margin: 8px 0 16px;
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+
+    /* ── Lists ── */
+    ul,
+    ol {
+      padding-left: 20px;
+      margin: 6px 0 10px;
+    }
+
+    li {
+      margin-bottom: 4px;
+      line-height: 1.6;
+    }
+
+    /* ── Print ── */
+    @media print {
+      body {
+        padding: 20px 28px;
+      }
+
+      .no-print {
+        display: none;
+      }
+
+      h2 {
+        page-break-before: auto;
+      }
+
+      .card,
+      table {
+        page-break-inside: avoid;
+      }
+    }
+
+    .print-btn {
+      position: fixed;
+      top: 18px;
+      right: 18px;
+      background: #00796b;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 24px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+    }
+
+    .print-btn:hover {
+      background: #004d40;
+    }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    @media print {
+      .two-col {
+        display: block;
+      }
+
+      .two-col .card {
+        margin-bottom: 10px;
+      }
+    }
+
+    footer {
+      margin-top: 40px;
+      padding-top: 12px;
+      border-top: 1px solid #ddd;
+      font-size: 11px;
+      color: #888;
+      text-align: center;
+    }
+  </style>
+</head>
+
+<body>
+
+  <button class="print-btn no-print" onclick="window.print()">⬇ Save as PDF</button>
+
+  <!-- ────────────────────────────── Header ── -->
+  <div class="header">
+    <h1>🏃 Running Companion — Full Project Plan</h1>
+    <p>Flutter Mobile App &nbsp;·&nbsp; ESP32 Robot Pacer &nbsp;·&nbsp; Firebase Cloud Sync &nbsp;·&nbsp; Generated
+      February 25, 2026</p>
+  </div>
+
+  <!-- ────────────────────────────── Overview ── -->
+  <h2>1 · Project Overview</h2>
+  <p>
+    <strong>Running Companion</strong> is a mobile + hardware system that lets a runner set a target pace, then have a
+    small 4-wheeled robot physically lead them on an outdoor GPS route — slowing when the runner falls behind,
+    navigating around obstacles, and stopping if the runner gets too far away.
+    Run data is synced to Firebase so history is available across devices.
+  </p>
+
+  <div class="two-col" style="margin-top:14px;">
+    <div class="card">
+      <h3>Mobile App</h3>
+      <ul>
+        <li>Flutter (Android / iOS / web)</li>
+        <li>Firebase email/password login</li>
+        <li>Pace Workout screen — ar stats</li>
+        <li>Run history saved to Firestore</li>
+        <li>Connects to robot via WiFi Direct (HTTP)</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>Robot</h3>
+      <ul>
+        <li>EMO 4WD Robot Chassis with speed encoders + ESP32 WROOM-32</li>
+        <li>NEO-6M GPS for navigation &amp; speed</li>
+        <li>SG90 servo sweeps ultrasonic sensor</li>
+        <li>Avoids obstacles, stops if runner lost</li>
+        <li>Creates its own WiFi hotspot</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ────────────────────────────── Status ── -->
+  <h2>2 · Current Status</h2>
+  <table>
+    <tr>
+      <th>Feature</th>
+      <th>Status</th>
+      <th>Notes</th>
+    </tr>
+    <tr>
+      <td>Flutter app build &amp; deploy to Pixel 10</td>
+      <td><span class="pill done">Done</span></td>
+      <td>Device ID 55301FDCR008RZ, Android 16</td>
+    </tr>
+    <tr>
+      <td>App name "Running Companion"</td>
+      <td><span class="pill done">Done</span></td>
+      <td>In Flutter + AndroidManifest</td>
+    </tr>
+    <tr>
+      <td>Login / Sign-up screen</td>
+      <td><span class="pill done">Done</span></td>
+      <td>Email + password UI built</td>
+    </tr>
+    <tr>
+      <td>Firestore run history</td>
+      <td><span class="pill done">Done</span></td>
+      <td>Save &amp; load run sessions per user</td>
+    </tr>
+    <tr>
+      <td>Pace Workout screen</td>
+      <td><span class="pill done">Done</span></td>
+      <td>Live stats, pace slider, waypoints</td>
+    </tr>
+    <tr>
+      <td>Robot HTTP service (Flutter)</td>
+      <td><span class="pill done">Done</span></td>
+      <td>start / stop / status polling</td>
+    </tr>
+    <tr>
+      <td>ESP32 firmware — GPS pacing</td>
+      <td><span class="pill done">Done</span></td>
+      <td>Follows GPS waypoints at set pace</td>
+    </tr>
+    <tr>
+      <td>ESP32 firmware — runner-lost stop</td>
+      <td><span class="pill done">Done</span></td>
+      <td>Stops if runner &gt;8 m for 3 s</td>
+    </tr>
+    <tr>
+      <td>ESP32 firmware — servo obstacle avoidance</td>
+      <td><span class="pill done">Done</span></td>
+      <td>Sweeps left/right, steers around obstacle</td>
+    </tr>
+    <tr>
+      <td>Landing website (GitHub Pages)</td>
+      <td><span class="pill done">Done</span></td>
+      <td>docs/index.html ready to publish</td>
+    </tr>
+    <tr>
+      <td>Firebase configuration</td>
+      <td><span class="pill blocked">Blocked</span></td>
+      <td>Needs <code>flutterfire configure</code> — see Step 3</td>
+    </tr>
+    <tr>
+      <td>Robot hardware (physical)</td>
+      <td><span class="pill pending">Pending</span></td>
+      <td>Parts to be ordered</td>
+    </tr>
+    <tr>
+      <td>Robot flashed &amp; tested</td>
+      <td><span class="pill pending">Pending</span></td>
+      <td>After hardware arrives</td>
+    </tr>
+  </table>
+
+  <!-- ────────────────────────────── Next Steps ── -->
+  <h2>3 · Immediate Next Steps</h2>
+
+  <div class="card info">
+    <h3>Step A — Configure Firebase (unblocks login + run history)</h3>
+    <ol>
+      <li>Go to <strong>console.firebase.google.com</strong> → Create project → name it <em>runner-companion</em></li>
+      <li>Authentication → Sign-in method → enable <strong>Email/Password</strong></li>
+      <li>Firestore Database → Create database → start in <strong>test mode</strong></li>
+      <li>Add an Android app: package name <code>com.example.runner_companion_app</code></li>
+      <li>In a terminal inside the project folder:</li>
+    </ol>
+    <pre>dart pub global activate flutterfire_cli
+flutterfire configure</pre>
+    <p>This replaces <code>lib/firebase_options.dart</code> with real credentials. Then rebuild:</p>
+    <pre>$env:JAVA_HOME = "C:\Program Files\Eclipse Adoptium\jdk-21.0.10.7-hotspot"
+$env:PATH = "$env:JAVA_HOME\bin;$env:PATH"
+flutter build apk --release
+flutter install -d 55301FDCR008RZ</pre>
+  </div>
+
+  <div class="card">
+    <h3>Step B — Order Hardware (~$120 CAD)</h3>
+    <table>
+      <tr>
+        <th>Item</th>
+        <th>Search Term / Product</th>
+        <th>Price (CAD)</th>
+      </tr>
+      <tr>
+        <td>Robot chassis (with encoders)</td>
+        <td>EMO Smart Robot Car Chassis Kit + battery box</td>
+        <td>~$18</td>
+      </tr>
+      <tr>
+        <td>ESP32 microcontroller</td>
+        <td>ESP32 WROOM-32 dev board</td>
+        <td>~$12</td>
+      </tr>
+      <tr>
+        <td>GPS module</td>
+        <td>NEO-6M GPS module Arduino</td>
+        <td>~$10</td>
+      </tr>
+      <tr>
+        <td>Sweep servo</td>
+        <td>SG90 servo motor micro</td>
+        <td>~$3</td>
+      </tr>
+      <tr>
+        <td>Ultrasonic sensors ×3</td>
+        <td>HC-SR04 5-pack (Elegoo or similar)</td>
+        <td>~$14</td>
+      </tr>
+      <tr>
+        <td>Battery</td>
+        <td>3S 11.1V LiPo 2200–3000mAh</td>
+        <td>~$25</td>
+      </tr>
+      <tr>
+        <td>LiPo balance charger</td>
+        <td>B3AC compact LiPo charger</td>
+        <td>~$15</td>
+      </tr>
+      <tr>
+        <td>Jumper wires</td>
+        <td>120pcs M-M/M-F/F-F breadboard kit</td>
+        <td>~$10</td>
+      </tr>
+      <tr>
+        <td>L brackets (20pcs + screws)</td>
+        <td>Small iron corner brackets black</td>
+        <td>~$7</td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h3>Step C — Flash the Robot</h3>
+    <ol>
+      <li>Install <strong>Arduino IDE 2</strong> (arduino.cc)</li>
+      <li>Add ESP32 board: File → Preferences → add
+        <code>https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json</code></li>
+      <li>Install libraries via Sketch → Include Library → Manage Libraries:
+        <ul>
+          <li><strong>TinyGPS++</strong> by Mikal Hart</li>
+          <li><strong>ArduinoJson</strong> by Benoit Blanchon</li>
+          <li><strong>ESP32Servo</strong> by Kevin Harrington</li>
+        </ul>
+      </li>
+      <li>Open <code>robot_firmware/runner_pacer/runner_pacer.ino</code></li>
+      <li>Select board: <strong>ESP32 Dev Module</strong>, correct COM port</li>
+      <li>Upload ⬆</li>
+    </ol>
+  </div>
+
+  <!-- ────────────────────────────── Hardware Wiring ── -->
+  <h2>4 · Hardware Wiring Guide</h2>
+
+  <h3>GPS Module (NEO-6M → ESP32)</h3>
+  <table>
+    <tr>
+      <th>NEO-6M Pin</th>
+      <th>ESP32 Pin</th>
+    </tr>
+    <tr>
+      <td>VCC</td>
+      <td>3.3V</td>
+    </tr>
+    <tr>
+      <td>GND</td>
+      <td>GND</td>
+    </tr>
+    <tr>
+      <td>TX</td>
+      <td>GPIO 16 (RX2)</td>
+    </tr>
+    <tr>
+      <td>RX</td>
+      <td>GPIO 17 (TX2)</td>
+    </tr>
+  </table>
+
+  <h3>SG90 Servo (front sensor sweep → ESP32)</h3>
+  <table>
+    <tr>
+      <th>Servo Wire</th>
+      <th>ESP32 Pin</th>
+    </tr>
+    <tr>
+      <td>Signal (orange)</td>
+      <td>GPIO 15</td>
+    </tr>
+    <tr>
+      <td>VCC (red)</td>
+      <td>5V</td>
+    </tr>
+    <tr>
+      <td>GND (brown)</td>
+      <td>GND</td>
+    </tr>
+  </table>
+
+  <h3>Ultrasonic Sensors (HC-SR04)</h3>
+  <table>
+    <tr>
+      <th>Sensor</th>
+      <th>TRIG pin</th>
+      <th>ECHO pin</th>
+      <th>Purpose</th>
+    </tr>
+    <tr>
+      <td>Front</td>
+      <td>GPIO 12</td>
+      <td>GPIO 13</td>
+      <td>Obstacle detection (mounted on servo)</td>
+    </tr>
+    <tr>
+      <td>Back</td>
+      <td>GPIO 4</td>
+      <td>GPIO 2</td>
+      <td>Runner distance monitoring</td>
+    </tr>
+  </table>
+
+  <h3>Motor Pins (Freenove kit default)</h3>
+  <table>
+    <tr>
+      <th>Motor</th>
+      <th>FWD</th>
+      <th>BWD</th>
+      <th>PWM (speed)</th>
+    </tr>
+    <tr>
+      <td>Left</td>
+      <td>GPIO 26</td>
+      <td>GPIO 27</td>
+      <td>GPIO 14</td>
+    </tr>
+    <tr>
+      <td>Right</td>
+      <td>GPIO 33</td>
+      <td>GPIO 32</td>
+      <td>GPIO 25</td>
+    </tr>
+  </table>
+
+  <!-- ────────────────────────────── Robot Behaviour ── -->
+  <h2>5 · Robot Behaviour Logic</h2>
+  <table>
+    <tr>
+      <th>Situation</th>
+      <th>Robot Response</th>
+    </tr>
+    <tr>
+      <td>Runner 0–5 m behind</td>
+      <td>Full target pace</td>
+    </tr>
+    <tr>
+      <td>Runner 5–8 m behind</td>
+      <td>Slow to 60% of target pace</td>
+    </tr>
+    <tr>
+      <td>Runner &gt;8 m behind for &lt;3 s</td>
+      <td>Countdown timer starts</td>
+    </tr>
+    <tr>
+      <td>Runner &gt;8 m behind for ≥3 s</td>
+      <td><strong>Stops completely</strong> — "Runner Lost" shown in app</td>
+    </tr>
+    <tr>
+      <td>Runner comes back within 8 m</td>
+      <td>Immediately resumes pacing</td>
+    </tr>
+    <tr>
+      <td>Obstacle &lt;50 cm ahead</td>
+      <td>Stops, sweeps servo left &amp; right</td>
+    </tr>
+    <tr>
+      <td>One side clear (&gt;80 cm)</td>
+      <td>Turns and drives around obstacle</td>
+    </tr>
+    <tr>
+      <td>Both sides blocked</td>
+      <td>Reverses slightly, re-scans</td>
+    </tr>
+    <tr>
+      <td>Cleared obstacle</td>
+      <td>Returns to GPS navigation</td>
+    </tr>
+    <tr>
+      <td>Final waypoint reached (within 3 m)</td>
+      <td>Stops, marks workout complete</td>
+    </tr>
+  </table>
+
+  <!-- ────────────────────────────── Battery ── -->
+  <h2>6 · Battery Life</h2>
+  <div class="card">
+    <p>The robot runs on a <strong>3S 11.1V LiPo battery (2200–3000mAh)</strong>. With ESP32 WiFi hotspot, 4 motors at
+      running pace, and 3 ultrasonic sensors the draw is roughly <strong>1.1–1.5 A</strong>.</p>
+    <table style="margin-top:10px;">
+      <tr>
+        <th>Battery</th>
+        <th>Capacity</th>
+        <th>Runtime</th>
+      </tr>
+      <tr>
+        <td>3S LiPo 2200mAh</td>
+        <td>2200 mAh</td>
+        <td>~45–55 min</td>
+      </tr>
+      <tr>
+        <td>3S LiPo 3000mAh</td>
+        <td>3000 mAh</td>
+        <td><strong>65–80 min</strong></td>
+      </tr>
+    </table>
+    <p style="margin-top:8px;">Speed is measured via <strong>GPS Doppler</strong> — no wheel encoders needed. Accurate
+      to ±0.1 km/h at running speeds.</p>
+  </div>
+
+  <!-- ────────────────────────────── File Structure ── -->
+  <h2>7 · Key Files</h2>
+  <table>
+    <tr>
+      <th>File</th>
+      <th>What it does</th>
+    </tr>
+    <tr>
+      <td><code>lib/main.dart</code></td>
+      <td>App entry, Firebase init, auth routing, main control page</td>
+    </tr>
+    <tr>
+      <td><code>lib/firebase_options.dart</code></td>
+      <td>⚠ Placeholder — replaced after <code>flutterfire configure</code></td>
+    </tr>
+    <tr>
+      <td><code>lib/screens/login_screen.dart</code></td>
+      <td>Email/password login + sign-up UI</td>
+    </tr>
+    <tr>
+      <td><code>lib/screens/pace_workout_screen.dart</code></td>
+      <td>Live pace workout — stats, waypoints, runner-lost badge</td>
+    </tr>
+    <tr>
+      <td><code>lib/services/auth_service.dart</code></td>
+      <td>Firebase Auth wrapper (login, signup, logout)</td>
+    </tr>
+    <tr>
+      <td><code>lib/services/firestore_service.dart</code></td>
+      <td>Save &amp; load run sessions from Firestore</td>
+    </tr>
+    <tr>
+      <td><code>lib/services/robot_service.dart</code></td>
+      <td>HTTP client to ESP32 robot + status model</td>
+    </tr>
+    <tr>
+      <td><code>robot_firmware/runner_pacer/runner_pacer.ino</code></td>
+      <td>Full ESP32 firmware with GPS, pacing, obstacle avoidance, runner-lost</td>
+    </tr>
+    <tr>
+      <td><code>docs/index.html</code></td>
+      <td>GitHub Pages landing website</td>
+    </tr>
+  </table>
+
+  <!-- ────────────────────────────── Build Commands ── -->
+  <h2>8 · Useful Commands</h2>
+
+  <h3>Build &amp; install APK on Pixel</h3>
+  <pre>$env:JAVA_HOME = "C:\Program Files\Eclipse Adoptium\jdk-21.0.10.7-hotspot"
+$env:PATH = "$env:JAVA_HOME\bin;$env:PATH"
+flutter build apk --release
+flutter install -d 55301FDCR008RZ</pre>
+
+  <h3>Run directly on Pixel (debug)</h3>
+  <pre>$env:JAVA_HOME = "C:\Program Files\Eclipse Adoptium\jdk-21.0.10.7-hotspot"
+$env:PATH = "$env:JAVA_HOME\bin;$env:PATH"
+flutter run -d 55301FDCR008RZ</pre>
+
+  <h3>Run on Windows desktop</h3>
+  <pre>flutter run -d windows</pre>
+
+  <h3>Run in Chrome</h3>
+  <pre>flutter run -d chrome</pre>
+
+  <h3>Robot WiFi connection</h3>
+  <table>
+    <tr>
+      <th>Setting</th>
+      <th>Value</th>
+    </tr>
+    <tr>
+      <td>SSID</td>
+      <td>RunnerCompanion</td>
+    </tr>
+    <tr>
+      <td>Password</td>
+      <td>runner123</td>
+    </tr>
+    <tr>
+      <td>Robot IP</td>
+      <td>192.168.4.1</td>
+    </tr>
+    <tr>
+      <td>Status endpoint</td>
+      <td>GET http://192.168.4.1/status</td>
+    </tr>
+    <tr>
+      <td>Start endpoint</td>
+      <td>POST http://192.168.4.1/start</td>
+    </tr>
+    <tr>
+      <td>Stop endpoint</td>
+      <td>POST http://192.168.4.1/stop</td>
+    </tr>
+  </table>
+
+  <footer>
+    Running Companion — Project Plan &nbsp;·&nbsp; Generated February 25, 2026 &nbsp;·&nbsp; All code in
+    c:\src\runner_companion_app
+  </footer>
+
+</body>
+
+</html>

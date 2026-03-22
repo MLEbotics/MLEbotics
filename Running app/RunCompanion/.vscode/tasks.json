@@ -1,0 +1,38 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "flutter run chrome",
+			"type": "shell",
+			"command": "flutter run -d chrome",
+			"isBackground": true
+		},
+		{
+			"label": "build and run windows",
+			"type": "shell",
+			"command": "flutter build windows && start build\\windows\\x64\\runner\\Release\\run_companion.exe",
+			"group": "build"
+		},
+		{
+			"label": "kill rebuild run windows",
+			"type": "shell",
+			"command": "Stop-Process -Name run_companion -Force -ErrorAction SilentlyContinue; Start-Sleep 2; flutter build windows; Start-Process build\\windows\\x64\\runner\\Release\\run_companion.exe",
+			"group": "build"
+		},
+		{
+			"label": "check and replace icons",
+			"type": "shell",
+			"command": "python -c \"\nimport os\nfrom PIL import Image\nfrom datetime import datetime\n\nsrc = r'C:\\\\src\\\\run_companion\\\\MLE.png'\nimg = Image.open(src)\nprint(f'Image size: {img.size}, modified: {os.path.getmtime(src)}')\nimg = img.convert('RGBA')\n\n# Windows ICO\nimg.save(r'C:\\\\src\\\\run_companion\\\\windows\\\\runner\\\\resources\\\\app_icon.ico', format='ICO', sizes=[(16,16),(32,32),(48,48),(64,64),(128,128),(256,256)])\nprint('Windows ICO done')\n\n# Android mipmaps\nbase = r'C:\\\\src\\\\run_companion\\\\android\\\\app\\\\src\\\\main\\\\res'\nfor folder, size in [('mipmap-mdpi',48),('mipmap-hdpi',72),('mipmap-xhdpi',96),('mipmap-xxhdpi',144),('mipmap-xxxhdpi',192)]:\n    img.resize((size,size), Image.LANCZOS).save(os.path.join(base, folder, 'ic_launcher.png'))\nprint('Android done')\n\n# iOS\nios = r'C:\\\\src\\\\run_companion\\\\ios\\\\Runner\\\\Assets.xcassets\\\\AppIcon.appiconset'\nfor s in [20,29,40,58,60,76,80,87,120,152,167,180,1024]:\n    img.resize((s,s), Image.LANCZOS).save(os.path.join(ios, f'Icon-App-{s}x{s}@1x.png'))\nprint('iOS done')\n\n# macOS\nmacos = r'C:\\\\src\\\\run_companion\\\\macos\\\\Runner\\\\Assets.xcassets\\\\AppIcon.appiconset'\nfor name, size in [('app_icon_16',16),('app_icon_32',32),('app_icon_64',64),('app_icon_128',128),('app_icon_256',256),('app_icon_512',512),('app_icon_1024',1024)]:\n    img.resize((size,size), Image.LANCZOS).save(os.path.join(macos, f'{name}.png'))\nprint('macOS done')\n\n# Web icons\nweb = r'C:\\\\src\\\\run_companion\\\\web'\nimg.resize((16,16), Image.LANCZOS).save(os.path.join(web, 'favicon.png'))\nfor s in [192,512]:\n    img.resize((s,s), Image.LANCZOS).save(os.path.join(web, 'icons', f'Icon-{s}.png'))\n    img.resize((s,s), Image.LANCZOS).save(os.path.join(web, 'icons', f'Icon-maskable-{s}.png'))\nprint('Web done')\n\n# Assets folder\nos.makedirs(r'C:\\\\src\\\\run_companion\\\\assets', exist_ok=True)\nimg.resize((1024,1024), Image.LANCZOS).save(r'C:\\\\src\\\\run_companion\\\\assets\\\\mle_logo.png')\nprint('ALL DONE')\n\""
+		},
+		{
+			"label": "web build and deploy",
+			"type": "shell",
+			"command": "flutter build web && firebase deploy --only hosting"
+		},
+		{
+			"label": "rebuild windows after photo change",
+			"type": "shell",
+			"command": "Stop-Process -Name run_companion -Force -ErrorAction SilentlyContinue; Start-Sleep 1; flutter build windows; Start-Process build\\windows\\x64\\runner\\Release\\run_companion.exe"
+		}
+	]
+}

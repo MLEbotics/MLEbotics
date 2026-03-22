@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Running Companion — Investor & Build Presentation</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      color: #1a1a2e;
+      background: #ffffff;
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 38px 48px;
+      line-height: 1.5;
+      font-size: 13px;
+    }
+
+    .header {
+      background: linear-gradient(135deg, #00695c, #004d40);
+      color: white;
+      border-radius: 12px;
+      padding: 26px 30px;
+      margin-bottom: 26px;
+    }
+
+    .header h1 {
+      font-size: 28px;
+      letter-spacing: 0.4px;
+    }
+
+    .header p {
+      margin-top: 8px;
+      opacity: 0.95;
+    }
+
+    h2 {
+      margin: 26px 0 12px;
+      color: #00695c;
+      border-bottom: 2px solid #00695c;
+      padding-bottom: 5px;
+      font-size: 15px;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+    }
+
+    h3 {
+      margin: 10px 0 6px;
+      font-size: 13px;
+      color: #263238;
+    }
+
+    .card {
+      background: #f7f8fb;
+      border-left: 4px solid #00695c;
+      border-radius: 8px;
+      padding: 12px 16px;
+      margin-bottom: 10px;
+    }
+
+    .card.warn {
+      border-left-color: #ef6c00;
+      background: #fff8f2;
+    }
+
+    .card.info {
+      border-left-color: #1565c0;
+      background: #f1f6ff;
+    }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 8px 0 14px;
+      font-size: 12.5px;
+    }
+
+    th {
+      background: #00695c;
+      color: #fff;
+      text-align: left;
+      padding: 7px 9px;
+    }
+
+    td {
+      padding: 7px 9px;
+      border-bottom: 1px solid #e5e7eb;
+      vertical-align: top;
+    }
+
+    tr:nth-child(even) td {
+      background: #fafafa;
+    }
+
+    ul,
+    ol {
+      padding-left: 20px;
+      margin: 5px 0 10px;
+    }
+
+    li {
+      margin-bottom: 4px;
+    }
+
+    .pill {
+      display: inline-block;
+      border-radius: 999px;
+      padding: 2px 10px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .done {
+      background: #dcedc8;
+      color: #33691e;
+    }
+
+    .pending {
+      background: #ffe0b2;
+      color: #e65100;
+    }
+
+    .blocked {
+      background: #ffcdd2;
+      color: #b71c1c;
+    }
+
+    .print-btn {
+      position: fixed;
+      right: 20px;
+      top: 18px;
+      border: none;
+      border-radius: 24px;
+      background: #00695c;
+      color: white;
+      padding: 10px 18px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .print-btn:hover {
+      background: #004d40;
+    }
+
+    .section-note {
+      font-size: 11.5px;
+      color: #5f6368;
+      margin-top: 5px;
+    }
+
+    footer {
+      margin-top: 28px;
+      padding-top: 10px;
+      border-top: 1px solid #ddd;
+      color: #7a7a7a;
+      font-size: 11px;
+      text-align: center;
+    }
+
+    @media print {
+      body {
+        max-width: none;
+        margin: 0;
+        padding: 20px 24px;
+      }
+
+      .print-btn {
+        display: none;
+      }
+
+      .card,
+      table {
+        page-break-inside: avoid;
+      }
+
+      .two-col {
+        display: block;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <button class="print-btn" onclick="window.print()">Export PDF</button>
+
+  <div class="header">
+    <h1>Running Companion</h1>
+    <p>Investor + Collaborator Presentation and Hardware Build Plan</p>
+    <p>Generated February 27, 2026</p>
+  </div>
+
+  <h2>1. Executive Summary</h2>
+  <div class="card">
+    Running Companion is a hybrid robotics + mobile software product: a 4-wheel pacing robot physically leads runners on
+    a route while a Flutter app provides pace control, voice interaction, AI coaching, and contact alerting.
+  </div>
+  <div class="two-col">
+    <div class="card info">
+      <h3>Current Software State</h3>
+      <ul>
+        <li>Flutter app screens and services implemented</li>
+        <li>Robot HTTP control + live status polling working in app</li>
+        <li>Voice assistant commands and spoken feedback implemented</li>
+        <li>Runner-ahead SMS + speaker alert workflow implemented</li>
+      </ul>
+    </div>
+    <div class="card info">
+      <h3>Current Hardware State</h3>
+      <ul>
+        <li>Firmware logic prepared for ESP32 robot platform</li>
+        <li>Physical parts list defined and budgeted</li>
+        <li>Wiring map and flashing workflow documented</li>
+        <li>Build/testing begins once parts arrive</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2>2. What Was Discussed (Product Scope)</h2>
+  <table>
+    <tr>
+      <th>Area</th>
+      <th>What the Product Does</th>
+    </tr>
+    <tr>
+      <td>Pace Robot</td>
+      <td>Leads runner on GPS waypoints at target speed, with adaptive slowdown and safe stop if runner falls behind.
+      </td>
+    </tr>
+    <tr>
+      <td>Voice Control</td>
+      <td>Owner-only voice commands for stop, speed up/down, pause/resume, return to start, alerting, and music control.
+      </td>
+    </tr>
+    <tr>
+      <td>Voice Coaching</td>
+      <td>Spoken pace feedback, milestone encouragement, obstacle notices, battery warnings, and workout status
+        summaries.</td>
+    </tr>
+    <tr>
+      <td>People Alerting</td>
+      <td>One tap or voice trigger sends SMS to saved route-ahead contacts and plays speaker announcement to clear path.
+      </td>
+    </tr>
+    <tr>
+      <td>Garmin Integration</td>
+      <td>Reads BLE heart rate, cadence, speed, and distance from Garmin watch services.</td>
+    </tr>
+    <tr>
+      <td>Run Data</td>
+      <td>Saves workout sessions to Firestore with duration, distance, pace, HR and cadence metrics.</td>
+    </tr>
+    <tr>
+      <td>AI Companion</td>
+      <td>Gemini-powered conversational coach that can embed control commands for robot actions.</td>
+    </tr>
+  </table>
+
+  <h2>3. Voice + Alerting Details (Important Investor Differentiator)</h2>
+  <div class="card">
+    <h3>Voice Commands Supported</h3>
+    <p>Stop, speed up, slow down, pause, resume, distance, pace, status, open box, close box, play music, alert ahead,
+      clear left, clear right, return to start.</p>
+  </div>
+  <div class="two-col">
+    <div class="card">
+      <h3>People-Ahead Alert Flow</h3>
+      <ol>
+        <li>Runner taps alert button or says a trigger phrase.</li>
+        <li>Robot speaker announces runner is approaching.</li>
+        <li>App opens SMS to each saved contact with distance/ETA/message.</li>
+      </ol>
+    </div>
+    <div class="card">
+      <h3>Directional Messaging</h3>
+      <ul>
+        <li>Clear Left: asks people to move right</li>
+        <li>Clear Right: asks people to move left</li>
+        <li>Default: generic polite clear-route request</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2>4. Robot Behavior + Speed Logic</h2>
+  <table>
+    <tr>
+      <th>Condition</th>
+      <th>Robot Response</th>
+    </tr>
+    <tr>
+      <td>Runner 0–5 m behind</td>
+      <td>Maintain full target pace</td>
+    </tr>
+    <tr>
+      <td>Runner 5–8 m behind</td>
+      <td>Reduce to 60% of target pace</td>
+    </tr>
+    <tr>
+      <td>Runner &gt;8 m behind for 3+ seconds</td>
+      <td>Stop; show runner-lost status in app</td>
+    </tr>
+    <tr>
+      <td>Obstacle &lt;50 cm ahead</td>
+      <td>Stop, servo sweep, choose clearer side</td>
+    </tr>
+    <tr>
+      <td>Both sides blocked</td>
+      <td>Reverse slightly and rescan</td>
+    </tr>
+    <tr>
+      <td>Waypoint complete</td>
+      <td>Stop and mark workout complete</td>
+    </tr>
+  </table>
+  <div class="card info">
+    Speed framework discussed: target pace is runner-selected; firmware and app support up to 30 km/h; speed can be
+    adjusted by voice and by app controls during a run.
+  </div>
+
+  <h2>5. Hardware Build Plan (To Realize Yesterday's Scope)</h2>
+  <h3>Bill of Materials (Initial Build)</h3>
+  <table>
+    <tr>
+      <th>Component</th>
+      <th>Purpose</th>
+      <th>Estimated Cost</th>
+    </tr>
+    <tr>
+      <td>Freenove 4WD ESP32 Kit</td>
+      <td>Base chassis, motors, control board</td>
+      <td>~$45</td>
+    </tr>
+    <tr>
+      <td>NEO-6M GPS Module</td>
+      <td>Route and speed tracking</td>
+      <td>~$10</td>
+    </tr>
+    <tr>
+      <td>SG90 Servo</td>
+      <td>Sweep front ultrasonic sensor</td>
+      <td>~$3</td>
+    </tr>
+    <tr>
+      <td>3S 11.1V LiPo Battery (2200–3000mAh)</td>
+      <td>Robot main power — 45–75 min runtime</td>
+      <td>~$20–$30</td>
+    </tr>
+    <tr>
+      <td>LiPo Balance Charger (e.g. ISDT Q6 / SkyRC B6)</td>
+      <td>Charges robot battery via XT60 + balance lead after each run. Plug charger into mains, connect battery balance
+        lead + main lead, select 3S LiPo mode, 1–2C charge rate.</td>
+      <td>~$15–$20</td>
+    </tr>
+    <tr>
+      <td>Dupont jumper wires</td>
+      <td>Interconnects</td>
+      <td>~$5</td>
+    </tr>
+    <tr>
+      <td>Optional BT speaker / buzzer upgrades</td>
+      <td>Louder public alerts</td>
+      <td>~$10–$25</td>
+    </tr>
+  </table>
+
+  <p style="font-size:0.9em;color:#555;"><strong>Charging:</strong> After each field run, connect the robot's 3S LiPo to
+    the balance charger (wall-powered). A full charge from empty takes ~60–90 min. Never leave charging unattended.
+    Store battery at ~50% if not in use for more than a few days.</p>
+
+  <h3>Implementation Phases</h3>
+  <table>
+    <tr>
+      <th>Phase</th>
+      <th>Outcome</th>
+      <th>Time</th>
+    </tr>
+    <tr>
+      <td>Phase 1: Procurement</td>
+      <td>All core parts ordered and received</td>
+      <td>3–7 days</td>
+    </tr>
+    <tr>
+      <td>Phase 2: Assembly + Wiring</td>
+      <td>Robot physically assembled with sensors</td>
+      <td>1–2 days</td>
+    </tr>
+    <tr>
+      <td>Phase 3: Firmware Flash</td>
+      <td>ESP32 online with route + obstacle logic</td>
+      <td>1 day</td>
+    </tr>
+    <tr>
+      <td>Phase 4: Phone Integration</td>
+      <td>App controls robot over hotspot APIs</td>
+      <td>1 day</td>
+    </tr>
+    <tr>
+      <td>Phase 5: Outdoor Validation</td>
+      <td>Pacing, alerting, safety behavior validated</td>
+      <td>3–5 test runs</td>
+    </tr>
+  </table>
+
+  <h2>6. App Architecture Decision (Including Your Hybrid Point)</h2>
+  <table>
+    <tr>
+      <th>Approach</th>
+      <th>Pros</th>
+      <th>Cons</th>
+      <th>Fit for This Product</th>
+    </tr>
+    <tr>
+      <td>Fully Native / Standard Flutter app</td>
+      <td>Strong device integration, best runtime control</td>
+      <td>Store release needed for most updates</td>
+      <td>Excellent for robot control, BLE, and low-latency workflows</td>
+    </tr>
+    <tr>
+      <td>WebView-heavy app</td>
+      <td>Fast cloud updates</td>
+      <td>Weaker hardware integration and performance</td>
+      <td>Not ideal for critical real-time control loops</td>
+    </tr>
+    <tr>
+      <td>Hybrid frameworks loading cloud modules (Flutter/React Native/Ionic)</td>
+      <td>Better performance than WebView; supports cloud-driven updates; usually app-store friendlier than full dynamic
+        code push</td>
+      <td>Higher architecture complexity; requires secure module-loading/versioning system</td>
+      <td>Best middle-ground for this product as it scales enterprise features</td>
+    </tr>
+  </table>
+  <div class="card warn">
+    <h3>Recommended Plan</h3>
+    Keep robot control, BLE, safety logic, and voice pipeline in stable app binaries. Move non-critical UI modules and
+    content surfaces to cloud-loaded modules over time.
+    <div class="section-note">This preserves real-time safety/performance while enabling faster product iteration.</div>
+  </div>
+
+  <h2>7. Current Build Status</h2>
+  <table>
+    <tr>
+      <th>Workstream</th>
+      <th>Status</th>
+      <th>Note</th>
+    </tr>
+    <tr>
+      <td>Flutter app core</td>
+      <td><span class="pill done">Done</span></td>
+      <td>Main screens/services implemented</td>
+    </tr>
+    <tr>
+      <td>Voice commands + coaching</td>
+      <td><span class="pill done">Done</span></td>
+      <td>Command parser + TTS/STT integrated</td>
+    </tr>
+    <tr>
+      <td>Runner alerting (SMS + speaker)</td>
+      <td><span class="pill done">Done</span></td>
+      <td>Contacts, bulk/single alerts available</td>
+    </tr>
+    <tr>
+      <td>Garmin BLE telemetry</td>
+      <td><span class="pill done">Done</span></td>
+      <td>Heart rate, cadence, speed, distance</td>
+    </tr>
+    <tr>
+      <td>Firebase production configuration</td>
+      <td><span class="pill blocked">Blocked</span></td>
+      <td>Requires final project setup and credentials</td>
+    </tr>
+    <tr>
+      <td>Physical robot build</td>
+      <td><span class="pill pending">Pending</span></td>
+      <td>Awaiting parts procurement and assembly</td>
+    </tr>
+  </table>
+
+  <h2>8. 30-60-90 Day Delivery Plan</h2>
+  <table>
+    <tr>
+      <th>Window</th>
+      <th>Primary Deliverable</th>
+      <th>Success Metric</th>
+    </tr>
+    <tr>
+      <td>0–30 days</td>
+      <td>Hardware build + stable end-to-end robot/app field runs</td>
+      <td>5 successful outdoor pacing runs with alerts</td>
+    </tr>
+    <tr>
+      <td>31–60 days</td>
+      <td>Reliability hardening and pilot workflow</td>
+      <td>Crash-free sessions, repeatable setup, support checklist</td>
+    </tr>
+    <tr>
+      <td>61–90 days</td>
+      <td>Pilot-ready investor demo package</td>
+      <td>Demo script, KPI dashboard, and video evidence</td>
+    </tr>
+  </table>
+
+  <h2>9. Ask to Investor / Collaborator</h2>
+  <div class="card">
+    <h3>Funding/Support Request (MVP Stage)</h3>
+    <ul>
+      <li>Small hardware budget and test logistics support</li>
+      <li>Pilot access (running clubs, events, test routes)</li>
+      <li>Product advisory on go-to-market and enterprise integrations</li>
+    </ul>
+  </div>
+
+  <footer>
+    Running Companion presentation • Prepared for investor and collaborator review • February 27, 2026
+  </footer>
+</body>
+
+</html>

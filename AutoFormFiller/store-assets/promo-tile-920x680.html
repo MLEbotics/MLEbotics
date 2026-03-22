@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Auto Form Filler — Promo Tile 920×680</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            width: 920px;
+            height: 680px;
+            overflow: hidden;
+            background: #06080f;
+            font-family: 'Segoe UI', Arial, sans-serif;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(0, 212, 255, 0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 212, 255, 0.04) 1px, transparent 1px);
+            background-size: 36px 36px;
+        }
+
+        .orb1 {
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(0, 212, 255, 0.1) 0%, transparent 70%);
+            top: -150px;
+            right: -100px;
+        }
+
+        .orb2 {
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(0, 255, 136, 0.07) 0%, transparent 70%);
+            bottom: -100px;
+            left: -80px;
+        }
+
+        .orb3 {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(157, 78, 221, 0.07) 0%, transparent 70%);
+            bottom: 100px;
+            right: 150px;
+        }
+
+        .layout {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            height: 100%;
+        }
+
+        /* LEFT COLUMN */
+        .left {
+            flex: 0 0 460px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 60px 48px 60px 60px;
+        }
+
+        .badge {
+            font-size: 11px;
+            font-family: 'Courier New', monospace;
+            color: #00d4ff;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+        }
+
+        .icon {
+            font-size: 52px;
+            margin-bottom: 16px;
+            filter: drop-shadow(0 0 16px rgba(0, 212, 255, 0.7));
+        }
+
+        h1 {
+            font-size: 36px;
+            font-weight: 900;
+            color: #ffffff;
+            line-height: 1.15;
+            margin-bottom: 12px;
+            text-shadow: 0 0 40px rgba(0, 212, 255, 0.25);
+        }
+
+        h1 span {
+            color: #00d4ff;
+        }
+
+        .tagline {
+            font-size: 16px;
+            color: #94a3b8;
+            line-height: 1.6;
+            margin-bottom: 32px;
+        }
+
+        .models {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 36px;
+        }
+
+        .model-pill {
+            font-size: 12px;
+            font-family: 'Courier New', monospace;
+            padding: 6px 16px;
+            border-radius: 20px;
+            border: 1px solid;
+        }
+
+        .pill-free {
+            background: rgba(0, 255, 136, 0.1);
+            border-color: rgba(0, 255, 136, 0.4);
+            color: #00ff88;
+        }
+
+        .pill-claude {
+            background: rgba(0, 212, 255, 0.08);
+            border-color: rgba(0, 212, 255, 0.3);
+            color: #00d4ff;
+        }
+
+        .pill-gpt {
+            background: rgba(157, 78, 221, 0.1);
+            border-color: rgba(157, 78, 221, 0.4);
+            color: #b77bff;
+        }
+
+        .cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: linear-gradient(135deg, #00d4ff, #00ff88);
+            color: #06080f;
+            font-size: 14px;
+            font-weight: 700;
+            padding: 12px 28px;
+            border-radius: 8px;
+            width: fit-content;
+            letter-spacing: 0.03em;
+        }
+
+        /* RIGHT COLUMN — Popup mockup */
+        .right {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+        }
+
+        .popup-mock {
+            width: 300px;
+            background: #f5f5f5;
+            border-radius: 10px;
+            box-shadow: 0 0 60px rgba(0, 212, 255, 0.2), 0 20px 60px rgba(0, 0, 0, 0.6);
+            overflow: hidden;
+            border: 1px solid rgba(0, 212, 255, 0.2);
+        }
+
+        .popup-header {
+            background: #ffffff;
+            padding: 10px 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .popup-header-icon {
+            font-size: 18px;
+        }
+
+        .popup-header-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: #1f2937;
+        }
+
+        .popup-tabs {
+            display: flex;
+            border-bottom: 2px solid #e5e7eb;
+            background: #fff;
+        }
+
+        .popup-tab {
+            flex: 1;
+            padding: 7px 0;
+            font-size: 11px;
+            font-weight: 700;
+            color: #9ca3af;
+            text-align: center;
+        }
+
+        .popup-tab.active {
+            color: #4CAF50;
+            border-bottom: 2px solid #4CAF50;
+            margin-bottom: -2px;
+        }
+
+        .popup-body {
+            padding: 14px;
+        }
+
+        .popup-field {
+            margin-bottom: 10px;
+        }
+
+        .popup-label {
+            font-size: 10px;
+            color: #6b7280;
+            margin-bottom: 3px;
+        }
+
+        .popup-value {
+            background: #fff;
+            border: 1px solid #d1d5db;
+            border-radius: 5px;
+            padding: 6px 10px;
+            font-size: 11px;
+            color: #1f2937;
+        }
+
+        .popup-value.filled {
+            border-color: #4CAF50;
+            background: #f0fdf4;
+            color: #166534;
+        }
+
+        .popup-btn {
+            background: linear-gradient(135deg, #4CAF50, #22c55e);
+            color: #fff;
+            border: none;
+            width: 100%;
+            padding: 9px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 700;
+            margin-top: 4px;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .popup-status {
+            text-align: center;
+            font-size: 10px;
+            color: #16a34a;
+            margin-top: 8px;
+        }
+
+        /* Features list */
+        .features {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 0;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .feature-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #00ff88;
+            margin-top: 6px;
+            flex-shrink: 0;
+        }
+
+        .feature-text {
+            font-size: 13px;
+            color: #cbd5e1;
+            line-height: 1.4;
+        }
+
+        .brand {
+            position: absolute;
+            bottom: 20px;
+            left: 60px;
+            font-size: 10px;
+            font-family: 'Courier New', monospace;
+            color: #1e293b;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="orb1"></div>
+    <div class="orb2"></div>
+    <div class="orb3"></div>
+
+    <div class="layout">
+        <div class="left">
+            <div class="badge">Chrome Extension</div>
+            <div class="icon">⚡</div>
+            <h1>Auto <span>Form</span><br>Filler</h1>
+            <p class="tagline">Fill any web form in one click using AI.<br>Works on every website. Free to start.</p>
+
+            <div class="models">
+                <div class="model-pill pill-free">✓ Gemini Free</div>
+                <div class="model-pill pill-claude">Claude</div>
+                <div class="model-pill pill-gpt">GPT-4</div>
+            </div>
+
+            <div class="features">
+                <div class="feature-item">
+                    <div class="feature-dot"></div>
+                    <span class="feature-text">Save your profile once — fill any form instantly</span>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-dot"></div>
+                    <span class="feature-text">AI maps your data to the right fields automatically</span>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-dot"></div>
+                    <span class="feature-text">Works on job boards, checkouts, government sites & more</span>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-dot"></div>
+                    <span class="feature-text">Your data stays private on your device</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="right">
+            <div class="popup-mock">
+                <div class="popup-header">
+                    <span class="popup-header-icon">⚡</span>
+                    <span class="popup-header-title">Auto Form Filler</span>
+                </div>
+                <div class="popup-tabs">
+                    <div class="popup-tab active">Fill Form</div>
+                    <div class="popup-tab">PDF</div>
+                    <div class="popup-tab">Settings</div>
+                </div>
+                <div class="popup-body">
+                    <div class="popup-field">
+                        <div class="popup-label">Name</div>
+                        <div class="popup-value filled">Eddie Chongtham</div>
+                    </div>
+                    <div class="popup-field">
+                        <div class="popup-label">Email</div>
+                        <div class="popup-value filled">eddie@mlebotics.com</div>
+                    </div>
+                    <div class="popup-field">
+                        <div class="popup-label">Phone</div>
+                        <div class="popup-value filled">+1 (403) 555-0192</div>
+                    </div>
+                    <div class="popup-field">
+                        <div class="popup-label">Address</div>
+                        <div class="popup-value filled">Calgary, AB, Canada</div>
+                    </div>
+                    <div class="popup-btn">⚡ Fill Form</div>
+                    <div class="popup-status">✓ 4 fields filled successfully</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="brand">mlebotics.com</div>
+</body>
+
+</html>

@@ -1,0 +1,9 @@
+# Railway build config
+# Uses requirements-server.txt (cloud-safe) instead of requirements.txt
+# which contains desktop-only packages (pyaudio, sounddevice, etc.)
+
+[phases.install]
+cmds = ["pip install -r requirements-server.txt"]
+
+[start]
+cmd = "python server.py"

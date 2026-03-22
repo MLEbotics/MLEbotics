@@ -1,0 +1,1753 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hey Girl — AI Assistant</title>
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+    <style>
+        :root {
+            --bg: #06080f;
+            --bg2: #0d1117;
+            --bg3: #111827;
+            --bg4: #1a2130;
+            --cyan: #00d4ff;
+            --green: #00ff88;
+            --purple: #9d4edd;
+            --red: #ef5350;
+            --orange: #ff7043;
+            --text: #e2e8f0;
+            --muted: #64748b;
+            --border: #1e293b;
+            --sidebar: 210px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* ── Top bar ── */
+        #topbar {
+            background: var(--bg2);
+            border-bottom: 1px solid var(--border);
+            padding: 0 20px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-shrink: 0;
+        }
+
+        .logo {
+            font-size: 1.15rem;
+            font-weight: 900;
+            color: var(--cyan);
+            letter-spacing: 0.05em;
+        }
+
+        .logo span {
+            color: var(--green);
+        }
+
+        #mode-badge {
+            font-size: 0.68rem;
+            padding: 2px 8px;
+            border-radius: 999px;
+            font-weight: 700;
+            letter-spacing: 0.06em;
+        }
+
+        #mode-badge.cloud {
+            background: rgba(157, 78, 221, .15);
+            color: var(--purple);
+            border: 1px solid rgba(157, 78, 221, .3);
+        }
+
+        #mode-badge.local {
+            background: rgba(0, 255, 136, .1);
+            color: var(--green);
+            border: 1px solid rgba(0, 255, 136, .3);
+        }
+
+        .spacer {
+            flex: 1;
+        }
+
+        #cost-badge {
+            font-size: 0.75rem;
+            color: var(--muted);
+            font-family: 'Consolas', monospace;
+        }
+
+        #cost-badge.warn {
+            color: var(--orange);
+        }
+
+        #cost-badge.over {
+            color: var(--red);
+        }
+
+        /* ── Layout ── */
+        #layout {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        /* ── Sidebar ── */
+        #sidebar {
+            width: var(--sidebar);
+            background: var(--bg2);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            padding: 10px 0;
+            flex-shrink: 0;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 18px;
+            color: var(--muted);
+            cursor: pointer;
+            font-size: 0.88rem;
+            border-left: 3px solid transparent;
+            transition: all .15s;
+            user-select: none;
+        }
+
+        .nav-item:hover {
+            color: var(--text);
+            background: rgba(255, 255, 255, .03);
+        }
+
+        .nav-item.active {
+            color: var(--cyan);
+            border-left-color: var(--cyan);
+            background: rgba(0, 212, 255, .05);
+        }
+
+        .nav-icon {
+            font-size: 1rem;
+            width: 20px;
+            text-align: center;
+        }
+
+        /* ── Main ── */
+        #main {
+            flex: 1;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .section {
+            display: none;
+            flex: 1;
+            overflow: hidden;
+            flex-direction: column;
+        }
+
+        .section.active {
+            display: flex;
+        }
+
+        /* ── Chat messages ── */
+        #chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .msg-row {
+            display: flex;
+            gap: 10px;
+            max-width: 820px;
+        }
+
+        .msg-row.user {
+            align-self: flex-end;
+            flex-direction: row-reverse;
+        }
+
+        .msg-row.bot {
+            align-self: flex-start;
+        }
+
+        .msg-row.sys {
+            align-self: center;
+        }
+
+        .av {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            flex-shrink: 0;
+            margin-top: 3px;
+        }
+
+        .msg-row.user .av {
+            background: rgba(0, 212, 255, .13);
+        }
+
+        .msg-row.bot .av {
+            background: rgba(157, 78, 221, .13);
+        }
+
+        .bubble {
+            padding: 10px 14px;
+            border-radius: 10px;
+            font-size: 0.88rem;
+            line-height: 1.65;
+            max-width: 680px;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        .msg-row.user .bubble {
+            background: rgba(0, 212, 255, .09);
+            border: 1px solid rgba(0, 212, 255, .2);
+            color: #b2ebf2;
+        }
+
+        .msg-row.bot .bubble {
+            background: var(--bg3);
+            border: 1px solid var(--border);
+        }
+
+        .msg-row.sys .bubble {
+            background: transparent;
+            color: var(--muted);
+            font-size: 0.78rem;
+            font-style: italic;
+            border: none;
+            padding: 0;
+        }
+
+        .typing {
+            display: inline-flex;
+            gap: 4px;
+            align-items: center;
+            padding: 4px 0;
+        }
+
+        .typing span {
+            width: 6px;
+            height: 6px;
+            background: var(--cyan);
+            border-radius: 50%;
+            opacity: .6;
+            animation: bounce 1.2s infinite;
+        }
+
+        .typing span:nth-child(2) {
+            animation-delay: .2s;
+        }
+
+        .typing span:nth-child(3) {
+            animation-delay: .4s;
+        }
+
+        @keyframes bounce {
+
+            0%,
+            60%,
+            100% {
+                transform: translateY(0);
+            }
+
+            30% {
+                transform: translateY(-6px);
+            }
+        }
+
+        /* ── Chat input ── */
+        #chat-input-area {
+            border-top: 1px solid var(--border);
+            background: var(--bg2);
+            padding: 10px 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        #chat-meta {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .toggle-group {
+            display: flex;
+            background: var(--bg3);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .toggle-item {
+            padding: 5px 14px;
+            font-size: 0.77rem;
+            cursor: pointer;
+            color: var(--muted);
+            transition: all .15s;
+        }
+
+        .toggle-item.active {
+            background: rgba(0, 212, 255, .12);
+            color: var(--cyan);
+        }
+
+        .check-opt {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.77rem;
+            color: var(--muted);
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .check-opt input {
+            accent-color: var(--cyan);
+        }
+
+        #chat-row {
+            display: flex;
+            gap: 8px;
+            align-items: flex-end;
+        }
+
+        #chat-input {
+            flex: 1;
+            background: var(--bg3);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text);
+            padding: 9px 13px;
+            font-size: 0.88rem;
+            font-family: inherit;
+            resize: none;
+            min-height: 40px;
+            max-height: 150px;
+            outline: none;
+            transition: border-color .15s;
+        }
+
+        #chat-input:focus {
+            border-color: var(--cyan);
+        }
+
+        #chat-input::placeholder {
+            color: var(--muted);
+        }
+
+        /* ── Buttons ── */
+        .btn {
+            padding: 8px 18px;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.83rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity .15s, transform .1s;
+            white-space: nowrap;
+        }
+
+        .btn:active {
+            transform: scale(.97);
+        }
+
+        .btn:disabled {
+            opacity: .38;
+            cursor: not-allowed;
+        }
+
+        .btn-primary {
+            background: var(--cyan);
+            color: #000;
+        }
+
+        .btn-secondary {
+            background: var(--bg3);
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+
+        .btn-danger {
+            background: #b71c1c;
+            color: #fff;
+        }
+
+        .btn-success {
+            background: #1b5e20;
+            color: #fff;
+        }
+
+        /* ── Scrollable section body ── */
+        .sec-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .sec-title {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: var(--cyan);
+            margin-bottom: 4px;
+        }
+
+        .sec-sub {
+            font-size: 0.78rem;
+            color: var(--muted);
+            margin-bottom: 16px;
+        }
+
+        /* ── Agent ── */
+        #agent-task {
+            width: 100%;
+            background: var(--bg3);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text);
+            padding: 10px 13px;
+            font-size: 0.88rem;
+            font-family: inherit;
+            resize: vertical;
+            min-height: 80px;
+            outline: none;
+            margin-bottom: 10px;
+        }
+
+        #agent-task:focus {
+            border-color: var(--cyan);
+        }
+
+        .agent-row {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            margin-bottom: 14px;
+            flex-wrap: wrap;
+        }
+
+        select {
+            background: var(--bg3);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--text);
+            padding: 7px 12px;
+            font-size: 0.83rem;
+            outline: none;
+            cursor: pointer;
+        }
+
+        #agent-log-wrap {
+            background: #08090f;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        #agent-log-hdr {
+            display: flex;
+            align-items: center;
+            padding: 8px 14px;
+            background: var(--bg3);
+            border-bottom: 1px solid var(--border);
+            gap: 8px;
+        }
+
+        #agent-log-hdr span {
+            flex: 1;
+            font-size: 0.78rem;
+            color: var(--muted);
+        }
+
+        #agent-log {
+            font-family: 'Consolas', monospace;
+            font-size: 0.78rem;
+            color: #a0aec0;
+            padding: 12px 14px;
+            overflow-y: auto;
+            max-height: 280px;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        .log-step {
+            color: var(--cyan);
+        }
+
+        .log-done {
+            color: var(--green);
+            font-weight: bold;
+        }
+
+        .log-error {
+            color: var(--red);
+            font-weight: bold;
+        }
+
+        .log-action {
+            color: #fff176;
+        }
+
+        #ss-wrap {
+            margin-top: 14px;
+            display: none;
+        }
+
+        #ss-wrap .ss-hdr {
+            font-size: 0.78rem;
+            color: var(--muted);
+            margin-bottom: 6px;
+        }
+
+        #ss-img {
+            width: 100%;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+        }
+
+        /* ── History ── */
+        .hist-actions {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        #history-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .hist-msg {
+            padding: 10px 14px;
+            border-radius: 8px;
+            font-size: 0.84rem;
+            line-height: 1.55;
+        }
+
+        .hist-msg.user {
+            background: rgba(0, 212, 255, .06);
+            border: 1px solid rgba(0, 212, 255, .13);
+        }
+
+        .hist-msg.assistant {
+            background: var(--bg3);
+            border: 1px solid var(--border);
+        }
+
+        .hist-role {
+            font-size: 0.68rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: .06em;
+            margin-bottom: 4px;
+        }
+
+        .hist-msg.user .hist-role {
+            color: var(--cyan);
+        }
+
+        .hist-msg.assistant .hist-role {
+            color: var(--purple);
+        }
+
+        /* ── Cost ── */
+        .cost-bar-lbl {
+            display: flex;
+            justify-content: space-between;
+            font-size: .78rem;
+            color: var(--muted);
+            margin-bottom: 6px;
+        }
+
+        .cost-bar-lbl .amt {
+            color: var(--text);
+            font-weight: 600;
+            font-family: 'Consolas', monospace;
+        }
+
+        .cost-track {
+            height: 11px;
+            background: var(--bg3);
+            border-radius: 999px;
+            overflow: hidden;
+            margin-bottom: 18px;
+        }
+
+        .cost-fill {
+            height: 100%;
+            border-radius: 999px;
+            background: var(--green);
+            transition: width .4s, background .4s;
+        }
+
+        .cost-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 10px;
+            margin-bottom: 18px;
+        }
+
+        .stat-card {
+            background: var(--bg3);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 12px;
+        }
+
+        .stat-val {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--cyan);
+            font-family: 'Consolas', monospace;
+        }
+
+        .stat-lbl {
+            font-size: 0.7rem;
+            color: var(--muted);
+            margin-top: 2px;
+        }
+
+        .cost-ev-list {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .cost-ev {
+            background: var(--bg3);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 7px 12px;
+            font-size: 0.76rem;
+            font-family: 'Consolas', monospace;
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .ev-src {
+            color: var(--cyan);
+        }
+
+        .ev-cost {
+            color: var(--green);
+        }
+
+        .ev-ts {
+            color: var(--muted);
+        }
+
+        .limit-row {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+
+        .limit-row label {
+            font-size: .8rem;
+            color: var(--muted);
+        }
+
+        .limit-row input {
+            width: 90px;
+            background: var(--bg3);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--text);
+            padding: 6px 10px;
+            font-size: .84rem;
+            outline: none;
+        }
+
+        /* ── Settings ── */
+        .cloud-notice {
+            background: rgba(157, 78, 221, .08);
+            border: 1px solid rgba(157, 78, 221, .2);
+            border-radius: 8px;
+            padding: 11px 15px;
+            font-size: .8rem;
+            color: #ce93d8;
+            margin-bottom: 16px;
+        }
+
+        .sg-title {
+            font-size: .72rem;
+            font-weight: 700;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: .08em;
+            margin-bottom: 12px;
+        }
+
+        .field {
+            margin-bottom: 12px;
+        }
+
+        .field label {
+            display: block;
+            font-size: .78rem;
+            color: var(--muted);
+            margin-bottom: 4px;
+        }
+
+        .field input {
+            width: 100%;
+            max-width: 420px;
+            background: var(--bg3);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--text);
+            padding: 8px 12px;
+            font-size: .83rem;
+            font-family: 'Consolas', monospace;
+            outline: none;
+        }
+
+        .field input:focus {
+            border-color: var(--cyan);
+        }
+
+        .field .hint {
+            font-size: .7rem;
+            color: var(--muted);
+            margin-top: 3px;
+        }
+
+        #server-info {
+            font-size: .8rem;
+            color: var(--muted);
+            font-family: 'Consolas', monospace;
+            line-height: 1.85;
+        }
+
+        /* ── Form Filler ── */
+        .form-tabs {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 14px;
+            flex-wrap: wrap;
+        }
+
+        .form-tab {
+            padding: 5px 14px;
+            font-size: 0.78rem;
+            background: var(--bg3);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--muted);
+            cursor: pointer;
+            transition: all .15s;
+            user-select: none;
+        }
+
+        .form-tab.active {
+            background: rgba(0, 212, 255, .12);
+            color: var(--cyan);
+            border-color: rgba(0, 212, 255, .3);
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+            gap: 10px 14px;
+            margin-bottom: 16px;
+        }
+
+        .form-field label {
+            display: block;
+            font-size: .72rem;
+            color: var(--muted);
+            margin-bottom: 3px;
+        }
+
+        .form-field input,
+        .form-field select {
+            width: 100%;
+            background: var(--bg3);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--text);
+            padding: 7px 10px;
+            font-size: .83rem;
+            outline: none;
+            font-family: inherit;
+        }
+
+        .form-field input:focus {
+            border-color: var(--cyan);
+        }
+
+        .profile-panel {
+            display: none;
+        }
+
+        .profile-panel.active {
+            display: block;
+        }
+
+        .form-status {
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: .8rem;
+            margin-bottom: 12px;
+            display: none;
+        }
+
+        .form-status.ok {
+            background: rgba(0, 255, 136, .08);
+            border: 1px solid rgba(0, 255, 136, .2);
+            color: var(--green);
+            display: block;
+        }
+
+        .form-status.err {
+            background: rgba(239, 83, 80, .08);
+            border: 1px solid rgba(239, 83, 80, .2);
+            color: var(--red);
+            display: block;
+        }
+
+        .form-notice {
+            background: rgba(0, 212, 255, .07);
+            border: 1px solid rgba(0, 212, 255, .2);
+            border-radius: 8px;
+            padding: 11px 15px;
+            font-size: .79rem;
+            color: #80d8ff;
+            margin-bottom: 16px;
+            line-height: 1.65;
+        }
+
+        /* ── Scrollbar ── */
+        ::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg2);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 3px;
+        }
+
+        /* ── Responsive ── */
+        @media(max-width:580px) {
+            #sidebar {
+                width: 48px;
+            }
+
+            .nav-item .nav-label {
+                display: none;
+            }
+
+            .nav-item {
+                justify-content: center;
+                padding: 12px 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ── Top bar ── -->
+    <div id="topbar">
+        <span class="logo">✨ Hey<span>Girl</span></span>
+        <span id="mode-badge">…</span>
+        <div class="spacer"></div>
+        <span id="cost-badge">loading…</span>
+    </div>
+
+    <div id="layout">
+
+        <!-- ── Sidebar ── -->
+        <nav id="sidebar">
+            <div class="nav-item active" data-sec="chat">
+                <span class="nav-icon">💬</span><span class="nav-label">Chat</span>
+            </div>
+            <div class="nav-item" data-sec="agent">
+                <span class="nav-icon" id="agent-icon">🤖</span><span class="nav-label">Computer Use</span>
+            </div>
+            <div class="nav-item" data-sec="history">
+                <span class="nav-icon">📜</span><span class="nav-label">History</span>
+            </div>
+            <div class="nav-item" data-sec="cost">
+                <span class="nav-icon">💰</span><span class="nav-label">Cost</span>
+            </div>
+            <div class="nav-item" data-sec="formfill">
+                <span class="nav-icon">📝</span><span class="nav-label">Form Filler</span>
+            </div>
+            <div class="nav-item" data-sec="settings">
+                <span class="nav-icon">⚙</span><span class="nav-label">Settings</span>
+            </div>
+        </nav>
+
+        <!-- ── Main ── -->
+        <div id="main">
+
+            <!-- ──────────── CHAT ──────────── -->
+            <div id="chat-section" class="section active">
+                <div id="chat-messages"></div>
+                <div id="chat-input-area">
+                    <div id="chat-meta">
+                        <div class="toggle-group">
+                            <div class="toggle-item active" id="use-claude">Claude</div>
+                            <div class="toggle-item" id="use-github">GPT-4o (free)</div>
+                        </div>
+                        <label class="check-opt" id="ss-opt" style="display:none">
+                            <input type="checkbox" id="inc-ss"> Include screenshot
+                        </label>
+                    </div>
+                    <div id="chat-row">
+                        <textarea id="chat-input" rows="2"
+                            placeholder="Ask anything… (Enter = send, Shift+Enter = new line)"></textarea>
+                        <button class="btn btn-primary" id="send-btn">Send</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ──────────── AGENT ──────────── -->
+            <div id="agent-section" class="section">
+                <div class="sec-body">
+                    <div class="sec-title">🤖 Computer Use Agent</div>
+                    <div class="sec-sub">AI controls your desktop autonomously. Only available when running locally on
+                        your PC.</div>
+
+                    <textarea id="agent-task"
+                        placeholder="Describe a task… e.g. 'Open Notepad and type Hello' or 'Google Python tutorials'"></textarea>
+
+                    <div class="agent-row">
+                        <select id="agent-type">
+                            <option value="auto">Auto (smart routing)</option>
+                            <option value="claude">Claude (desktop)</option>
+                            <option value="openai">OpenAI CUA (web)</option>
+                        </select>
+                        <input type="number" id="agent-steps" value="20" min="1" max="50"
+                            style="width:72px;background:var(--bg3);border:1px solid var(--border);border-radius:6px;color:var(--text);padding:6px 10px;font-size:.83rem;outline:none"
+                            title="Max steps">
+                        <button class="btn btn-success" id="agent-run">▶ Run</button>
+                        <button class="btn btn-danger" id="agent-stop" disabled>■ Stop</button>
+                    </div>
+
+                    <div id="agent-log-wrap">
+                        <div id="agent-log-hdr">
+                            <span id="agent-status">Idle — enter a task above and click Run</span>
+                            <button class="btn btn-secondary" id="agent-clr"
+                                style="padding:3px 10px;font-size:.72rem">Clear</button>
+                        </div>
+                        <div id="agent-log"></div>
+                    </div>
+
+                    <div id="ss-wrap">
+                        <div class="ss-hdr">📸 Live screenshot (refreshes during run)</div>
+                        <img id="ss-img" alt="Desktop screenshot" />
+                    </div>
+                </div>
+            </div>
+
+            <!-- ──────────── HISTORY ──────────── -->
+            <div id="history-section" class="section">
+                <div class="sec-body">
+                    <div class="sec-title">📜 Conversation History</div>
+                    <div class="hist-actions">
+                        <button class="btn btn-secondary" id="hist-refresh">🔄 Refresh</button>
+                        <button class="btn btn-danger" id="hist-clear">🗑 Clear All</button>
+                    </div>
+                    <div id="history-list"></div>
+                </div>
+            </div>
+
+            <!-- ──────────── COST ──────────── -->
+            <div id="cost-section" class="section">
+                <div class="sec-body">
+                    <div class="sec-title">💰 Daily Budget</div>
+                    <div class="cost-bar-lbl">
+                        <span>Today's spending</span>
+                        <span class="amt" id="cost-amt">$0.0000 / $1.00</span>
+                    </div>
+                    <div class="cost-track">
+                        <div class="cost-fill" id="cost-fill" style="width:0%"></div>
+                    </div>
+
+                    <div class="cost-stats">
+                        <div class="stat-card">
+                            <div class="stat-val" id="s-claude">0</div>
+                            <div class="stat-lbl">Claude calls</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-val" id="s-openai">0</div>
+                            <div class="stat-lbl">OpenAI calls</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-val" id="s-tts">0</div>
+                            <div class="stat-lbl">TTS chars</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-val" id="s-whisper">0.0</div>
+                            <div class="stat-lbl">Whisper mins</div>
+                        </div>
+                    </div>
+
+                    <div class="limit-row">
+                        <label>Daily limit $</label>
+                        <input type="number" id="new-limit" min="0.1" step="0.5" />
+                        <button class="btn btn-secondary" id="set-limit">Set</button>
+                        <button class="btn btn-danger" id="reset-cost">Reset Today</button>
+                    </div>
+
+                    <div style="font-size:.78rem;color:var(--muted);margin-bottom:8px">Recent API calls:</div>
+                    <div class="cost-ev-list" id="cost-evs"></div>
+                </div>
+            </div>
+
+            <!-- ──────────── FORM FILLER ──────────── -->
+            <div id="formfill-section" class="section">
+                <div class="sec-body">
+                    <div class="sec-title">📝 Form Filler</div>
+                    <div class="sec-sub">AI auto-fills web forms and PDFs using your profile. Works with the Chrome
+                        extension.</div>
+
+                    <div class="form-notice">
+                        💡 <b>Chrome Extension:</b> Install the AutoFormFiller extension and set its backend URL to
+                        <code
+                            style="background:rgba(255,255,255,.06);padding:1px 6px;border-radius:3px;font-family:Consolas,monospace">http://localhost:5000</code>
+                        (local) or your Railway URL (cloud). Then browse any web form and click <b>Fill</b> — AI fills
+                        it instantly using your profile below.
+                    </div>
+
+                    <div style="margin-bottom:16px">
+                        <div class="sg-title">AI Model</div>
+                        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+                            <select id="ff-model">
+                                <option value="gemini-1.5-flash">Gemini 1.5 Flash (free, 10/day)</option>
+                                <option value="gemini-1.5-pro">Gemini 1.5 Pro</option>
+                                <option value="gemini-2.0-flash-lite">Gemini 2.0 Flash Lite</option>
+                                <option value="gpt-4o-mini">GPT-4o Mini</option>
+                                <option value="gpt-4o">GPT-4o</option>
+                                <option value="claude-haiku-4-5-20251001">Claude Haiku (fastest)</option>
+                                <option value="claude-sonnet-4-6">Claude Sonnet</option>
+                            </select>
+                            <input type="password" id="ff-api-key"
+                                style="flex:1;max-width:300px;background:var(--bg3);border:1px solid var(--border);border-radius:6px;color:var(--text);padding:7px 11px;font-size:.83rem;font-family:Consolas,monospace;outline:none"
+                                placeholder="Optional: your own API key (unlimited fills)" />
+                        </div>
+                        <div style="font-size:.7rem;color:var(--muted);margin-top:5px">Gemini free tier needs no key —
+                            limited to 10 fills/day per IP.</div>
+                    </div>
+
+                    <div class="sg-title">Your Profile <span
+                            style="font-weight:400;font-size:.72rem;color:var(--muted)">(used to fill forms)</span>
+                    </div>
+                    <div id="profile-status" class="form-status"></div>
+
+                    <div class="form-tabs">
+                        <div class="form-tab active" data-ptab="personal">Personal</div>
+                        <div class="form-tab" data-ptab="address">Address</div>
+                        <div class="form-tab" data-ptab="family">Family</div>
+                        <div class="form-tab" data-ptab="work">Work & Housing</div>
+                    </div>
+
+                    <!-- Personal -->
+                    <div class="profile-panel active" id="ptab-personal">
+                        <div class="form-grid">
+                            <div class="form-field"><label>First Name</label><input id="pf-first_name" type="text" />
+                            </div>
+                            <div class="form-field"><label>Last Name</label><input id="pf-last_name" type="text" />
+                            </div>
+                            <div class="form-field"><label>Full Name</label><input id="pf-name" type="text" /></div>
+                            <div class="form-field"><label>Email</label><input id="pf-email" type="email" /></div>
+                            <div class="form-field"><label>Phone</label><input id="pf-phone" type="text" /></div>
+                            <div class="form-field"><label>Date of Birth</label><input id="pf-date_of_birth" type="text"
+                                    placeholder="YYYY-MM-DD" /></div>
+                            <div class="form-field"><label>Gender</label>
+                                <select id="pf-gender">
+                                    <option value="">—</option>
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
+                                    <option value="other">Other / Prefer not to say</option>
+                                </select>
+                            </div>
+                            <div class="form-field"><label>Website</label><input id="pf-website" type="text"
+                                    placeholder="https://" /></div>
+                        </div>
+                    </div>
+
+                    <!-- Address -->
+                    <div class="profile-panel" id="ptab-address">
+                        <div class="form-grid">
+                            <div class="form-field"><label>Street Address</label><input id="pf-address" type="text" />
+                            </div>
+                            <div class="form-field"><label>City</label><input id="pf-city" type="text" /></div>
+                            <div class="form-field"><label>Province / State</label><input id="pf-state" type="text" />
+                            </div>
+                            <div class="form-field"><label>Postal / ZIP Code</label><input id="pf-zip" type="text" />
+                            </div>
+                            <div class="form-field"><label>Country</label><input id="pf-country" type="text" /></div>
+                        </div>
+                    </div>
+
+                    <!-- Family -->
+                    <div class="profile-panel" id="ptab-family">
+                        <div style="font-size:.75rem;font-weight:600;color:var(--muted);margin-bottom:10px">Spouse /
+                            Partner</div>
+                        <div class="form-grid">
+                            <div class="form-field"><label>First Name</label><input id="pf-spouse_first_name"
+                                    type="text" /></div>
+                            <div class="form-field"><label>Last Name</label><input id="pf-spouse_last_name"
+                                    type="text" /></div>
+                            <div class="form-field"><label>Full Name</label><input id="pf-spouse_name" type="text" />
+                            </div>
+                            <div class="form-field"><label>Phone</label><input id="pf-spouse_phone" type="text" /></div>
+                            <div class="form-field"><label>Date of Birth</label><input id="pf-spouse_date_of_birth"
+                                    type="text" placeholder="YYYY-MM-DD" /></div>
+                            <div class="form-field"><label>Gender</label>
+                                <select id="pf-spouse_gender">
+                                    <option value="">—</option>
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                            <div class="form-field"><label>Job Title</label><input id="pf-spouse_job_title"
+                                    type="text" /></div>
+                            <div class="form-field"><label>Company</label><input id="pf-spouse_company" type="text" />
+                            </div>
+                        </div>
+                        <div style="font-size:.75rem;font-weight:600;color:var(--muted);margin:14px 0 10px">Child 1
+                        </div>
+                        <div class="form-grid">
+                            <div class="form-field"><label>First Name</label><input id="pf-child1_first_name"
+                                    type="text" /></div>
+                            <div class="form-field"><label>Last Name</label><input id="pf-child1_last_name"
+                                    type="text" /></div>
+                            <div class="form-field"><label>Date of Birth</label><input id="pf-child1_date_of_birth"
+                                    type="text" /></div>
+                        </div>
+                        <div style="font-size:.75rem;font-weight:600;color:var(--muted);margin:14px 0 10px">Child 2
+                        </div>
+                        <div class="form-grid">
+                            <div class="form-field"><label>First Name</label><input id="pf-child2_first_name"
+                                    type="text" /></div>
+                            <div class="form-field"><label>Last Name</label><input id="pf-child2_last_name"
+                                    type="text" /></div>
+                            <div class="form-field"><label>Date of Birth</label><input id="pf-child2_date_of_birth"
+                                    type="text" /></div>
+                        </div>
+                    </div>
+
+                    <!-- Work & Housing -->
+                    <div class="profile-panel" id="ptab-work">
+                        <div style="font-size:.75rem;font-weight:600;color:var(--muted);margin-bottom:10px">Employment
+                        </div>
+                        <div class="form-grid">
+                            <div class="form-field"><label>Job Title</label><input id="pf-job_title" type="text" />
+                            </div>
+                            <div class="form-field"><label>Company</label><input id="pf-company" type="text" /></div>
+                        </div>
+                        <div style="font-size:.75rem;font-weight:600;color:var(--muted);margin:14px 0 10px">Housing &
+                            Mortgage</div>
+                        <div class="form-grid">
+                            <div class="form-field"><label>Housing Status</label>
+                                <select id="pf-housing_status">
+                                    <option value="">—</option>
+                                    <option value="owner">Owner</option>
+                                    <option value="renter">Renter</option>
+                                </select>
+                            </div>
+                            <div class="form-field"><label>Mortgage Ownership</label>
+                                <select id="pf-mortgage_ownership">
+                                    <option value="">—</option>
+                                    <option value="sole">Sole</option>
+                                    <option value="joint">Joint</option>
+                                </select>
+                            </div>
+                            <div class="form-field"><label>Co-Owner Name</label><input id="pf-mortgage_co_owner"
+                                    type="text" /></div>
+                            <div class="form-field"><label>Mortgage Payment (total)</label><input
+                                    id="pf-mortgage_payment_total" type="text" /></div>
+                            <div class="form-field"><label>Mortgage Per Person</label><input
+                                    id="pf-mortgage_payment_per_person" type="text" /></div>
+                            <div class="form-field"><label>Payment Frequency</label>
+                                <select id="pf-mortgage_payment_frequency">
+                                    <option value="">—</option>
+                                    <option value="monthly">Monthly</option>
+                                    <option value="biweekly">Biweekly</option>
+                                    <option value="weekly">Weekly</option>
+                                </select>
+                            </div>
+                            <div class="form-field"><label>Monthly Housing Cost (total)</label><input
+                                    id="pf-monthly_housing_cost_total" type="text" /></div>
+                            <div class="form-field"><label>Monthly Housing Cost (per person)</label><input
+                                    id="pf-monthly_housing_cost_per_person" type="text" /></div>
+                        </div>
+                    </div>
+
+                    <div style="margin-top:16px;display:flex;gap:8px">
+                        <button class="btn btn-primary" id="save-profile">💾 Save Profile</button>
+                        <button class="btn btn-secondary" id="reload-profile">🔄 Reload</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ──────────── SETTINGS ──────────── -->
+            <div id="settings-section" class="section">
+                <div class="sec-body">
+                    <div id="cloud-notice" class="cloud-notice" style="display:none">
+                        ☁ Running in cloud mode — set API keys as environment variables on Railway.
+                        The inputs below are for local development only.
+                    </div>
+
+                    <div style="margin-bottom:20px">
+                        <div class="sg-title">API Keys</div>
+                        <div class="field">
+                            <label>Anthropic API Key (Claude)</label>
+                            <input type="password" id="s-anthropic" placeholder="sk-ant-…" />
+                            <div class="hint">Required for Claude chat and Computer Use agent.</div>
+                        </div>
+                        <div class="field">
+                            <label>OpenAI API Key</label>
+                            <input type="password" id="s-openai" placeholder="sk-…" />
+                            <div class="hint">Required for Whisper STT / OpenAI TTS voice (local app).</div>
+                        </div>
+                        <div class="field">
+                            <label>GitHub Token (free GPT-4o)</label>
+                            <input type="password" id="s-github" placeholder="github_pat_…" />
+                            <div class="hint">github.com → Settings → Personal access tokens → enables free GPT-4o.
+                            </div>
+                        </div>
+                        <button class="btn btn-primary" id="save-keys">Save to .env</button>
+                    </div>
+
+                    <div>
+                        <div class="sg-title">Server Info</div>
+                        <div id="server-info">Loading…</div>
+                    </div>
+                </div>
+            </div>
+
+        </div><!-- /main -->
+    </div><!-- /layout -->
+
+    <script>
+        // ════════════════════════════════════════════════
+        // State
+        // ════════════════════════════════════════════════
+        let currentModel = 'claude';
+        let isAgentRunning = false;
+        let ssInterval = null;
+        let appMode = 'cloud';
+
+        // ════════════════════════════════════════════════
+        // SocketIO
+        // ════════════════════════════════════════════════
+        const socket = io();
+        socket.on('agent_log', ({ msg }) => agentLog(msg));
+        socket.on('agent_done', ({ task }) => { agentLog(`\n✅ Done: ${task}`, 'log-done'); setRunning(false); });
+        socket.on('agent_error', ({ error }) => { agentLog(`\n❌ ${error}`, 'log-error'); setRunning(false); });
+
+        // ════════════════════════════════════════════════
+        // Init
+        // ════════════════════════════════════════════════
+        async function init() {
+            await fetchStatus();
+            await loadCost();
+            loadFormProfile();
+            appendSys('Hey Girl v2 ready. Type a message or pick a section from the sidebar.');
+        }
+
+        async function fetchStatus() {
+            try {
+                const s = await (await fetch('/api/status')).json();
+                appMode = s.mode;
+
+                const badge = document.getElementById('mode-badge');
+                badge.textContent = s.mode.toUpperCase();
+                badge.className = s.mode;
+
+                if (!s.computer_use) {
+                    document.getElementById('agent-run').disabled = true;
+                    document.getElementById('agent-task').placeholder =
+                        'Computer Use is only available when running locally on your PC.';
+                    document.getElementById('agent-icon').style.opacity = '0.4';
+                } else {
+                    document.getElementById('ss-wrap').style.display = 'block';
+                    document.getElementById('ss-opt').style.display = 'flex';
+                }
+
+                if (s.mode === 'cloud') {
+                    document.getElementById('cloud-notice').style.display = 'block';
+                }
+
+                document.getElementById('server-info').innerHTML =
+                    `Mode: <b style="color:var(--cyan)">${s.mode}</b><br>` +
+                    `Claude: ${s.claude ? '✅' : '❌ missing key'}<br>` +
+                    `OpenAI: ${s.openai ? '✅' : '❌ missing key'}<br>` +
+                    `GitHub: ${s.github ? '✅' : '❌ missing key'}<br>` +
+                    `Computer Use: ${s.computer_use ? '✅ available' : '⛔ cloud only'}<br>` +
+                    `Voice: ${s.voice ? '✅ available' : '⛔ cloud only'}<br>` +
+                    `Version: ${s.version}`;
+            } catch (e) {
+                console.error('Status error:', e);
+            }
+        }
+
+        // ════════════════════════════════════════════════
+        // Navigation
+        // ════════════════════════════════════════════════
+        document.querySelectorAll('.nav-item').forEach(el => {
+            el.addEventListener('click', () => {
+                document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+                document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+                el.classList.add('active');
+                const sec = el.dataset.sec;
+                document.getElementById(`${sec}-section`).classList.add('active');
+                if (sec === 'history') loadHistory();
+                if (sec === 'cost') loadCost();
+                if (sec === 'formfill') loadFormProfile();
+            });
+        });
+
+        // ════════════════════════════════════════════════
+        // Chat
+        // ════════════════════════════════════════════════
+        const chatInput = document.getElementById('chat-input');
+        chatInput.addEventListener('keydown', e => {
+            if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendChat(); }
+        });
+        chatInput.addEventListener('input', () => {
+            chatInput.style.height = 'auto';
+            chatInput.style.height = Math.min(chatInput.scrollHeight, 150) + 'px';
+        });
+        document.getElementById('send-btn').addEventListener('click', sendChat);
+
+        document.getElementById('use-claude').addEventListener('click', () => setModel('claude'));
+        document.getElementById('use-github').addEventListener('click', () => setModel('github'));
+
+        function setModel(m) {
+            currentModel = m;
+            document.getElementById('use-claude').classList.toggle('active', m === 'claude');
+            document.getElementById('use-github').classList.toggle('active', m === 'github');
+        }
+
+        function appendMsg(role, text) {
+            const msgs = document.getElementById('chat-messages');
+            const row = document.createElement('div');
+            row.className = `msg-row ${role}`;
+
+            if (role !== 'sys') {
+                const av = document.createElement('div');
+                av.className = 'av';
+                av.textContent = role === 'user' ? '🧑' : '✨';
+                row.appendChild(av);
+            }
+
+            const bub = document.createElement('div');
+            bub.className = 'bubble';
+            bub.textContent = text;
+            row.appendChild(bub);
+            msgs.appendChild(row);
+            msgs.scrollTop = msgs.scrollHeight;
+            return bub;
+        }
+
+        function appendSys(text) { appendMsg('sys', text); }
+        function appendTyping() {
+            const msgs = document.getElementById('chat-messages');
+            const row = document.createElement('div');
+            row.className = 'msg-row bot';
+            row.id = 'typing-row';
+            const av = document.createElement('div'); av.className = 'av'; av.textContent = '✨';
+            const bub = document.createElement('div'); bub.className = 'bubble';
+            bub.innerHTML = '<div class="typing"><span></span><span></span><span></span></div>';
+            row.appendChild(av); row.appendChild(bub);
+            msgs.appendChild(row);
+            msgs.scrollTop = msgs.scrollHeight;
+            return row;
+        }
+
+        async function sendChat() {
+            const msg = chatInput.value.trim();
+            if (!msg) return;
+
+            const sendBtn = document.getElementById('send-btn');
+            sendBtn.disabled = true;
+            chatInput.value = '';
+            chatInput.style.height = '';
+            appendMsg('user', msg);
+
+            if (currentModel === 'claude') {
+                await sendStream(msg);
+            } else {
+                await sendRegular(msg);
+            }
+            sendBtn.disabled = false;
+        }
+
+        async function sendStream(msg) {
+            const incSS = document.getElementById('inc-ss').checked;
+            const typRow = appendTyping();
+            let botBub = null;
+            let reply = '';
+
+            try {
+                const resp = await fetch('/api/chat/stream', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: msg, include_screenshot: incSS }),
+                });
+
+                const reader = resp.body.getReader();
+                const decoder = new TextDecoder();
+
+                while (true) {
+                    const { done, value } = await reader.read();
+                    if (done) break;
+                    for (const line of decoder.decode(value).split('\n')) {
+                        if (!line.startsWith('data: ')) continue;
+                        try {
+                            const d = JSON.parse(line.slice(6));
+                            if (d.error) {
+                                typRow.remove();
+                                appendSys('❌ ' + d.error);
+                                return;
+                            }
+                            if (d.text) {
+                                reply += d.text;
+                                if (!botBub) { typRow.remove(); botBub = appendMsg('bot', reply); }
+                                else { botBub.textContent = reply; document.getElementById('chat-messages').scrollTop = 999999; }
+                            }
+                            if (d.done) updateCostBadge(d.cost, d.limit);
+                        } catch (_) { }
+                    }
+                }
+            } catch (e) {
+                typRow.remove();
+                appendSys('❌ Network error: ' + e.message);
+            }
+        }
+
+        async function sendRegular(msg) {
+            const incSS = document.getElementById('inc-ss').checked;
+            const typRow = appendTyping();
+            try {
+                const r = await fetch('/api/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: msg, use_github: true, include_screenshot: incSS }),
+                });
+                const d = await r.json();
+                typRow.remove();
+                if (d.error) { appendSys('❌ ' + d.error); return; }
+                appendMsg('bot', d.reply);
+                updateCostBadge(d.cost, d.limit);
+            } catch (e) {
+                typRow.remove();
+                appendSys('❌ Network error: ' + e.message);
+            }
+        }
+
+        // ════════════════════════════════════════════════
+        // Agent
+        // ════════════════════════════════════════════════
+        document.getElementById('agent-run').addEventListener('click', startAgent);
+        document.getElementById('agent-stop').addEventListener('click', () => {
+            setRunning(false);
+            agentLog('\n⏹ Stopped.', 'log-error');
+        });
+        document.getElementById('agent-clr').addEventListener('click', () => {
+            document.getElementById('agent-log').innerHTML = '';
+        });
+
+        async function startAgent() {
+            const task = document.getElementById('agent-task').value.trim();
+            const agType = document.getElementById('agent-type').value;
+            const maxSteps = parseInt(document.getElementById('agent-steps').value) || 20;
+            if (!task) return;
+
+            setRunning(true);
+            document.getElementById('agent-log').innerHTML = '';
+            agentLog(`▶ Task: ${task}\n`, 'log-step');
+
+            try {
+                const r = await fetch('/api/agent/run', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ task, agent: agType, max_steps: maxSteps }),
+                });
+                const d = await r.json();
+                if (d.error) { agentLog('❌ ' + d.error, 'log-error'); setRunning(false); }
+            } catch (e) {
+                agentLog('❌ Network error: ' + e.message, 'log-error');
+                setRunning(false);
+            }
+        }
+
+        function setRunning(running) {
+            isAgentRunning = running;
+            document.getElementById('agent-run').disabled = running;
+            document.getElementById('agent-stop').disabled = !running;
+            document.getElementById('agent-status').textContent = running ? '⚡ Running…' : 'Idle';
+            if (running && appMode === 'local') startSSPoll();
+            else stopSSPoll();
+        }
+
+        function agentLog(msg, cls) {
+            const log = document.getElementById('agent-log');
+            const span = document.createElement('span');
+            if (cls) span.className = cls;
+            span.textContent = msg + '\n';
+            log.appendChild(span);
+            log.scrollTop = log.scrollHeight;
+        }
+
+        function startSSPoll() {
+            stopSSPoll();
+            ssInterval = setInterval(refreshSS, 2500);
+            refreshSS();
+        }
+        function stopSSPoll() {
+            if (ssInterval) { clearInterval(ssInterval); ssInterval = null; }
+        }
+        async function refreshSS() {
+            try {
+                const r = await fetch('/api/screenshot');
+                if (!r.ok) return;
+                const d = await r.json();
+                if (d.screenshot) document.getElementById('ss-img').src = `data:image/png;base64,${d.screenshot}`;
+            } catch (_) { }
+        }
+
+        // ════════════════════════════════════════════════
+        // History
+        // ════════════════════════════════════════════════
+        async function loadHistory() {
+            const list = document.getElementById('history-list');
+            list.innerHTML = '<p style="color:var(--muted);font-size:.84rem">Loading…</p>';
+            try {
+                const { messages } = await (await fetch('/api/history')).json();
+                list.innerHTML = '';
+                if (!messages.length) {
+                    list.innerHTML = '<p style="color:var(--muted);font-size:.84rem">No conversation history.</p>';
+                    return;
+                }
+                messages.forEach(m => {
+                    const el = document.createElement('div');
+                    el.className = `hist-msg ${m.role}`;
+                    const raw = typeof m.content === 'string' ? m.content
+                        : (Array.isArray(m.content) ? m.content.map(p => p.text || '').join(' ') : '');
+                    const text = raw.length > 500 ? raw.slice(0, 500) + '…' : raw;
+                    el.innerHTML = `<div class="hist-role">${m.role}</div><div>${esc(text)}</div>`;
+                    list.appendChild(el);
+                });
+            } catch (e) {
+                list.innerHTML = `<p style="color:var(--red)">Error: ${e.message}</p>`;
+            }
+        }
+
+        document.getElementById('hist-refresh').addEventListener('click', loadHistory);
+        document.getElementById('hist-clear').addEventListener('click', async () => {
+            if (!confirm('Clear all conversation history?')) return;
+            await fetch('/api/history/clear', { method: 'POST' });
+            loadHistory();
+        });
+
+        // ════════════════════════════════════════════════
+        // Cost
+        // ════════════════════════════════════════════════
+        async function loadCost() {
+            try {
+                const d = await (await fetch('/api/cost')).json();
+                const pct = Math.min((d.total / d.limit) * 100, 100);
+                const fmt = v => `$${Number(v).toFixed(4)}`;
+
+                document.getElementById('cost-amt').textContent = `${fmt(d.total)} / ${fmt(d.limit)}`;
+                const fill = document.getElementById('cost-fill');
+                fill.style.width = `${pct}%`;
+                fill.style.background = pct >= 100 ? 'var(--red)' : pct >= 70 ? 'var(--orange)' : 'var(--green)';
+
+                document.getElementById('s-claude').textContent = d.claude_calls;
+                document.getElementById('s-openai').textContent = d.openai_calls;
+                document.getElementById('s-tts').textContent = (d.tts_chars || 0).toLocaleString();
+                document.getElementById('s-whisper').textContent = (d.whisper_minutes || 0).toFixed(1);
+                document.getElementById('new-limit').value = d.limit;
+
+                const evs = document.getElementById('cost-evs');
+                evs.innerHTML = '';
+                if (!d.events?.length) {
+                    evs.innerHTML = '<p style="color:var(--muted);font-size:.76rem">No API calls yet today.</p>';
+                } else {
+                    [...d.events].reverse().forEach(ev => {
+                        const el = document.createElement('div');
+                        el.className = 'cost-ev';
+                        el.innerHTML =
+                            `<span class="ev-src">${esc(ev.source || '')}</span>` +
+                            `<span>${esc(ev.detail || '')}</span>` +
+                            `<span class="ev-cost">$${Number(ev.cost || 0).toFixed(5)}</span>` +
+                            `<span class="ev-ts">${esc(ev.time || '')}</span>`;
+                        evs.appendChild(el);
+                    });
+                }
+                updateCostBadge(d.total, d.limit);
+            } catch (_) { }
+        }
+
+        function updateCostBadge(total, limit) {
+            const b = document.getElementById('cost-badge');
+            const pct = total / limit;
+            b.textContent = `💰 $${Number(total).toFixed(4)} / $${Number(limit).toFixed(2)}`;
+            b.className = pct >= 1 ? 'over' : pct >= .7 ? 'warn' : '';
+        }
+
+        document.getElementById('set-limit').addEventListener('click', async () => {
+            const v = parseFloat(document.getElementById('new-limit').value);
+            if (isNaN(v) || v <= 0) { alert('Enter a valid limit'); return; }
+            await fetch('/api/cost/limit', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ limit: v }) });
+            loadCost();
+        });
+
+        document.getElementById('reset-cost').addEventListener('click', async () => {
+            if (!confirm("Reset today's cost?")) return;
+            await fetch('/api/cost/reset', { method: 'POST' });
+            loadCost();
+        });
+
+        // ════════════════════════════════════════════════
+        // Settings
+        // ════════════════════════════════════════════════
+        document.getElementById('save-keys').addEventListener('click', async () => {
+            if (appMode === 'cloud') {
+                alert('In cloud mode, set API keys as environment variables on Railway (not here).');
+                return;
+            }
+            const body = {
+                anthropic: document.getElementById('s-anthropic').value.trim(),
+                openai: document.getElementById('s-openai').value.trim(),
+                github: document.getElementById('s-github').value.trim(),
+            };
+            try {
+                const r = await fetch('/api/settings/keys', {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body)
+                });
+                const d = await r.json();
+                if (d.ok) alert('Keys saved to .env. Restart the app to fully apply.');
+                else alert('Failed: ' + (d.error || 'unknown'));
+            } catch (e) { alert('Error: ' + e.message); }
+        });
+
+        // ════════════════════════════════════════════════
+        // Form Filler
+        // ════════════════════════════════════════════════
+        const PROFILE_FIELDS = [
+            'first_name', 'last_name', 'name', 'email', 'phone', 'date_of_birth', 'gender', 'website',
+            'address', 'city', 'state', 'zip', 'country',
+            'spouse_first_name', 'spouse_last_name', 'spouse_name', 'spouse_phone',
+            'spouse_date_of_birth', 'spouse_gender', 'spouse_job_title', 'spouse_company',
+            'child1_first_name', 'child1_last_name', 'child1_date_of_birth',
+            'child2_first_name', 'child2_last_name', 'child2_date_of_birth',
+            'job_title', 'company',
+            'housing_status', 'mortgage_ownership', 'mortgage_co_owner',
+            'mortgage_payment_total', 'mortgage_payment_per_person', 'mortgage_payment_frequency',
+            'monthly_housing_cost_total', 'monthly_housing_cost_per_person'
+        ];
+
+        async function loadFormProfile() {
+            try {
+                const d = await (await fetch('/api/get-user-data')).json();
+                if (!d.success) return;
+                PROFILE_FIELDS.forEach(k => {
+                    const el = document.getElementById(`pf-${k}`);
+                    if (el) el.value = d.data[k] || '';
+                });
+            } catch (_) { }
+        }
+
+        async function saveFormProfile() {
+            const statusEl = document.getElementById('profile-status');
+            const data = {};
+            PROFILE_FIELDS.forEach(k => {
+                const el = document.getElementById(`pf-${k}`);
+                if (el && el.value.trim()) data[k] = el.value.trim();
+            });
+            try {
+                const r = await fetch('/api/save-user-data', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data),
+                });
+                const result = await r.json();
+                if (result.success) {
+                    statusEl.textContent = '✅ Profile saved.';
+                    statusEl.className = 'form-status ok';
+                } else {
+                    statusEl.textContent = '❌ ' + result.error;
+                    statusEl.className = 'form-status err';
+                }
+            } catch (e) {
+                statusEl.textContent = '❌ Network error: ' + e.message;
+                statusEl.className = 'form-status err';
+            }
+            setTimeout(() => { statusEl.className = 'form-status'; }, 4000);
+        }
+
+        document.getElementById('save-profile').addEventListener('click', saveFormProfile);
+        document.getElementById('reload-profile').addEventListener('click', loadFormProfile);
+
+        document.querySelectorAll('.form-tab[data-ptab]').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.form-tab[data-ptab]').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.profile-panel').forEach(p => p.classList.remove('active'));
+                tab.classList.add('active');
+                document.getElementById(`ptab-${tab.dataset.ptab}`).classList.add('active');
+            });
+        });
+
+        // ════════════════════════════════════════════════
+        // Helpers
+        // ════════════════════════════════════════════════
+        function esc(s) {
+            return String(s)
+                .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        }
+
+        // ════════════════════════════════════════════════
+        // Boot
+        // ════════════════════════════════════════════════
+        init();
+    </script>
+</body>
+
+</html>

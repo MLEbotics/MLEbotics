@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Auto Form Filler — Promo Tile 440×280</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            width: 440px;
+            height: 280px;
+            overflow: hidden;
+            background: #06080f;
+            font-family: 'Segoe UI', Arial, sans-serif;
+        }
+
+        /* Grid background */
+        body::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(0, 212, 255, 0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 212, 255, 0.04) 1px, transparent 1px);
+            background-size: 28px 28px;
+        }
+
+        /* Glow orbs */
+        .orb1 {
+            position: absolute;
+            width: 280px;
+            height: 280px;
+            background: radial-gradient(circle, rgba(0, 212, 255, 0.12) 0%, transparent 70%);
+            top: -80px;
+            right: -60px;
+        }
+
+        .orb2 {
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(0, 255, 136, 0.08) 0%, transparent 70%);
+            bottom: -60px;
+            left: -40px;
+        }
+
+        .content {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            padding: 28px 32px;
+            text-align: center;
+        }
+
+        .badge {
+            font-size: 10px;
+            font-family: 'Courier New', monospace;
+            color: #00d4ff;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+            opacity: 0.85;
+        }
+
+        .icon {
+            font-size: 36px;
+            margin-bottom: 10px;
+            filter: drop-shadow(0 0 12px rgba(0, 212, 255, 0.6));
+        }
+
+        h1 {
+            font-size: 18px;
+            font-weight: 900;
+            color: #ffffff;
+            letter-spacing: 0.02em;
+            line-height: 1.2;
+            margin-bottom: 6px;
+            text-shadow: 0 0 30px rgba(0, 212, 255, 0.3);
+        }
+
+        h1 span {
+            color: #00d4ff;
+        }
+
+        .tagline {
+            font-size: 11.5px;
+            color: #94a3b8;
+            margin-bottom: 18px;
+            line-height: 1.5;
+        }
+
+        .models {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+        }
+
+        .model-pill {
+            font-size: 10px;
+            font-family: 'Courier New', monospace;
+            padding: 4px 10px;
+            border-radius: 20px;
+            border: 1px solid;
+            letter-spacing: 0.05em;
+        }
+
+        .pill-free {
+            background: rgba(0, 255, 136, 0.1);
+            border-color: rgba(0, 255, 136, 0.4);
+            color: #00ff88;
+        }
+
+        .pill-claude {
+            background: rgba(0, 212, 255, 0.08);
+            border-color: rgba(0, 212, 255, 0.3);
+            color: #00d4ff;
+        }
+
+        .pill-gpt {
+            background: rgba(157, 78, 221, 0.1);
+            border-color: rgba(157, 78, 221, 0.4);
+            color: #b77bff;
+        }
+
+        .brand {
+            position: absolute;
+            bottom: 14px;
+            right: 18px;
+            font-size: 9px;
+            font-family: 'Courier New', monospace;
+            color: #334155;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="orb1"></div>
+    <div class="orb2"></div>
+    <div class="content">
+        <div class="badge">Chrome Extension</div>
+        <div class="icon">⚡</div>
+        <h1>Auto <span>Form</span> Filler</h1>
+        <p class="tagline">Fill any web form in one click<br>using AI. Free to start.</p>
+        <div class="models">
+            <div class="model-pill pill-free">Gemini Free</div>
+            <div class="model-pill pill-claude">Claude</div>
+            <div class="model-pill pill-gpt">GPT-4</div>
+        </div>
+    </div>
+    <div class="brand">mlebotics.com</div>
+</body>
+
+</html>

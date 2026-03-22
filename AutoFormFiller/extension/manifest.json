@@ -1,0 +1,43 @@
+{
+  "manifest_version": 3,
+  "name": "Auto Form Filler — AI Powered",
+  "version": "1.0.0",
+  "description": "Fill any web form in one click using AI. Supports Gemini (free), Claude, and GPT-4. Your data stays private.",
+  "homepage_url": "https://mlebotics.com/autoformfiller.html",
+  "minimum_chrome_version": "88",
+  "permissions": [
+    "activeTab",
+    "scripting",
+    "storage"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Auto Form Filler",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "content.js"
+      ]
+    }
+  ]
+}

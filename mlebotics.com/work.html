@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <base href="/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Work — MLEbotics</title>
+    <link rel="icon" type="image/png" href="img/logo.png?v=2" />
+    <link rel="apple-touch-icon" href="img/logo.png?v=2" />
+    <!-- Redirect if served from wrong path (e.g. inside /runcompanion/app/ via CloudFront 404 fallback) -->
+    <script>
+        if (location.pathname !== '/work.html') {
+            location.replace('/work.html' + location.search + location.hash);
+        }
+    </script>
+    <!-- Hide hero/tabbar BEFORE any HTML renders when a ?tab= param is present, preventing flash -->
+    <script>
+        if (new URLSearchParams(location.search).get('tab')) {
+            document.write('<style id="tab-hide">.page-hero,.tab-bar{display:none!important}</style>');
+        }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;600&display=swap"
+        rel="stylesheet" />
+    <style>
+        :root {
+            --bg: #06080f;
+            --bg2: #0d1117;
+            --bg3: #111827;
+            --cyan: #00d4ff;
+            --green: #00ff88;
+            --purple: #9d4edd;
+            --text: #e2e8f0;
+            --muted: #64748b;
+            --border: #1e293b;
+            --card: #0d1117;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #06080f;
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+
+        #bg-video {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            min-width: 100vw;
+            min-height: 100vh;
+            width: auto;
+            height: auto;
+            transform: translate(-50%, -50%);
+            z-index: -1;
+            object-fit: cover;
+        }
+
+        /* ─── NAV ─── */
+        nav {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(6, 8, 15, 0.85);
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .nav-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.6em;
+            font-family: 'Orbitron', monospace;
+            font-size: 1.3rem;
+            font-weight: 900;
+            color: var(--cyan);
+            text-shadow: 0 0 20px rgba(0, 212, 255, 0.4);
+            letter-spacing: 0.15em;
+            text-decoration: none;
+        }
+
+        .nav-logo img {
+            height: 2.1em;
+            width: auto;
+            display: inline-block;
+            vertical-align: middle;
+            margin-right: 0.1em;
+        }
+
+        .nav-logo span {
+            color: var(--green);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: #b0bec5;
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-family: 'Share Tech Mono', monospace;
+            letter-spacing: 0.1em;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--cyan);
+        }
+
+        .nav-dropdown {
+            position: relative;
+        }
+
+        .nav-dropdown>.nav-parent {
+            color: #b0bec5;
+            font-size: 0.85rem;
+            font-family: 'Share Tech Mono', monospace;
+            letter-spacing: 0.1em;
+            cursor: default;
+            transition: color 0.2s;
+        }
+
+        .nav-dropdown:hover>.nav-parent {
+            color: var(--cyan);
+        }
+
+        .nav-dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #0d1117;
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            border-radius: 6px;
+            padding: 0.6rem 0 0.4rem;
+            min-width: 140px;
+            z-index: 100;
+            margin-top: 0;
+        }
+
+        .nav-dropdown:hover .nav-dropdown-menu {
+            display: block;
+        }
+
+        .nav-dropdown-menu a {
+            display: block;
+            padding: 0.4rem 1rem;
+            color: #b0bec5;
+            font-size: 0.8rem;
+            font-family: 'Share Tech Mono', monospace;
+            letter-spacing: 0.08em;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+
+        .nav-dropdown-menu a:hover {
+            color: var(--cyan);
+            background: rgba(0, 212, 255, 0.05);
+        }
+
+        /* ─── HERO ─── */
+        .page-hero {
+            padding: 5rem 2rem 3rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .section-tag {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.9rem;
+            color: var(--green);
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            margin-bottom: 0.75rem;
+            text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000, 0 0 8px rgba(0, 0, 0, 0.9);
+        }
+
+        .page-hero h1 {
+            font-family: 'Orbitron', monospace;
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--cyan) 0%, var(--green) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+            filter: drop-shadow(0 0 6px rgba(0, 0, 0, 1)) drop-shadow(-1px -1px 0 #000) drop-shadow(1px 1px 0 #000);
+        }
+
+        .page-hero p {
+            color: #ffffff;
+            font-size: 1.1rem;
+            line-height: 1.7;
+            max-width: 600px;
+            margin: 0 auto 1rem;
+            text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000, 0 0 8px rgba(0, 0, 0, 0.9);
+        }
+
+        /* ─── SECTION HEADINGS ─── */
+        .showcase-section {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 2rem 4rem;
+        }
+
+        .showcase-section+.showcase-section {
+            border-top: 1px solid var(--border);
+        }
+
+        .section-label {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.85rem;
+            color: var(--cyan);
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+            text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000, 0 0 8px rgba(0, 0, 0, 0.9);
+        }
+
+        .section-heading {
+            font-family: 'Orbitron', monospace;
+            font-size: clamp(1.4rem, 2.5vw, 2rem);
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 0.5rem;
+            text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000, 0 0 12px rgba(0, 0, 0, 1);
+        }
+
+        .section-sub {
+            color: #e2e8f0;
+            font-size: 1rem;
+            font-family: 'Share Tech Mono', monospace;
+            letter-spacing: 0.05em;
+            margin-bottom: 2rem;
+            text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000, 0 0 8px rgba(0, 0, 0, 0.9);
+        }
+
+        /* ─── CARDS ─── */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .work-card {
+            background: rgba(13, 17, 23, 0.85);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1.75rem;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(4px);
+        }
+
+        .work-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--cyan), var(--green));
+            transform: scaleX(0);
+            transition: transform 0.3s;
+        }
+
+        .work-card:hover {
+            border-color: rgba(0, 212, 255, 0.3);
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 30px rgba(0, 212, 255, 0.05);
+        }
+
+        .work-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .card-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            background: rgba(0, 212, 255, 0.08);
+            border: 1px solid rgba(0, 212, 255, 0.15);
+        }
+
+        .card-status {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.65rem;
+            letter-spacing: 0.15em;
+            padding: 0.25rem 0.6rem;
+            border-radius: 2px;
+        }
+
+        .status-live {
+            color: var(--green);
+            background: rgba(0, 255, 136, 0.08);
+            border: 1px solid rgba(0, 255, 136, 0.2);
+        }
+
+        .status-prog {
+            color: #fbbf24;
+            background: rgba(251, 191, 36, 0.08);
+            border: 1px solid rgba(251, 191, 36, 0.2);
+        }
+
+        .status-school {
+            color: var(--purple);
+            background: rgba(157, 78, 221, 0.08);
+            border: 1px solid rgba(157, 78, 221, 0.2);
+        }
+
+        .card-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 0.5rem;
+            letter-spacing: 0.05em;
+        }
+
+        .card-course {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.7rem;
+            color: var(--purple);
+            letter-spacing: 0.1em;
+            margin-bottom: 0.5rem;
+        }
+
+        .card-desc {
+            color: #b0bec5;
+            font-size: 0.875rem;
+            line-height: 1.6;
+            margin-bottom: 1.25rem;
+        }
+
+        .card-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .tag {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.7rem;
+            color: var(--muted);
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border);
+            padding: 0.2rem 0.55rem;
+            border-radius: 2px;
+            letter-spacing: 0.05em;
+        }
+
+        .card-links {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .card-link {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.75rem;
+            text-decoration: none;
+            padding: 0.45rem 0.9rem;
+            border-radius: 3px;
+            letter-spacing: 0.1em;
+            transition: all 0.2s;
+        }
+
+        .link-live {
+            color: var(--green);
+            border: 1px solid rgba(0, 255, 136, 0.3);
+        }
+
+        .link-live:hover {
+            background: rgba(0, 255, 136, 0.08);
+            box-shadow: 0 0 12px rgba(0, 255, 136, 0.2);
+        }
+
+        .link-demo {
+            color: var(--cyan);
+            border: 1px solid rgba(0, 212, 255, 0.3);
+        }
+
+        .link-demo:hover {
+            background: rgba(0, 212, 255, 0.1);
+            box-shadow: 0 0 12px rgba(0, 212, 255, 0.2);
+        }
+
+        .link-github {
+            color: var(--muted);
+            border: 1px solid var(--border);
+        }
+
+        .link-github:hover {
+            color: var(--text);
+            border-color: var(--muted);
+        }
+
+        .link-disabled {
+            color: #2d3748;
+            border: 1px solid #1a202c;
+            cursor: not-allowed;
+        }
+
+        .link-download {
+            color: var(--green);
+            border: 1px solid rgba(0, 255, 136, 0.4);
+            background: rgba(0, 255, 136, 0.06);
+        }
+
+        .link-download:hover {
+            background: rgba(0, 255, 136, 0.14);
+            box-shadow: 0 0 14px rgba(0, 255, 136, 0.25);
+        }
+
+        /* ─── FOOTER ─── */
+        footer {
+            position: relative;
+            z-index: 1;
+            border-top: 1px solid var(--border);
+            padding: 3rem 2rem;
+            background: rgba(6, 8, 15, 0.7);
+            backdrop-filter: blur(4px);
+        }
+
+        .footer-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+        }
+
+        .footer-logo {
+            font-family: 'Orbitron', monospace;
+            font-size: 1.1rem;
+            font-weight: 900;
+            color: var(--cyan);
+            letter-spacing: 0.15em;
+            text-shadow: 0 0 15px rgba(0, 212, 255, 0.3);
+            text-decoration: none;
+        }
+
+        .footer-logo span {
+            color: var(--green);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .social-link {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #b0bec5;
+            text-decoration: none;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.8rem;
+            letter-spacing: 0.1em;
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            transition: all 0.3s;
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        .social-link:hover {
+            color: var(--cyan);
+            border-color: rgba(0, 212, 255, 0.4);
+            box-shadow: 0 0 15px rgba(0, 212, 255, 0.1);
+        }
+
+        .social-link svg {
+            width: 16px;
+            height: 16px;
+            fill: currentColor;
+        }
+
+        .footer-copy {
+            color: #64748b;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.75rem;
+            letter-spacing: 0.1em;
+            width: 100%;
+            text-align: center;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border);
+            text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+        }
+
+        /* ─── TABS ─── */
+        .tab-bar {
+            display: flex;
+            gap: 0.75rem;
+            justify-content: center;
+            margin: 2rem auto 0;
+            max-width: 1200px;
+            padding: 0 2rem;
+        }
+
+        .tab-btn {
+            font-family: 'Orbitron', monospace;
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            padding: 0.75rem 2rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.25s;
+            background: rgba(13, 17, 23, 0.85);
+            border: 1px solid var(--border);
+            color: var(--muted);
+            text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+        }
+
+        .tab-btn:hover {
+            border-color: var(--cyan);
+            color: var(--cyan);
+        }
+
+        .tab-btn.tab-active-personal {
+            border-color: var(--cyan);
+            color: var(--cyan);
+            background: rgba(0, 212, 255, 0.08);
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.15);
+        }
+
+        .tab-btn.tab-active-school {
+            border-color: var(--purple);
+            color: var(--purple);
+            background: rgba(157, 78, 221, 0.08);
+            box-shadow: 0 0 20px rgba(157, 78, 221, 0.15);
+        }
+
+        .tab-panel {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .tab-panel.visible {
+            display: block;
+            opacity: 1;
+        }
+
+        @media (max-width: 768px) {
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-links {
+                gap: 1rem;
+            }
+
+            .tab-btn {
+                padding: 0.65rem 1.2rem;
+                font-size: 0.7rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <video id="bg-video" autoplay muted loop playsinline>
+        <source src="video/bg.mp4" type="video/mp4">
+    </video>
+
+    <!-- NAV -->
+    <nav>
+        <a class="nav-logo" href="index.html"><img src="img/logo.png" alt="MLEbotics Logo" />MLE<span>botics</span></a>
+        <ul class="nav-links">
+            <li class="nav-dropdown">
+                <span class="nav-parent">Projects ▾</span>
+                <div class="nav-dropdown-menu">
+                    <a href="work.html?tab=personal">Personal</a>
+                    <a href="work.html?tab=school">School</a>
+                </div>
+            </li>
+            <li><a href="index.html#about">About</a></li>
+            <li><a href="index.html#contact">Contact</a></li>
+        </ul>
+    </nav>
+
+    <!-- PAGE HERO -->
+    <div class="page-hero">
+        <div class="section-tag">// LIVE WORK</div>
+        <h1>Everything I've Built</h1>
+        <p>Personal projects, school work, and live deployments — all in one place. Click OPEN LIVE to see them running.
+        </p>
+    </div>
+
+    <!-- TAB BAR -->
+    <div class="tab-bar">
+        <button class="tab-btn tab-active-personal" id="btn-personal" onclick="switchTab('personal')">⚡ PERSONAL
+            PROJECTS</button>
+        <button class="tab-btn" id="btn-school" onclick="switchTab('school')">🎓 SCHOOL WORK</button>
+    </div>
+
+    <!-- ── PERSONAL PROJECTS ── -->
+    <div class="tab-panel visible" id="panel-personal">
+        <section class="showcase-section">
+            <div class="section-label">// PERSONAL</div>
+            <div class="section-heading">Personal Projects</div>
+            <div class="section-sub">Built under MLEbotics — AI tools, mobile apps, and automation systems.</div>
+
+            <div class="cards-grid">
+
+                <!-- Hey Girl -->
+                <div class="work-card">
+                    <div class="card-header">
+                        <div class="card-icon">🎙️</div>
+                        <span class="card-status status-prog">● IN PROGRESS</span>
+                    </div>
+                    <div class="card-title">Hey Girl — Voice AI</div>
+                    <div class="card-desc">Always-on voice AI assistant for Windows. Wake-word activated, powered by
+                        local + cloud LLMs. Handles reminders, searches, automation, and desktop control via voice
+                        commands.</div>
+                    <div class="card-tags">
+                        <span class="tag">Python</span>
+                        <span class="tag">Speech Recognition</span>
+                        <span class="tag">LLM</span>
+                        <span class="tag">Windows</span>
+                    </div>
+                    <div class="card-links">
+                        <a href="downloads/mlebotics-hub.zip" download
+                            class="card-link link-download">⬇ DOWNLOAD .ZIP</a>
+                        <a href="https://github.com/eddie7ch/MLEbotics/tree/main/hey-girl" target="_blank"
+                            class="card-link link-github">GITHUB</a>
+                    </div>
+                </div>
+
+                <!-- RunCompanion -->
+                <div class="work-card">
+                    <div class="card-header">
+                        <div class="card-icon">🏃</div>
+                        <span class="card-status status-prog">● IN PROGRESS</span>
+                    </div>
+                    <div class="card-title">RunCompanion</div>
+                    <div class="card-desc">AI-powered running companion app built with Flutter. GPS tracking,
+                        Bluetooth heart rate, Gemini AI coaching, voice guidance, and a robot running companion.
+                        Android available now — try it in the browser on any device.</div>
+                    <div class="card-tags">
+                        <span class="tag">Flutter</span>
+                        <span class="tag">Dart</span>
+                        <span class="tag">Firebase</span>
+                        <span class="tag">Gemini AI</span>
+                    </div>
+                    <div class="card-links">
+                        <a href="downloads/runner_companion.apk"
+                            target="_blank" class="card-link link-download">ANDROID APK</a>
+                        <a href="https://runcompanion.mlebotics.com" target="_blank" class="card-link link-demo">TRY IN
+                            BROWSER</a>
+                        <a href="runcompanion/index.html" class="card-link link-live">INFO PAGE</a>
+                        <a href="https://github.com/eddie7ch/MLEbotics/tree/main/RunCompanion" target="_blank"
+                            class="card-link link-github">GITHUB</a>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+    </div>
+
+    <!-- ── SCHOOL WORK ── -->
+    <div class="tab-panel" id="panel-school">
+        <section class="showcase-section">
+            <div class="section-label">// SCHOOL — BOW VALLEY COLLEGE</div>
+            <div class="section-heading">Academic Projects</div>
+            <div class="section-sub">Course work from the Software Development program — React, ASP.NET, OOP, and Cloud.
+            </div>
+
+            <div class="cards-grid">
+
+                <!-- React Final Group Project -->
+                <div class="work-card">
+                    <div class="card-header">
+                        <div class="card-icon">⚛️</div>
+                        <span class="card-status status-school">● SCHOOL</span>
+                    </div>
+                    <div class="card-title">StockPulse — React Final Project</div>
+                    <div class="card-course">Web Programming — React</div>
+                    <div class="card-desc">Real-time stock tracking dashboard. React + Vite frontend with live charts
+                        (Recharts), Socket.io for real-time data, and React Router. Built as the final group project.
+                    </div>
+                    <div class="card-tags">
+                        <span class="tag">React</span>
+                        <span class="tag">Vite</span>
+                        <span class="tag">Recharts</span>
+                        <span class="tag">Socket.io</span>
+                        <span class="tag">Node.js</span>
+                    </div>
+                    <div class="card-links">
+                        <a href="https://eddie7ch.github.io/SchoolWork-WebProgramming-React/" target="_blank"
+                            class="card-link link-live">OPEN LIVE →</a>
+                        <a href="https://github.com/eddie7ch/SchoolWork-WebProgramming-React/tree/main/Projects/FinalGroupProject"
+                            target="_blank" class="card-link link-github">GITHUB</a>
+                    </div>
+                </div>
+
+                <!-- React Assignments -->
+                <div class="work-card">
+                    <div class="card-header">
+                        <div class="card-icon">📝</div>
+                        <span class="card-status status-school">● SCHOOL</span>
+                    </div>
+                    <div class="card-title">React Assignments (1–4)</div>
+                    <div class="card-course">Web Programming — React</div>
+                    <div class="card-desc">Four graded assignments covering React fundamentals — components, state,
+                        hooks,
+                        routing, and API integration.</div>
+                    <div class="card-tags">
+                        <span class="tag">React</span>
+                        <span class="tag">Hooks</span>
+                        <span class="tag">React Router</span>
+                        <span class="tag">JavaScript</span>
+                    </div>
+                    <div class="card-links">
+                        <span class="card-link link-disabled">DEMO SOON</span>
+                        <a href="https://github.com/eddie7ch/SchoolWork-WebProgramming-React" target="_blank"
+                            class="card-link link-github">GITHUB</a>
+                    </div>
+                </div>
+
+                <!-- ASP.NET -->
+                <div class="work-card">
+                    <div class="card-header">
+                        <div class="card-icon">🔷</div>
+                        <span class="card-status status-school">● SCHOOL</span>
+                    </div>
+                    <div class="card-title">Vehicle Rental Management System</div>
+                    <div class="card-course">Web Programming — ASP.NET</div>
+                    <div class="card-desc">Full-stack vehicle rental web app. ASP.NET MVC, Entity Framework Core + Azure
+                        SQL, session-based auth with SHA-256, and deployed live on Azure App Service.</div>
+                    <div class="card-tags">
+                        <span class="tag">ASP.NET MVC</span>
+                        <span class="tag">C#</span>
+                        <span class="tag">Azure SQL</span>
+                        <span class="tag">Entity Framework</span>
+                        <span class="tag">Azure</span>
+                    </div>
+                    <div class="card-links">
+                        <a href="https://vehicle-rental-app.azurewebsites.net" target="_blank"
+                            class="card-link link-live">OPEN LIVE →</a>
+                        <a href="https://github.com/bvc-g9-vehicle-rental/Vehicle-Rental-Management-System"
+                            target="_blank" class="card-link link-github">GITHUB</a>
+                    </div>
+                </div>
+
+                <!-- OOP Concepts -->
+                <div class="work-card">
+                    <div class="card-header">
+                        <div class="card-icon">🧩</div>
+                        <span class="card-status status-school">● SCHOOL</span>
+                    </div>
+                    <div class="card-title">OOP Concepts — C#</div>
+                    <div class="card-course">OOP Concepts</div>
+                    <div class="card-desc">Object-oriented programming in C# — classes, inheritance, polymorphism,
+                        interfaces, SOLID principles, and design patterns.</div>
+                    <div class="card-tags">
+                        <span class="tag">C#</span>
+                        <span class="tag">.NET</span>
+                        <span class="tag">OOP</span>
+                        <span class="tag">Design Patterns</span>
+                        <span class="tag">SOLID</span>
+                    </div>
+                    <div class="card-links">
+                        <span class="card-link link-disabled">DEMO SOON</span>
+                        <a href="https://github.com/eddie7ch/SchoolWork-OOPConcepts" target="_blank"
+                            class="card-link link-github">GITHUB</a>
+                    </div>
+                </div>
+
+                <!-- Intro to Cloud -->
+                <div class="work-card">
+                    <div class="card-header">
+                        <div class="card-icon">☁️</div>
+                        <span class="card-status status-school">● SCHOOL</span>
+                    </div>
+                    <div class="card-title">Intro to Cloud — AWS</div>
+                    <div class="card-course">Introduction to Cloud</div>
+                    <div class="card-desc">Cloud fundamentals using AWS — EC2, S3, Lambda, DynamoDB, Cognito, IAM, and
+                        cloud
+                        architecture design.</div>
+                    <div class="card-tags">
+                        <span class="tag">AWS</span>
+                        <span class="tag">EC2</span>
+                        <span class="tag">S3</span>
+                        <span class="tag">Lambda</span>
+                        <span class="tag">DynamoDB</span>
+                    </div>
+                    <div class="card-links">
+                        <span class="card-link link-disabled">DEMO SOON</span>
+                        <a href="https://github.com/eddie7ch/SchoolWork-IntroToCloud" target="_blank"
+                            class="card-link link-github">GITHUB</a>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+    </div>
+
+    <script>
+        function switchTab(tab) {
+            var panels = ['personal', 'school'];
+            var btns = { personal: document.getElementById('btn-personal'), school: document.getElementById('btn-school') };
+
+            panels.forEach(function (p) {
+                var panel = document.getElementById('panel-' + p);
+                var btn = btns[p];
+                if (p === tab) {
+                    panel.style.display = 'block';
+                    setTimeout(function () { panel.style.opacity = '1'; }, 10);
+                    btn.className = 'tab-btn tab-active-' + p;
+                } else {
+                    panel.style.opacity = '0';
+                    setTimeout(function () { panel.style.display = 'none'; }, 300);
+                    btn.className = 'tab-btn';
+                }
+            });
+        }
+        // Auto-select tab from URL param e.g. work.html?tab=school
+        (function () {
+            var params = new URLSearchParams(window.location.search);
+            var tab = params.get('tab');
+            if (tab === 'school' || tab === 'personal') {
+                switchTab(tab);
+                // hero/tabbar already hidden by head script — scroll to top
+                history.scrollRestoration = 'manual';
+                window.scrollTo({ top: 0, behavior: 'instant' });
+            }
+        })();    </script>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-inner">
+            <a href="index.html" class="footer-logo">MLE<span>botics</span></a>
+            <div class="social-links">
+                <a href="https://github.com/eddie7ch" target="_blank" class="social-link">
+                    <svg viewBox="0 0 24 24">
+                        <path
+                            d="M12 .5C5.73.5.5 5.73.5 12c0 5.08 3.29 9.38 7.86 10.9.57.1.78-.25.78-.55v-1.93c-3.2.7-3.87-1.54-3.87-1.54-.52-1.33-1.28-1.68-1.28-1.68-1.05-.71.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.76 2.7 1.25 3.36.96.1-.75.4-1.25.73-1.54-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.28 1.18-3.09-.12-.29-.51-1.46.11-3.04 0 0 .97-.31 3.17 1.18a11.1 11.1 0 0 1 2.89-.39c.98 0 1.97.13 2.89.39 2.2-1.49 3.16-1.18 3.16-1.18.63 1.58.23 2.75.11 3.04.74.81 1.18 1.83 1.18 3.09 0 4.42-2.69 5.39-5.26 5.68.41.36.78 1.07.78 2.15v3.19c0 .3.2.66.79.55A11.51 11.51 0 0 0 23.5 12C23.5 5.73 18.27.5 12 .5z" />
+                    </svg>
+                    GITHUB
+                </a>
+                <a href="https://linkedin.com/in/eddiechongtham" target="_blank" class="social-link">
+                    <svg viewBox="0 0 24 24">
+                        <path
+                            d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.47-.9 1.63-1.85 3.36-1.85 3.59 0 4.26 2.36 4.26 5.44v6.3zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zm1.78 13.02H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z" />
+                    </svg>
+                    LINKEDIN
+                </a>
+            </div>
+            <div class="footer-copy">© 2026 MLEbotics</div>
+        </div>
+    </footer>
+
+</body>
+
+</html>

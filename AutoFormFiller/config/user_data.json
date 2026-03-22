@@ -1,0 +1,56 @@
+{
+  "_comment": "Fill in your real details. Passwords are handled by Bitwarden — do not add them here.",
+
+  "name": "Eddie Chongtham",
+  "first_name": "Eddie",
+  "last_name": "Chongtham",
+  "email": "eddie7ch@gmail.com",
+  "phone": "4038887361",
+
+  "address": "103 Royston Way NW",
+  "city": "Calgary",
+  "state": "AB",
+  "zip": "T3L 0M4",
+  "country": "Canada",
+
+  "company": "Community Living Alternative Services",
+  "job_title": "Disability Support Worker",
+  "website": "",
+
+  "date_of_birth": "1984-03-01",
+  "gender": "male",
+
+  "spouse_name": "Devika Irungbam",
+  "spouse_first_name": "Devika",
+  "spouse_last_name": "Irungbam",
+  "spouse_phone": "4039900361",
+  "spouse_address": "103 Royston Way NW",
+  "spouse_city": "Calgary",
+  "spouse_state": "AB",
+  "spouse_zip": "T3L 0M4",
+  "spouse_country": "Canada",
+  "spouse_company": "Community Living Alternative Services",
+  "spouse_job_title": "Disability Support Worker",
+  "spouse_gender": "female",
+  "spouse_date_of_birth": "1986-01-06",
+
+  "child1_name": "Langlen Chongtham",
+  "child1_first_name": "Langlen",
+  "child1_last_name": "Chongtham",
+  "child1_date_of_birth": "2021-06-25",
+
+  "child2_name": "Thoibi Chongtham",
+  "child2_first_name": "Thoibi",
+  "child2_last_name": "Chongtham",
+  "child2_date_of_birth": "2021-06-25",
+
+  "housing_status": "owner",
+  "mortgage_ownership": "joint",
+  "mortgage_co_owner": "Devika Irungbam",
+  "mortgage_payment_total": "1400",
+  "mortgage_payment_per_person": "700",
+  "mortgage_payment_frequency": "biweekly",
+  "mortgage_payment_currency": "CAD",
+  "monthly_housing_cost_total": "2800",
+  "monthly_housing_cost_per_person": "1400"
+}

@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      width: 320px;
+      padding: 0;
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+    }
+
+    /* Header */
+    .header {
+      display: flex;
+      align-items: center;
+      padding: 10px 14px 0;
+    }
+    .header h3 {
+      margin: 0;
+      font-size: 15px;
+      color: #333;
+    }
+
+    /* Tabs */
+    .tabs {
+      display: flex;
+      border-bottom: 2px solid #ddd;
+      margin: 8px 0 0;
+    }
+    .tab-btn {
+      flex: 1;
+      padding: 7px 0;
+      background: none;
+      border: none;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -2px;
+      font-size: 13px;
+      font-weight: bold;
+      color: #888;
+      cursor: pointer;
+    }
+    .tab-btn.active {
+      color: #4CAF50;
+      border-bottom-color: #4CAF50;
+    }
+    .tab-btn:hover:not(.active) { color: #555; }
+
+    /* Panels */
+    .panel { display: none; padding: 12px 14px 14px; }
+    .panel.active { display: block; }
+
+    /* Buttons */
+    .btn {
+      width: 100%;
+      padding: 9px;
+      background: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: bold;
+    }
+    .btn:hover { background: #45a049; }
+    .btn:disabled { background: #aaa; cursor: not-allowed; }
+    .btn-blue { background: #1976d2; }
+    .btn-blue:hover { background: #1565c0; }
+
+    /* Status box */
+    .status-box {
+      margin-top: 10px;
+      padding: 8px 10px;
+      background: white;
+      border-radius: 4px;
+      text-align: center;
+      display: none;
+      font-size: 13px;
+      line-height: 1.4;
+    }
+    .success { color: #2e7d32; }
+    .error   { color: #c62828; }
+    .info    { color: #555; }
+
+    /* Divider / badges */
+    .divider { border: none; border-top: 1px solid #ddd; margin: 12px 0; }
+    .tool-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      color: #555;
+      margin-bottom: 6px;
+    }
+    .badge {
+      display: inline-block;
+      padding: 2px 7px;
+      border-radius: 10px;
+      font-size: 11px;
+      font-weight: bold;
+      white-space: nowrap;
+    }
+    .badge-green { background: #e8f5e9; color: #2e7d32; border: 1px solid #a5d6a7; }
+    .badge-blue  { background: #e3f2fd; color: #1565c0; border: 1px solid #90caf9; }
+    .fields-list { font-size: 11px; color: #777; margin: 0; padding-left: 16px; }
+
+    /* Settings form */
+    .settings-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px 10px;
+    }
+    .settings-grid .full { grid-column: 1 / -1; }
+    .field-group { display: flex; flex-direction: column; gap: 2px; }
+    .field-group label {
+      font-size: 10px;
+      font-weight: bold;
+      color: #666;
+      text-transform: uppercase;
+      letter-spacing: .4px;
+    }
+    .field-group input, .field-group select {
+      padding: 5px 7px;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+      font-size: 12px;
+      background: white;
+      width: 100%;
+    }
+    .field-group input:focus, .field-group select:focus {
+      border-color: #4CAF50;
+      outline: none;
+    }
+    .section-title {
+      font-size: 11px;
+      font-weight: bold;
+      color: #888;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      margin: 10px 0 4px;
+      grid-column: 1 / -1;
+    }
+    .hint {
+      font-size: 11px;
+      color: #888;
+      margin: 5px 0 0;
+      line-height: 1.4;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <h3>&#9889; Auto Form Filler</h3>
+  </div>
+
+  <div class="tabs">
+    <button class="tab-btn active" id="tab-fill">Fill</button>
+    <button class="tab-btn" id="tab-settings">My Data</button>
+    <button class="tab-btn" id="tab-info">Info</button>
+  </div>
+
+  <!-- Fill Panel -->
+  <div class="panel active" id="panel-fill">
+    <div class="field-group" style="margin-bottom:8px;">
+      <label style="font-size:10px;font-weight:bold;color:#666;text-transform:uppercase;letter-spacing:.4px;">AI Model</label>
+      <select id="modelSelect" style="padding:5px 7px;border:1px solid #ccc;border-radius:3px;font-size:12px;background:white;width:100%;">
+        <optgroup label="Free (no key needed)">
+          <option value="gemini-1.5-flash" selected>Gemini Flash &mdash; Free</option>
+        </optgroup>
+        <optgroup label="Claude (needs Anthropic key)">
+          <option value="claude-haiku-4-5-20251001">Claude Haiku 4.5 (Fastest)</option>
+          <option value="claude-sonnet-4-6">Claude Sonnet 4.6</option>
+          <option value="claude-opus-4-6">Claude Opus 4.6 (Best)</option>
+        </optgroup>
+        <optgroup label="GPT (needs OpenAI key)">
+          <option value="gpt-4o-mini">GPT-4o Mini (Fast)</option>
+          <option value="gpt-4o">GPT-4o</option>
+          <option value="gpt-4-turbo">GPT-4 Turbo</option>
+        </optgroup>
+        <optgroup label="Gemini (needs Gemini key for unlimited)">
+          <option value="gemini-1.5-pro">Gemini 1.5 Pro</option>
+        </optgroup>
+      </select>
+    </div>
+    <button class="btn" id="fillBtn">&#9889; Fill</button>
+    <div class="status-box" id="fillStatus"></div>
+
+  </div>
+
+  <!-- Settings Panel -->
+  <div class="panel" id="panel-settings">
+    <div class="status-box" id="settingsStatus"></div>
+
+    <div class="settings-grid">
+      <span class="section-title">Personal</span>
+
+      <div class="field-group">
+        <label>First Name</label>
+        <input id="s-first_name" type="text" placeholder="John">
+      </div>
+      <div class="field-group">
+        <label>Last Name</label>
+        <input id="s-last_name" type="text" placeholder="Doe">
+      </div>
+      <div class="field-group full">
+        <label>Full Name</label>
+        <input id="s-name" type="text" placeholder="John Doe">
+      </div>
+      <div class="field-group full">
+        <label>Email</label>
+        <input id="s-email" type="email" placeholder="john@example.com">
+      </div>
+      <div class="field-group full">
+        <label>Phone</label>
+        <input id="s-phone" type="text" placeholder="123-456-7890">
+      </div>
+
+      <span class="section-title">Address</span>
+
+      <div class="field-group full">
+        <label>Street Address</label>
+        <input id="s-address" type="text" placeholder="123 Main St">
+      </div>
+      <div class="field-group full">
+        <label>City</label>
+        <input id="s-city" type="text" placeholder="New York">
+      </div>
+      <div class="field-group">
+        <label>State</label>
+        <input id="s-state" type="text" placeholder="NY">
+      </div>
+      <div class="field-group">
+        <label>ZIP</label>
+        <input id="s-zip" type="text" placeholder="10001">
+      </div>
+      <div class="field-group full">
+        <label>Country</label>
+        <input id="s-country" type="text" placeholder="USA">
+      </div>
+
+      <span class="section-title">Professional</span>
+
+      <div class="field-group full">
+        <label>Company</label>
+        <input id="s-company" type="text" placeholder="Acme Corp">
+      </div>
+      <div class="field-group full">
+        <label>Job Title</label>
+        <input id="s-job_title" type="text" placeholder="Software Engineer">
+      </div>
+      <div class="field-group full">
+        <label>Website</label>
+        <input id="s-website" type="url" placeholder="https://example.com">
+      </div>
+
+      <span class="section-title">Other</span>
+
+      <div class="field-group">
+        <label>Date of Birth</label>
+        <input id="s-date_of_birth" type="text" placeholder="1990-01-15">
+      </div>
+      <div class="field-group">
+        <label>Gender</label>
+        <select id="s-gender">
+          <option value="">— select —</option>
+          <option value="male">Male</option>
+          <option value="female">Female</option>
+          <option value="non-binary">Non-binary</option>
+          <option value="prefer not to say">Prefer not to say</option>
+        </select>
+      </div>
+
+      <span class="section-title" style="margin-top:14px;">API Keys <span style="font-weight:normal;color:#aaa;text-transform:none;letter-spacing:0;">(optional &mdash; free tier works without)</span></span>
+
+      <div class="field-group full">
+        <label>Gemini Key &mdash; for unlimited free-tier use</label>
+        <input id="s-gemini_key" type="password" placeholder="AIza... (get free at aistudio.google.com)">
+      </div>
+      <div class="field-group full">
+        <label>Anthropic Key &mdash; for Claude models</label>
+        <input id="s-anthropic_key" type="password" placeholder="sk-ant-...">
+      </div>
+      <div class="field-group full">
+        <label>OpenAI Key &mdash; for GPT models</label>
+        <input id="s-openai_key" type="password" placeholder="sk-...">
+      </div>
+    </div>
+
+    <div style="margin-top:12px;">
+      <button class="btn btn-blue" id="saveBtn">Save</button>
+    </div>
+  </div>
+
+  <!-- Info Panel -->
+  <div class="panel" id="panel-info" style="font-size:12px;color:#444;line-height:1.6;">
+    <p style="margin:0 0 10px;font-weight:bold;font-size:13px;color:#333;">&#9889; Auto Form Filler</p>
+    <p style="margin:0 0 10px;">Automatically detects the current page and fills in your personal data using AI.</p>
+
+    <p style="margin:0 0 4px;font-weight:bold;color:#2e7d32;">&#127381; Free tier</p>
+    <p style="margin:0 0 10px;">Uses <strong>Gemini Flash</strong> (Google) — no API key needed. Limited to 10 fills/day. For unlimited use, add your own free Gemini key at <strong>aistudio.google.com</strong>.</p>
+
+    <p style="margin:0 0 4px;font-weight:bold;color:#1565c0;">&#128176; Paid models</p>
+    <p style="margin:0 0 10px;">Claude (Anthropic) and GPT (OpenAI) require your own API key in My Data &rarr; API Keys. You pay your provider directly.</p>
+
+    <p style="margin:0 0 4px;font-weight:bold;color:#555;">&#128196; What it fills</p>
+    <ul style="margin:0 0 10px;padding-left:16px;color:#666;">
+      <li>Name, email, phone</li>
+      <li>Address, city, state, ZIP, country</li>
+      <li>Company, job title, website</li>
+      <li>Date of birth, gender</li>
+    </ul>
+
+    <p style="margin:0;font-size:11px;color:#999;">&#128274; Passwords &amp; logins are handled by Bitwarden &mdash; install it separately.</p>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

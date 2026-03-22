@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <!--
+    If you are serving your web app in a path other than the root, change the
+    href value below to reflect the base path you are serving from.
+
+    The path provided below has to start and end with a slash "/" in order for
+    it to work correctly.
+
+    For more details:
+    * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base
+
+    This is a placeholder for base href that will be replaced by the value of
+    the `--base-href` argument provided to `flutter build`.
+  -->
+  <base href="$FLUTTER_BASE_HREF">
+
+  <meta charset="UTF-8">
+  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+  <meta name="description" content="A new Flutter project.">
+
+  <!-- iOS meta tags & icons -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="runner_companion_app">
+  <link rel="apple-touch-icon" href="icons/Icon-192.png">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="favicon.png" />
+
+  <title>Running Companion</title>
+  <link rel="manifest" href="manifest.json">
+  <script src="https://js.stripe.com/v3/"></script>
+  <script>
+    // Unregister any stale service workers so Flutter loads fresh from network.
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.getRegistrations().then(function (regs) {
+        if (regs.length > 0) {
+          Promise.all(regs.map(function (r) { return r.unregister(); }))
+            .then(function () {
+              if ('caches' in window) {
+                caches.keys().then(function (keys) {
+                  return Promise.all(keys.map(function (k) { return caches.delete(k); }));
+                });
+              }
+              window.location.reload();
+            });
+        }
+      });
+    }
+  </script>
+</head>
+
+<body>
+  <script src="flutter_bootstrap.js" async></script>
+  <script>
+    // Expose a global showEmailPicker so Flutter web pages can call it via JS interop.
+    (function(){
+      window.showEmailPicker = function(opts){
+        var to = encodeURIComponent(opts && opts.to ? opts.to : 'eddie@mlebotics.com');
+        var subject = encodeURIComponent(opts && opts.subject ? opts.subject : '');
+        var body = encodeURIComponent((opts && opts.body ? opts.body : '') + '\n\n— via runcompanion');
+        var chooser = 'Choose how to compose an email to ' + (opts && opts.to ? opts.to : 'eddie@mlebotics.com');
+        // Use window.open for web clients, fallback to mailto
+        var html = '<div style="font-family:Inter,sans-serif;padding:18px;max-width:420px">'+
+          '<h3 style="margin:0 0 8px">Contact</h3><p style="color:#9fb8c4;margin:0 0 12px">'+chooser+'</p>'+
+          '<div style="display:flex;flex-direction:column;gap:8px">'+
+          '<a href="mailto:'+decodeURIComponent(to)+'?subject='+subject+'&body='+body+'" style="padding:10px;border-radius:8px;background:#0b1220;color:#fff;text-align:center;text-decoration:none">Default mail app</a>'+
+          '<a href="https://mail.google.com/mail/?view=cm&fs=1&to='+to+'&su='+subject+'&body='+body+'" target="_blank" rel="noopener" style="padding:10px;border-radius:8px;background:#1a73e8;color:#fff;text-align:center;text-decoration:none">Gmail (web)</a>'+
+          '<a href="https://outlook.live.com/owa/?path=/mail/action/compose&to='+to+'&subject='+subject+'&body='+body+'" target="_blank" rel="noopener" style="padding:10px;border-radius:8px;background:#0072c6;color:#fff;text-align:center;text-decoration:none">Outlook.com</a>'+
+          '</div></div>';
+        var w = window.open('about:blank','_blank','noopener');
+        try { w.document.write(html); w.document.close(); } catch (e) { window.location.href = 'mailto:' + (opts && opts.to ? opts.to : 'eddie@mlebotics.com') + '?subject=' + (opts && opts.subject ? encodeURIComponent(opts.subject) : '') + '&body=' + (opts && opts.body ? encodeURIComponent(opts.body) : ''); }
+      };
+    })();
+  </script>
+</body>
+
+</html>
