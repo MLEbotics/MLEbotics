@@ -1,0 +1,27 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+
+  "buildCommand": "pnpm turbo run build --filter=@mlebotics/marketing",
+  "installCommand": "pnpm install --frozen-lockfile",
+  "outputDirectory": "apps/marketing/dist",
+  "framework": null,
+
+  "rewrites": [
+    {
+      "source": "/console/:path*",
+      "destination": "$CONSOLE_APP_URL/:path*"
+    },
+    {
+      "source": "/studio/:path*",
+      "destination": "$STUDIO_APP_URL/:path*"
+    },
+    {
+      "source": "/docs/:path*",
+      "destination": "$DOCS_APP_URL/:path*"
+    },
+    {
+      "source": "/:path*",
+      "destination": "/"
+    }
+  ]
+}

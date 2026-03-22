@@ -1,0 +1,17 @@
+{
+  "name": "@mlebotics/robot-agent",
+  "version": "0.1.0",
+  "private": true,
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@mlebotics/robotics-agents": "workspace:*"
+  },
+  "devDependencies": {
+    "@mlebotics/config": "workspace:*",
+    "typescript": "^5.7.0"
+  }
+}

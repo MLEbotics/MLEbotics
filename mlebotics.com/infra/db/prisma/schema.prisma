@@ -1,0 +1,68 @@
+// Prisma schema — MLEbotics multi-tenant data model
+// Run: pnpm --filter @mlebotics/db db:generate
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// ── Organization (tenant) ────────────────────────────────────────────────────
+
+model Organization {
+  id          String   @id @default(cuid())
+  name        String
+  slug        String   @unique
+  avatarUrl   String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  memberships Membership[]
+
+  @@map("organizations")
+}
+
+// ── User ─────────────────────────────────────────────────────────────────────
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  avatarUrl String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  memberships Membership[]
+
+  @@map("users")
+}
+
+// ── Membership (user ↔ org, Phase 2 — RBAC) ─────────────────────────────────
+
+model Membership {
+  id             String     @id @default(cuid())
+  role           String     @default("MEMBER")
+  userId         String
+  organizationId String
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
+
+  user         User         @relation(fields: [userId],         references: [id], onDelete: Cascade)
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, organizationId])
+  @@map("memberships")
+}
+
+// ── Role values (Phase 2 — RBAC) ────────────────────────────────────────────
+// SQLite does not support native enum types. Role is stored as a String.
+// Valid values: OWNER | ADMIN | MEMBER | VIEWER
+
+// ── Phase 3 placeholders ─────────────────────────────────────────────────────
+// World, Entity, Workflow, Step, Plugin models will be added here in Phase 3.
+
+// ── Phase 4 placeholders ─────────────────────────────────────────────────────
+// Robot, RobotAgent, Adapter models will be added here in Phase 4.

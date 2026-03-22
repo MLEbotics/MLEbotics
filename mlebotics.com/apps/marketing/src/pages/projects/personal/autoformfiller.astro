@@ -1,0 +1,153 @@
+---
+import Layout from '@layouts/Layout.astro'
+import Header from '@components/Header.astro'
+import Footer from '@components/Footer.astro'
+
+const features = [
+  'Chrome extension sidebar UI — one-click form scan and fill',
+  'Flask API backend — intent-based field mapping via OpenAI GPT-4o',
+  'Profile store — fill your data once, reuse it everywhere',
+  'DOM injection with synthetic event dispatch for React / Vue compatibility',
+  'Multi-step form support with dynamic field detection',
+  'Checkbox, radio button, and select element handlers',
+  'Cover letter drafting mode — generates contextual free-text content',
+]
+
+const steps = [
+  'Extension scans the DOM and extracts all form field metadata (labels, placeholders, name attributes, element types).',
+  'Field list is sent to the Flask API along with the user\'s stored profile (name, contact, work history, etc.).',
+  'OpenAI returns a structured JSON map of field identifiers to fill values.',
+  'Extension iterates the map, sets values, and fires input + change events so the page\'s framework state updates correctly.',
+]
+---
+
+<Layout
+  title="AutoFormFiller — Personal Project"
+  description="Chrome extension + Flask backend that fills web forms automatically using AI."
+>
+  <Header />
+
+  <main>
+    <section class="section">
+      <div class="container project-container">
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+          <a href="/projects">Projects</a>
+          <span aria-hidden="true">→</span>
+          <a href="/projects/personal">Personal</a>
+          <span aria-hidden="true">→</span>
+          <span>AutoFormFiller</span>
+        </nav>
+
+        <header class="project-header">
+          <div class="project-meta">
+            {['Python', 'Flask', 'Chrome Extension', 'OpenAI'].map((s) => (
+              <span class="stack-pill">{s}</span>
+            ))}
+            <span class="status-badge active">Active</span>
+          </div>
+          <h1>AutoFormFiller</h1>
+          <p class="project-tagline">
+            A Chrome extension and Python backend that scans any web form and fills it automatically using your stored profile and OpenAI.
+          </p>
+        </header>
+
+        <div class="project-body">
+          <section class="detail-section">
+            <h2>Overview</h2>
+            <p>
+              AutoFormFiller was born from 30+ job applications worth of repetitive form work. The extension reads every visible field on the page — labels, placeholders, and surrounding DOM context — and sends them to a Flask API. OpenAI maps the fields to your stored profile data and returns a fill-map. The extension then injects the values and fires synthetic input events so frameworks like React detect the changes correctly.
+            </p>
+          </section>
+
+          <section class="detail-section">
+            <h2>Features</h2>
+            <ul class="feature-list">
+              {features.map((f) => <li>{f}</li>)}
+            </ul>
+          </section>
+
+          <section class="detail-section">
+            <h2>How It Works</h2>
+            <div class="steps">
+              {steps.map((s, i) => (
+                <div class="step">
+                  <span class="step-num">{i + 1}</span>
+                  <p>{s}</p>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          <section class="detail-section">
+            <h2>Links</h2>
+            <div class="links-row">
+              <a
+                href="https://github.com/eddie7ch/MLEbotics"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="btn-outline btn--sm"
+              >GitHub →</a>
+              <a href="/blog/ai-automation-workflow" class="btn-outline btn--sm">
+                Read build post →
+              </a>
+            </div>
+          </section>
+        </div>
+
+        <div class="page-footer">
+          <a href="/projects/personal" class="btn-outline btn--sm">← Personal projects</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</Layout>
+
+<style>
+  .project-container { max-width: 800px; }
+  .breadcrumb {
+    display: flex; gap: .5rem; align-items: center; flex-wrap: wrap;
+    font-size: .8rem; color: var(--muted); margin-bottom: 2.5rem;
+  }
+  .breadcrumb a { color: var(--cyan); text-decoration: none; }
+  .project-header { margin-bottom: 3rem; }
+  .project-meta { display: flex; gap: .5rem; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; }
+  .stack-pill {
+    font-size: .68rem; font-weight: 600; padding: .2rem .6rem; border-radius: 99px;
+    background: rgba(255,255,255,.05); border: 1px solid var(--border); color: var(--muted);
+  }
+  .status-badge {
+    font-size: .68rem; font-weight: 600; padding: .2rem .65rem; border-radius: 99px;
+  }
+  .status-badge.active {
+    background: rgba(0,255,136,.1); border: 1px solid rgba(0,255,136,.25); color: var(--green);
+  }
+  .project-header h1 {
+    font-size: clamp(2rem, 5vw, 3rem); font-weight: 700; color: #fff; margin-bottom: .75rem;
+  }
+  .project-tagline { font-size: 1.05rem; color: var(--muted); line-height: 1.75; max-width: 640px; }
+  .project-body { display: flex; flex-direction: column; gap: 2.5rem; }
+  .detail-section h2 {
+    font-size: 1.15rem; font-weight: 600; color: #fff;
+    margin-bottom: .9rem; padding-bottom: .5rem; border-bottom: 1px solid var(--border);
+  }
+  .detail-section p { font-size: .9rem; color: var(--muted); line-height: 1.8; }
+  .feature-list {
+    display: flex; flex-direction: column; gap: .45rem; margin-left: 1.25rem;
+  }
+  .feature-list li { font-size: .9rem; color: var(--text); }
+  .steps { display: flex; flex-direction: column; gap: 1rem; margin-top: .5rem; }
+  .step { display: flex; gap: 1rem; align-items: flex-start; }
+  .step-num {
+    display: flex; align-items: center; justify-content: center;
+    min-width: 28px; height: 28px; border-radius: 50%;
+    background: rgba(0,212,255,.1); border: 1px solid rgba(0,212,255,.25);
+    color: var(--cyan); font-size: .75rem; font-weight: 700;
+    flex-shrink: 0; margin-top: .1rem;
+  }
+  .step p { font-size: .875rem; color: var(--muted); line-height: 1.7; }
+  .links-row { display: flex; gap: .75rem; flex-wrap: wrap; }
+  .page-footer { margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--border); }
+  .btn--sm { padding: .45rem 1rem; font-size: .8rem; }
+</style>

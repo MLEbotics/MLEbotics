@@ -1,0 +1,143 @@
+---
+import Layout from '@layouts/Layout.astro'
+import Header from '@components/Header.astro'
+import Footer from '@components/Footer.astro'
+---
+
+<Layout
+  title="Why I Built AutoFormFiller: Killing Repetitive Forms"
+  description="Applying for 30+ positions meant filling the same fields hundreds of times. So I automated it with a Chrome extension and OpenAI backend."
+>
+  <Header />
+
+  <main>
+    <section class="section">
+      <div class="container post-container">
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+          <a href="/blog">Blog</a>
+          <span aria-hidden="true">→</span>
+          <span>Why I Built AutoFormFiller</span>
+        </nav>
+
+        <header class="post-header">
+          <div class="post-meta">
+            <span>February 15, 2026</span>
+            <span class="sep">·</span>
+            <span>5 min read</span>
+          </div>
+          <h1>Why I Built AutoFormFiller: Killing Repetitive Forms</h1>
+          <div class="post-tags">
+            {['Python', 'Flask', 'Chrome Extension', 'OpenAI'].map((t) => (
+              <span class="tag-pill">{t}</span>
+            ))}
+          </div>
+        </header>
+
+        <article class="post-body">
+          <p>
+            I spent three weeks applying for jobs and internships. After the thirtieth application I had typed my name, email, phone number, and "describe yourself in 100 words" into boxes so many times that I started making typos on <em>my own name</em>. Something had to change.
+          </p>
+
+          <h2>The Pattern</h2>
+          <p>
+            Most application forms are structurally identical. Name, contact info, work history, education, a free-text box for a cover letter or summary. The data is the same every time. Only the boxes change — slightly different field IDs, different placeholder text, different page layouts. An AI just needs to understand the intent behind each field.
+          </p>
+
+          <h2>Architecture</h2>
+          <p>
+            AutoFormFiller is split into two parts: a Chrome extension that runs in the browser, and a Python Flask backend that handles all the AI logic.
+          </p>
+
+          <ul>
+            <li><strong>Chrome Extension</strong> — sidebar UI built with vanilla JS; reads form fields from the DOM and sends them to the backend</li>
+            <li><strong>Flask API</strong> — receives the field list, calls OpenAI to map the user's profile data to field values, returns a fill-map JSON</li>
+            <li><strong>Profile store</strong> — user fills their data once in extension settings; it is stored locally and sent with each request</li>
+            <li><strong>DOM injection</strong> — the extension sets field values and fires synthetic input events so frameworks like React detect the change</li>
+          </ul>
+
+          <h2>The Prompt Design</h2>
+          <p>
+            The backend prompt includes the full list of field labels, placeholder hints, and surrounding DOM context. OpenAI returns a structured JSON object mapping field identifiers to suggested fill values. The extension iterates the map and sets each matching element.
+          </p>
+          <p>
+            Edge cases were plentiful: radio buttons, checkboxes, <code>contenteditable</code> divs used as text inputs, and multi-step forms that render new fields after a button click. Each required its own injection handler.
+          </p>
+
+          <h2>Result</h2>
+          <p>
+            A 10-field form that previously took 4–5 minutes now takes about 8 seconds — one click triggers the scan, a 2-second API call maps the fields, and the extension fills everything. Longer cover-letter fields still need a manual review pass, but the base content is drafted automatically.
+          </p>
+
+          <p class="callout">
+            AutoFormFiller is part of the MLEbotics monorepo. The Chrome extension can be loaded unpacked from the <code>extension/</code> directory in Developer Mode.
+          </p>
+        </article>
+
+        <div class="post-footer">
+          <a href="/blog" class="btn-outline btn--sm">← Back to blog</a>
+          <a href="/projects/personal/autoformfiller" class="btn-outline btn--sm">View project →</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</Layout>
+
+<style>
+  .post-container { max-width: 720px; }
+  .breadcrumb {
+    display: flex; gap: .5rem; align-items: center;
+    font-size: .8rem; color: var(--muted); margin-bottom: 2.5rem;
+  }
+  .breadcrumb a { color: var(--cyan); text-decoration: none; }
+  .breadcrumb a:hover { text-decoration: underline; }
+  .post-header { margin-bottom: 3rem; }
+  .post-meta {
+    font-size: .8rem; color: var(--muted); margin-bottom: 1rem;
+    display: flex; gap: .5rem; align-items: center;
+  }
+  .sep { color: var(--muted); }
+  .post-header h1 {
+    font-size: clamp(1.6rem, 4vw, 2.5rem);
+    font-weight: 700; color: #fff; line-height: 1.2; margin-bottom: 1.25rem;
+  }
+  .post-tags { display: flex; gap: .5rem; flex-wrap: wrap; }
+  .tag-pill {
+    display: inline-block; font-size: .7rem; font-weight: 500;
+    padding: .2rem .65rem; border-radius: 99px;
+    border: 1px solid rgba(0,212,255,.2);
+    color: var(--cyan); background: rgba(0,212,255,.06);
+  }
+  .post-body { color: var(--text); line-height: 1.8; }
+  .post-body p { margin-bottom: 1.4rem; }
+  .post-body h2 {
+    font-size: 1.25rem; font-weight: 600; color: #fff;
+    margin: 2.5rem 0 1rem;
+  }
+  .post-body ul {
+    margin: 0 0 1.4rem 1.25rem;
+    display: flex; flex-direction: column; gap: .4rem;
+  }
+  .post-body li { font-size: .95rem; color: var(--text); }
+  .post-body strong { color: #fff; font-weight: 600; }
+  .post-body em { color: var(--cyan); font-style: normal; }
+  .post-body code {
+    font-family: monospace; font-size: .85rem;
+    background: rgba(255,255,255,.06); border-radius: 4px;
+    padding: .1rem .35rem; color: #e879f9;
+  }
+  .callout {
+    background: rgba(0,212,255,.06);
+    border: 1px solid rgba(0,212,255,.2);
+    border-left: 3px solid var(--cyan);
+    border-radius: 8px; padding: 1rem 1.25rem;
+    font-size: .9rem; color: var(--text); margin: 2rem 0;
+  }
+  .post-footer {
+    margin-top: 3rem; padding-top: 2rem;
+    border-top: 1px solid var(--border);
+    display: flex; gap: 1rem; flex-wrap: wrap;
+  }
+  .btn--sm { padding: .45rem 1rem; font-size: .8rem; }
+</style>

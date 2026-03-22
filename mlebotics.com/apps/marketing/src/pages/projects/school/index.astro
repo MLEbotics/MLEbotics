@@ -1,0 +1,117 @@
+---
+import Layout from '@layouts/Layout.astro'
+import Header from '@components/Header.astro'
+import Footer from '@components/Footer.astro'
+
+const projects = [
+  {
+    slug: 'movie-browser',
+    name: 'Movie Browser App',
+    course: 'Web Programming — React',
+    year: '2026',
+    stack: ['React', 'TMDB API', 'CSS Modules', 'React Router'],
+    summary:
+      'SPA that fetches top-rated movies from TMDB, supports search, genre filtering, and pagination, with React Router navigation and portal-based detail overlays.',
+  },
+  {
+    slug: 'cloud-architecture',
+    name: 'AWS Cloud Architecture',
+    course: 'Introduction to Cloud',
+    year: '2026',
+    stack: ['AWS', 'EC2', 'RDS', 'S3', 'CloudFormation'],
+    summary:
+      'Designed and deployed a multi-tier cloud architecture on AWS — VPC with public/private subnets, EC2 web tier, RDS database tier, S3 static assets, and CloudFront CDN.',
+  },
+]
+---
+
+<Layout
+  title="School Projects"
+  description="School projects from Bow Valley College — React, AWS, C#, and ASP.NET."
+>
+  <Header />
+
+  <main>
+    <section class="section">
+      <div class="container">
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+          <a href="/projects">Projects</a>
+          <span aria-hidden="true">→</span>
+          <span>School</span>
+        </nav>
+
+        <p class="tag">Bow Valley College</p>
+        <h1 class="page-h1">School Projects</h1>
+        <p class="page-sub">
+          Academic projects from my Computer Information Technology program — applying class concepts to real, working implementations.
+        </p>
+
+        <div class="project-grid">
+          {projects.map((p) => (
+            <a href={`/projects/school/${p.slug}`} class="card project-card">
+              <div class="project-card__head">
+                <div class="stack-pills">
+                  {p.stack.slice(0, 3).map((s) => <span class="stack-pill">{s}</span>)}
+                </div>
+                <span class="year-badge">{p.year}</span>
+              </div>
+              <p class="course-label">{p.course}</p>
+              <h2 class="project-name">{p.name}</h2>
+              <p class="project-summary">{p.summary}</p>
+              <span class="project-link">Read more →</span>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</Layout>
+
+<style>
+  .breadcrumb {
+    display: flex; gap: .5rem; align-items: center;
+    font-size: .8rem; color: var(--muted); margin-bottom: 2rem;
+  }
+  .breadcrumb a { color: var(--cyan); text-decoration: none; }
+  .page-h1 {
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 700; color: #fff; margin-bottom: .75rem;
+  }
+  .page-sub {
+    font-size: .95rem; color: var(--muted);
+    margin-bottom: 3rem; max-width: 600px; line-height: 1.7;
+  }
+  .project-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 1.25rem;
+  }
+  .project-card { display: block; text-decoration: none; }
+  .project-card__head {
+    display: flex; justify-content: space-between;
+    align-items: flex-start; margin-bottom: 1rem; gap: 1rem;
+  }
+  .stack-pills { display: flex; gap: .4rem; flex-wrap: wrap; }
+  .stack-pill {
+    font-size: .65rem; font-weight: 600; padding: .2rem .6rem; border-radius: 99px;
+    background: rgba(255,255,255,.05); border: 1px solid var(--border); color: var(--muted);
+  }
+  .year-badge {
+    font-size: .68rem; font-weight: 600; padding: .2rem .65rem; border-radius: 99px;
+    background: rgba(99,102,241,.1); border: 1px solid rgba(99,102,241,.25);
+    color: #818cf8; flex-shrink: 0;
+  }
+  .course-label {
+    font-size: .72rem; font-weight: 600; letter-spacing: .06em;
+    text-transform: uppercase; color: var(--cyan); margin-bottom: .4rem;
+  }
+  .project-name {
+    font-size: 1.15rem; font-weight: 600; color: #fff; margin-bottom: .6rem;
+  }
+  .project-summary {
+    font-size: .875rem; color: var(--muted); line-height: 1.7; margin-bottom: 1.25rem;
+  }
+  .project-link { font-size: .85rem; color: var(--cyan); }
+</style>

@@ -1,0 +1,20 @@
+# Secret/credential files
+.env
+.env.*
+tokens.json
+
+# Python virtual environment
+.venv/
+
+# AWS / deployment
+.aws/
+
+# Build artifacts
+node_modules/
+
+functions/.env
+functions/.env.*
+.env
+.env.*
+.vercel
+.env*.local

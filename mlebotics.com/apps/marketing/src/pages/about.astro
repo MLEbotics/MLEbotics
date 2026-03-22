@@ -1,0 +1,135 @@
+---
+import Layout from '@layouts/Layout.astro'
+import Header from '@components/Header.astro'
+import Footer from '@components/Footer.astro'
+import '../styles/global.css'
+
+const values = [
+  { icon: '⚡', title: 'Ruthless simplicity', body: "Every feature earns its place. If it doesn't reduce friction, it doesn't ship." },
+  { icon: '🧩', title: 'Modularity first', body: 'Tools are designed to compose. Each component can stand alone or plug into a larger system.' },
+  { icon: '🛡️', title: 'Reliability over novelty', body: "We'd rather ship a robust 80% solution on schedule than a fragile 100% solution never." },
+  { icon: '🔬', title: 'Build to learn', body: 'MLEbotics projects are also learning vehicles — every system teaches something the next one uses.' },
+]
+
+const stack = [
+  'Python', 'Flutter / Dart', 'Next.js', 'Astro', 'Firebase',
+  'OpenAI API', 'Anthropic Claude', 'Prisma', 'tRPC', 'Turborepo',
+]
+---
+
+<Layout title="About" description="About MLEbotics — who we are, what we value, and how we build.">
+  <Header />
+
+  <main>
+    <!-- Intro -->
+    <section class="section">
+      <div class="container about-intro">
+        <div>
+          <p class="tag">About MLEbotics</p>
+          <h1 class="page-h1">Building tools<br /><span class="gradient-text">that work.</span></h1>
+          <p class="page-sub">
+            MLEbotics is a one-person engineering lab based in Calgary, AB, Canada. 
+            Every project starts with a real problem: something that wastes time, creates friction, 
+            or just shouldn't require human attention. We build the tool that fixes it.
+          </p>
+          <p class="page-sub">
+            The focus is on AI agents, desktop automation, robotics firmware, and cross-platform apps —
+            built to be reliable, composable, and practical.
+          </p>
+          <a href="mailto:eddie@mlebotics.com" class="btn-primary" style="margin-top:.75rem;">Get in touch &rarr;</a>
+        </div>
+        <div class="about-card card">
+          <p class="tag">Founder</p>
+          <p class="about-name">Eddie Chongtham</p>
+          <p class="about-role">Engineer · Builder · Calgary, AB</p>
+          <div class="about-links">
+            <a href="https://github.com/eddie7ch" target="_blank" rel="noopener noreferrer" class="btn-outline btn--sm">GitHub</a>
+            <a href="mailto:eddie@mlebotics.com" class="btn-outline btn--sm">Email</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Values -->
+    <section class="section" style="padding-top:0">
+      <div class="container">
+        <p class="tag">What we believe</p>
+        <h2 class="section-h2">Core values</h2>
+        <div class="values-grid">
+          {values.map(v => (
+            <div class="card value-card">
+              <span class="value-icon" aria-hidden="true">{v.icon}</span>
+              <h3>{v.title}</h3>
+              <p>{v.body}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- Stack -->
+    <section class="section" style="padding-top:0">
+      <div class="container">
+        <p class="tag">Technologies</p>
+        <h2 class="section-h2">How we build</h2>
+        <div class="stack-chips">
+          {stack.map(s => <span class="chip">{s}</span>)}
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact CTA -->
+    <section class="section" style="padding-top:0">
+      <div class="container">
+        <div class="cta-banner">
+          <h2>Let's build something</h2>
+          <p>Interested in working together, or have a friction-point that needs solving? Reach out.</p>
+          <a href="mailto:eddie@mlebotics.com" class="btn-primary">eddie@mlebotics.com</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</Layout>
+
+<style>
+  .page-h1  { font-size: clamp(2rem,4vw,3rem); font-weight: 700; color: #fff; margin-bottom: 1.25rem; line-height: 1.15; }
+  .page-sub { font-size: .97rem; color: var(--muted); max-width: 520px; line-height: 1.8; margin-bottom: .75rem; }
+  .section-h2 { font-size: clamp(1.4rem,2.5vw,1.9rem); font-weight: 700; color: #fff; margin-bottom: 2rem; }
+
+  .about-intro {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 4rem;
+    align-items: start;
+  }
+  @media (max-width: 760px) { .about-intro { grid-template-columns: 1fr; } }
+
+  .about-card { min-width: 220px; display: flex; flex-direction: column; gap: .65rem; }
+  .about-name { font-size: 1.1rem; font-weight: 700; color: #fff; }
+  .about-role { font-size: .82rem; color: var(--muted); }
+  .about-links { display: flex; gap: .6rem; flex-wrap: wrap; margin-top: .25rem; }
+
+  .values-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.25rem; }
+  .value-card  { display: flex; flex-direction: column; gap: .65rem; }
+  .value-icon  { font-size: 1.5rem; }
+  .value-card h3 { font-size: .97rem; font-weight: 600; color: #fff; }
+  .value-card p  { font-size: .875rem; color: var(--muted); line-height: 1.7; }
+
+  .stack-chips { display: flex; flex-wrap: wrap; gap: .5rem; }
+  .chip { font-size: .8rem; font-weight: 500; color: var(--cyan); border: 1px solid rgba(0,212,255,.25); border-radius: 6px; padding: .3rem .75rem; }
+
+  .cta-banner {
+    background: linear-gradient(135deg, rgba(0,212,255,.08), rgba(0,255,136,.05));
+    border: 1px solid rgba(0,212,255,.2);
+    border-radius: 16px;
+    padding: 4rem 2rem;
+    text-align: center;
+    display: flex; flex-direction: column; align-items: center; gap: 1.25rem;
+  }
+  .cta-banner h2 { font-size: 1.9rem; font-weight: 700; color: #fff; }
+  .cta-banner p  { font-size: 1rem; color: var(--muted); max-width: 420px; line-height: 1.7; }
+
+  .btn--sm { padding: .45rem 1rem; font-size: .8rem; }
+</style>

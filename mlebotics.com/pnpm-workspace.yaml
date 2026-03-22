@@ -1,0 +1,8 @@
+packages:
+  - "apps/*"
+  - "packages/*"
+  - "platform"
+  - "infra/db"
+  - "robotics/agents"
+  - "robotics/agents/*"
+  - "robotics/adapters/*"

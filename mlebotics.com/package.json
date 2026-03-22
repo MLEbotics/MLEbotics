@@ -1,0 +1,34 @@
+{
+  "name": "mlebotics",
+  "private": true,
+  "version": "0.1.0",
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "start": "turbo run start",
+    "lint": "turbo run lint",
+    "typecheck": "turbo run typecheck",
+    "dev:marketing": "turbo run dev --filter=@mlebotics/marketing",
+    "dev:console": "turbo run dev --filter=@mlebotics/console",
+    "dev:studio": "turbo run dev --filter=@mlebotics/studio",
+    "dev:docs": "turbo run dev --filter=@mlebotics/docs",
+    "build:marketing": "turbo run build --filter=@mlebotics/marketing",
+    "build:console": "turbo run build --filter=@mlebotics/console",
+    "build:studio": "turbo run build --filter=@mlebotics/studio",
+    "build:docs": "turbo run build --filter=@mlebotics/docs",
+    "start:marketing": "turbo run start --filter=@mlebotics/marketing",
+    "start:console": "turbo run start --filter=@mlebotics/console",
+    "start:studio": "turbo run start --filter=@mlebotics/studio",
+    "start:docs": "turbo run start --filter=@mlebotics/docs"
+  },
+  "devDependencies": {
+    "next": "^15.5.14",
+    "turbo": "^2.5.0",
+    "typescript": "^5.7.0"
+  },
+  "engines": {
+    "node": ">=20.0.0",
+    "pnpm": ">=9.0.0"
+  },
+  "packageManager": "pnpm@10.32.1"
+}

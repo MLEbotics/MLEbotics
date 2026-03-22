@@ -1,0 +1,187 @@
+---
+import Layout from '@layouts/Layout.astro'
+import Header from '@components/Header.astro'
+import Footer from '@components/Footer.astro'
+import '../styles/global.css'
+---
+
+<Layout title="MLEbotics" description="Building modular AI, automation, and robotics tools that remove friction and make life easier.">
+  <Header />
+
+  <main>
+    <!-- ── Hero ────────────────────────────────────────────────────── -->
+    <section class="hero section">
+      <div class="container hero__inner">
+        <div class="hero__badge">
+          <span class="dot"></span>
+          AI · Automation · Robotics
+        </div>
+        <h1 class="hero__h1">
+          Remove friction.<br />
+          <span class="gradient-text">Build smarter tools.</span>
+        </h1>
+        <p class="hero__sub">
+          MLEbotics builds modular AI, automation, and robotics systems—<br />
+          so you can focus on what matters, not on repetitive work.
+        </p>
+        <div class="hero__cta">
+          <a href="/projects" class="btn-primary">See our projects</a>
+          <a href="/about" class="btn-outline">About us</a>
+        </div>
+      </div>
+      <div class="hero__glow" aria-hidden="true"></div>
+    </section>
+
+    <!-- ── Capabilities ─────────────────────────────────────────────── -->
+    <section class="section">
+      <div class="container">
+        <p class="tag">What we build</p>
+        <h2 class="section__h2">Modular tools for every layer</h2>
+        <div class="grid3">
+          <div class="card cap-card">
+            <div class="cap-icon" aria-hidden="true">&#129302;</div>
+            <h3>AI Agents</h3>
+            <p>Context-aware agents that read, reason, and act — from scheduling to document processing to full desktop automation.</p>
+          </div>
+          <div class="card cap-card">
+            <div class="cap-icon" aria-hidden="true">&#9881;&#65039;</div>
+            <h3>Automation</h3>
+            <p>End-to-end workflow automation: form filling, data extraction, notification routing, and API orchestration.</p>
+          </div>
+          <div class="card cap-card">
+            <div class="cap-icon" aria-hidden="true">&#129302;</div>
+            <h3>Robotics Firmware</h3>
+            <p>Lightweight firmware and companion apps for physical robots — bridging embedded hardware to cloud intelligence.</p>
+          </div>
+          <div class="card cap-card">
+            <div class="cap-icon" aria-hidden="true">&#128241;</div>
+            <h3>Mobile Apps</h3>
+            <p>Cross-platform Flutter applications — from running trackers to AI-powered coaching dashboards.</p>
+          </div>
+          <div class="card cap-card">
+            <div class="cap-icon" aria-hidden="true">&#128202;</div>
+            <h3>Dashboards</h3>
+            <p>Real-time monitoring dashboards that surface the data you care about, without the noise you don't.</p>
+          </div>
+          <div class="card cap-card">
+            <div class="cap-icon" aria-hidden="true">&#128279;</div>
+            <h3>Integrations</h3>
+            <p>Plug-and-play connectors for Telegram, Firebase, OpenAI, Anthropic, and your existing stack.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Projects preview ─────────────────────────────────────────── -->
+    <section class="section">
+      <div class="container">
+        <p class="tag">Featured projects</p>
+        <h2 class="section__h2">Built at MLEbotics</h2>
+        <div class="project-list">
+          <a href="/projects#runcompanion" class="card project-card">
+            <div class="project-card__head">
+              <span class="project-badge">Flutter · Firebase</span>
+              <span class="project-status active">Active</span>
+            </div>
+            <h3>RunCompanion</h3>
+            <p>AI-powered running coach. Tracks pace, plans sessions, and syncs with robotics training hardware.</p>
+          </a>
+          <a href="/projects#autoformfiller" class="card project-card">
+            <div class="project-card__head">
+              <span class="project-badge">Chrome · Flask</span>
+              <span class="project-status active">Active</span>
+            </div>
+            <h3>AutoFormFiller</h3>
+            <p>Chrome extension + backend that automatically fills forms using AI — built for job applications and registrations.</p>
+          </a>
+          <a href="/projects#hey-girl" class="card project-card">
+            <div class="project-card__head">
+              <span class="project-badge">Python · OpenAI</span>
+              <span class="project-status active">Active</span>
+            </div>
+            <h3>Hey Girl</h3>
+            <p>Voice AI assistant for Windows. Handles tasks, reads assignments, solves quizzes, and answers questions contextually.</p>
+          </a>
+          <a href="/projects#computer-use" class="card project-card">
+            <div class="project-card__head">
+              <span class="project-badge">Anthropic · Desktop</span>
+              <span class="project-status wip">In Progress</span>
+            </div>
+            <h3>Computer Use Agent</h3>
+            <p>Anthropic-powered AI desktop agent that sees your screen and completes tasks like a human operator.</p>
+          </a>
+        </div>
+        <div style="margin-top:2.5rem;text-align:center;">
+          <a href="/projects" class="btn-outline">View all projects &rarr;</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── CTA banner ────────────────────────────────────────────────── -->
+    <section class="section">
+      <div class="container">
+        <div class="cta-banner">
+          <h2>See it in action</h2>
+          <p>Explore the live dashboard to track projects, robots, and workflows in real time.</p>
+          <a href="https://console.mlebotics.com" class="btn-primary">Open dashboard &rarr;</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</Layout>
+
+<style>
+  /* Hero */
+  .hero { position: relative; overflow: hidden; padding-top: 7rem; padding-bottom: 7rem; text-align: center; }
+  .hero__inner { position: relative; z-index: 1; }
+  .hero__badge {
+    display: inline-flex; align-items: center; gap: .5rem;
+    font-size: .75rem; font-weight: 500; letter-spacing: .08em; text-transform: uppercase;
+    color: var(--cyan); border: 1px solid rgba(0,212,255,.25); border-radius: 99px;
+    padding: .35rem 1rem; margin-bottom: 2rem;
+  }
+  .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); box-shadow: 0 0 6px var(--green); }
+  .hero__h1 { font-size: clamp(2.5rem, 6vw, 4.5rem); font-weight: 700; line-height: 1.1; margin-bottom: 1.5rem; color: #fff; }
+  .hero__sub { font-size: 1.1rem; color: var(--muted); margin-bottom: 2.5rem; line-height: 1.8; }
+  .hero__cta { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+  .hero__glow {
+    position: absolute; inset: 0; pointer-events: none;
+    background: radial-gradient(ellipse 70% 55% at 50% 35%, rgba(0,212,255,.07) 0%, transparent 70%);
+  }
+
+  /* Section heading */
+  .section__h2 { font-size: clamp(1.6rem, 3vw, 2.2rem); font-weight: 700; color: #fff; margin-bottom: 2.5rem; }
+
+  /* Capabilities grid */
+  .grid3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem; }
+  .cap-card { display: flex; flex-direction: column; gap: .75rem; }
+  .cap-icon { font-size: 1.75rem; }
+  .cap-card h3 { font-size: 1rem; font-weight: 600; color: #fff; }
+  .cap-card p { font-size: .875rem; color: var(--muted); line-height: 1.7; }
+
+  /* Projects list */
+  .project-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.25rem; }
+  .project-card { text-decoration: none; color: inherit; display: flex; flex-direction: column; gap: .6rem; }
+  .project-card:hover h3 { color: var(--cyan); }
+  .project-card__head { display: flex; justify-content: space-between; align-items: center; }
+  .project-badge { font-size: .7rem; color: var(--muted); }
+  .project-status { font-size: .65rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; padding: .2rem .55rem; border-radius: 99px; }
+  .project-status.active { background: rgba(0,255,136,.12); color: var(--green); }
+  .project-status.wip    { background: rgba(0,212,255,.12); color: var(--cyan); }
+  .project-card h3 { font-size: 1.05rem; font-weight: 600; color: #fff; transition: color .15s; }
+  .project-card p  { font-size: .875rem; color: var(--muted); line-height: 1.7; }
+
+  /* CTA banner */
+  .cta-banner {
+    background: linear-gradient(135deg, rgba(0,212,255,.08), rgba(0,255,136,.05));
+    border: 1px solid rgba(0,212,255,.2);
+    border-radius: 16px;
+    padding: 4rem 2rem;
+    text-align: center;
+    display: flex; flex-direction: column; align-items: center; gap: 1.25rem;
+  }
+  .cta-banner h2 { font-size: 2rem; font-weight: 700; color: #fff; }
+  .cta-banner p  { font-size: 1rem; color: var(--muted); max-width: 480px; line-height: 1.7; }
+</style>

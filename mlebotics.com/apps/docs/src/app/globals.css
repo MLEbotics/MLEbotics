@@ -1,0 +1,21 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@keyframes logo-glow {
+  0%, 100% { color: #22d3ee; text-shadow: 0 0 10px rgba(34,211,238,0.8), 0 0 20px rgba(34,211,238,0.4); }
+  33%       { color: #a78bfa; text-shadow: 0 0 10px rgba(167,139,250,0.8), 0 0 20px rgba(167,139,250,0.4); }
+  66%       { color: #34d399; text-shadow: 0 0 10px rgba(52,211,153,0.8), 0 0 20px rgba(52,211,153,0.4); }
+}
+
+.logo-glow {
+  animation: logo-glow 4s ease-in-out infinite;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  transition: animation-duration 0.3s;
+}
+
+.logo-glow:hover {
+  animation-duration: 1.2s;
+}

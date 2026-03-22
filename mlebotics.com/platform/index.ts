@@ -1,0 +1,10 @@
+// platform/index.ts — top-level re-export for all platform types + runtime
+export * from './world'
+export * from './automation'
+export * from './plugins'
+export * from './shared/types'
+export * from './event-bus'
+export * from './world-engine'
+export * from './automation-engine'
+export * from './plugin-engine'
+export { PlatformRuntime } from './runtime'

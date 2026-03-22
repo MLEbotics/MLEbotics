@@ -1,0 +1,118 @@
+---
+import Layout from '@layouts/Layout.astro'
+import Header from '@components/Header.astro'
+import Footer from '@components/Footer.astro'
+
+const pillars = [
+  {
+    icon: '🎯',
+    title: 'Ship working tools',
+    body: 'We build things that actually run in production, not prototypes that exist only in demos. Every project in the MLEbotics repo is deployable today.',
+  },
+  {
+    icon: '🧩',
+    title: 'Stay modular',
+    body: 'Each tool is a standalone component. Systems should compose — not require you to adopt our entire stack to get value from one piece.',
+  },
+  {
+    icon: '🤖',
+    title: 'Bridge AI and physical systems',
+    body: 'The biggest unlock comes when software intelligence connects to the physical world. We focus on the bridge layer — firmware, BLE, MQTT, ROS2.',
+  },
+  {
+    icon: '⚡',
+    title: 'Optimise for time saved',
+    body: 'Every tool is measured by one metric: how many hours per month does it give back? If the answer is not measurable, we rethink the tool.',
+  },
+  {
+    icon: '🔓',
+    title: 'Keep it open',
+    body: 'Open source by default. Private only when security or client confidentiality demands it. We share the building blocks freely.',
+  },
+  {
+    icon: '📦',
+    title: 'Build it yourself first',
+    body: 'Before pulling in a dependency, we understand the problem well enough to build it. This keeps the stack lean and the mental model clear.',
+  },
+]
+---
+
+<Layout
+  title="Mission"
+  description="The principles and day-to-day mission driving MLEbotics."
+>
+  <Header />
+
+  <main>
+    <section class="section">
+      <div class="container">
+        <p class="tag">What we stand for</p>
+        <h1 class="page-h1">Our Mission</h1>
+        <p class="page-intro">
+          Build the modular AI, automation, and robotics tools that professionals and builders need — practical, composable, and open. Remove friction at every layer so people can focus on the work that matters.
+        </p>
+
+        <div class="pillars-grid">
+          {pillars.map((p) => (
+            <div class="pillar-card">
+              <span class="pillar-icon" aria-hidden="true">{p.icon}</span>
+              <h2>{p.title}</h2>
+              <p>{p.body}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="section section--alt">
+      <div class="container cta-row">
+        <div>
+          <h2 class="cta-h2">See the mission in practice</h2>
+          <p class="cta-sub">Every project in the repo is a direct expression of these principles.</p>
+        </div>
+        <div class="cta-btn-group">
+          <a href="/projects" class="btn-primary">Browse projects →</a>
+          <a href="/vision" class="btn-outline">Our vision</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</Layout>
+
+<style>
+  .page-h1 {
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 700; color: #fff; margin-bottom: 1rem;
+  }
+  .page-intro {
+    font-size: 1rem; color: var(--muted);
+    max-width: 680px; line-height: 1.8; margin-bottom: 3.5rem;
+  }
+  .pillars-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.25rem;
+  }
+  .pillar-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px; padding: 1.75rem;
+    transition: border-color .2s;
+  }
+  .pillar-card:hover { border-color: rgba(0,212,255,.3); }
+  .pillar-icon { font-size: 1.6rem; display: block; margin-bottom: 1rem; }
+  .pillar-card h2 {
+    font-size: 1rem; font-weight: 600; color: #fff; margin-bottom: .6rem;
+  }
+  .pillar-card p { font-size: .875rem; color: var(--muted); line-height: 1.75; }
+  .section--alt { background: var(--bg2); }
+  .cta-row {
+    display: flex; align-items: center;
+    justify-content: space-between; gap: 2rem; flex-wrap: wrap;
+  }
+  .cta-h2 { font-size: 1.6rem; font-weight: 700; color: #fff; margin-bottom: .4rem; }
+  .cta-sub { font-size: .9rem; color: var(--muted); }
+  .cta-btn-group { display: flex; gap: .75rem; flex-wrap: wrap; }
+</style>

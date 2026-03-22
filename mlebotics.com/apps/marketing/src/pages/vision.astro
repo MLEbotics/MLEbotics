@@ -1,0 +1,136 @@
+---
+import Layout from '@layouts/Layout.astro'
+import Header from '@components/Header.astro'
+import Footer from '@components/Footer.astro'
+
+const pillars = [
+  {
+    num: '01',
+    title: 'AI that acts, not just answers',
+    body: 'The next generation of AI assistants won\'t just respond to questions — they will autonomously complete tasks across software, hardware, and physical systems. We are building the infrastructure to make that real.',
+  },
+  {
+    num: '02',
+    title: 'Robotics that ships, not papers',
+    body: 'Too much robotics work lives in labs and research papers. Our vision is for modular, deployable robot firmware and cloud connectors that anyone can integrate without a PhD in ROS.',
+  },
+  {
+    num: '03',
+    title: 'Tools that compound',
+    body: 'Each MLEbotics tool is designed to integrate with every other. An AI agent that fills forms should also be able to read your running schedule, talk to your robot hardware, and update your dashboard — all through the same event bus.',
+  },
+  {
+    num: '04',
+    title: 'Open by default',
+    body: 'The infrastructure that removes friction should not itself be friction. Our tools are open-source, modular, and replaceable. We build dependencies on ideas, not on vendor lock-in.',
+  },
+]
+---
+
+<Layout
+  title="Vision"
+  description="The long-term vision driving everything we build at MLEbotics."
+>
+  <Header />
+
+  <main>
+    <section class="section">
+      <div class="container page-container">
+        <p class="tag">Where we're going</p>
+        <h1 class="page-h1">
+          A world without<br />
+          <span class="gradient-text">unnecessary friction.</span>
+        </h1>
+        <p class="page-intro">
+          Every hour a human being spends on a repetitive, automatable task is an hour stolen from something that actually matters. Our vision is to eliminate that class of work entirely — not someday, but now, one tool at a time.
+        </p>
+
+        <div class="vision-grid">
+          {pillars.map((p) => (
+            <div class="vision-block">
+              <span class="vision-num">{p.num}</span>
+              <h2>{p.title}</h2>
+              <p>{p.body}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="section section--alt">
+      <div class="container">
+        <div class="pull-quote">
+          <p>
+            "The best automation is the kind you never have to think about.
+            It just works — and you're already focused on the next thing."
+          </p>
+          <cite>— MLEbotics Design Principle</cite>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container cta-row">
+        <div>
+          <h2 class="cta-h2">See the vision in practice</h2>
+          <p class="cta-sub">Every project is a direct expression of where we want to go.</p>
+        </div>
+        <div class="cta-btn-group">
+          <a href="/projects" class="btn-primary">Browse projects →</a>
+          <a href="/mission" class="btn-outline">Our mission</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</Layout>
+
+<style>
+  .page-container { max-width: 900px; }
+  .page-h1 {
+    font-size: clamp(2.2rem, 5vw, 3.5rem);
+    font-weight: 700; line-height: 1.1; color: #fff; margin-bottom: 1.5rem;
+  }
+  .page-intro {
+    font-size: 1.1rem; color: var(--muted);
+    max-width: 700px; line-height: 1.85; margin-bottom: 4rem;
+  }
+  .vision-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+    gap: 1.5rem;
+  }
+  .vision-block {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 2rem;
+    transition: border-color .2s;
+  }
+  .vision-block:hover { border-color: rgba(0,212,255,.3); }
+  .vision-num {
+    display: block;
+    font-size: .7rem; font-weight: 700; letter-spacing: .15em;
+    color: var(--cyan); margin-bottom: .9rem;
+  }
+  .vision-block h2 {
+    font-size: 1.1rem; font-weight: 600; color: #fff; margin-bottom: .75rem;
+  }
+  .vision-block p { font-size: .9rem; color: var(--muted); line-height: 1.75; }
+  .section--alt { background: var(--bg2); }
+  .pull-quote { max-width: 680px; margin: 0 auto; text-align: center; }
+  .pull-quote p {
+    font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+    font-style: italic; color: var(--text); line-height: 1.65;
+    margin-bottom: 1.25rem;
+  }
+  .pull-quote cite { font-size: .8rem; color: var(--muted); font-style: normal; }
+  .cta-row {
+    display: flex; align-items: center;
+    justify-content: space-between; gap: 2rem; flex-wrap: wrap;
+  }
+  .cta-h2 { font-size: 1.6rem; font-weight: 700; color: #fff; margin-bottom: .4rem; }
+  .cta-sub { font-size: .9rem; color: var(--muted); }
+  .cta-btn-group { display: flex; gap: .75rem; flex-wrap: wrap; }
+</style>

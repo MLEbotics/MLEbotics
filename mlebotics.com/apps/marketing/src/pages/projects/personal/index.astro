@@ -1,0 +1,143 @@
+---
+import Layout from '@layouts/Layout.astro'
+import Header from '@components/Header.astro'
+import Footer from '@components/Footer.astro'
+
+const projects = [
+  {
+    slug: 'run-companion',
+    name: 'RunCompanion',
+    status: 'active',
+    stack: ['Flutter', 'Firebase', 'Dart', 'BLE'],
+    summary:
+      'Cross-platform AI running coach. Plans adaptive training sessions, tracks pace and heart-rate zones, and connects to robot treadmill hardware over Bluetooth.',
+  },
+  {
+    slug: 'autoformfiller',
+    name: 'AutoFormFiller',
+    status: 'active',
+    stack: ['Python', 'Flask', 'Chrome Extension', 'OpenAI'],
+    summary:
+      'Chrome extension + Flask backend that reads web forms and fills them automatically using AI. Built for job applications and event registrations.',
+  },
+  {
+    slug: null,
+    name: 'Hey Girl',
+    status: 'active',
+    stack: ['Python', 'OpenAI', 'Telegram', 'Whisper'],
+    summary:
+      'Voice AI assistant for Windows. Handles tasks, reads assignments, solves quizzes, and answers questions contextually. Accessible via voice or Telegram.',
+  },
+  {
+    slug: null,
+    name: 'Computer Use Agent',
+    status: 'wip',
+    stack: ['Python', 'Anthropic', 'Vision'],
+    summary:
+      'Anthropic-powered AI desktop agent that sees your screen and completes tasks like a human operator. Currently in active development.',
+  },
+]
+
+const statusLabel: Record<string, string> = { active: 'Active', wip: 'In Progress' }
+---
+
+<Layout
+  title="Personal Projects"
+  description="MLEbotics personal projects — AI tools, automation, robotics, and mobile apps."
+>
+  <Header />
+
+  <main>
+    <section class="section">
+      <div class="container">
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+          <a href="/projects">Projects</a>
+          <span aria-hidden="true">→</span>
+          <span>Personal</span>
+        </nav>
+
+        <p class="tag">Built for real problems</p>
+        <h1 class="page-h1">Personal Projects</h1>
+        <p class="page-sub">
+          Tools I built because I needed them — AI agents, running coaches, form automation, and desktop robots.
+        </p>
+
+        <div class="project-grid">
+          {projects.map((p) => (
+            <div class="card project-card">
+              <div class="project-card__head">
+                <div class="stack-pills">
+                  {p.stack.slice(0, 3).map((s) => <span class="stack-pill">{s}</span>)}
+                </div>
+                <span class={`status-badge ${p.status}`}>{statusLabel[p.status]}</span>
+              </div>
+              <h2 class="project-name">{p.name}</h2>
+              <p class="project-summary">{p.summary}</p>
+              {p.slug && (
+                <a href={`/projects/personal/${p.slug}`} class="project-link">
+                  Read more →
+                </a>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</Layout>
+
+<style>
+  .breadcrumb {
+    display: flex; gap: .5rem; align-items: center;
+    font-size: .8rem; color: var(--muted); margin-bottom: 2rem;
+  }
+  .breadcrumb a { color: var(--cyan); text-decoration: none; }
+  .page-h1 {
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 700; color: #fff; margin-bottom: .75rem;
+  }
+  .page-sub {
+    font-size: .95rem; color: var(--muted);
+    margin-bottom: 3rem; max-width: 600px; line-height: 1.7;
+  }
+  .project-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.25rem;
+  }
+  .project-card__head {
+    display: flex; justify-content: space-between;
+    align-items: flex-start; margin-bottom: 1rem; gap: 1rem;
+  }
+  .stack-pills { display: flex; gap: .4rem; flex-wrap: wrap; }
+  .stack-pill {
+    font-size: .65rem; font-weight: 600;
+    padding: .2rem .6rem; border-radius: 99px;
+    background: rgba(255,255,255,.05); border: 1px solid var(--border);
+    color: var(--muted);
+  }
+  .status-badge {
+    font-size: .68rem; font-weight: 600;
+    padding: .2rem .65rem; border-radius: 99px; flex-shrink: 0;
+  }
+  .status-badge.active {
+    background: rgba(0,255,136,.1);
+    border: 1px solid rgba(0,255,136,.25);
+    color: var(--green);
+  }
+  .status-badge.wip {
+    background: rgba(251,191,36,.1);
+    border: 1px solid rgba(251,191,36,.25);
+    color: #fbbf24;
+  }
+  .project-name {
+    font-size: 1.15rem; font-weight: 600; color: #fff; margin-bottom: .6rem;
+  }
+  .project-summary {
+    font-size: .875rem; color: var(--muted); line-height: 1.7; margin-bottom: 1.25rem;
+  }
+  .project-link { font-size: .85rem; color: var(--cyan); text-decoration: none; }
+  .project-link:hover { text-decoration: underline; }
+</style>

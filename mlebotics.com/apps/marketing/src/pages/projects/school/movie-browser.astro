@@ -1,0 +1,177 @@
+---
+import Layout from '@layouts/Layout.astro'
+import Header from '@components/Header.astro'
+import Footer from '@components/Footer.astro'
+
+const features = [
+  'Home page with top-rated movie list sourced from TMDB API',
+  'Client-side pagination — Next / Prev updates state and triggers a new API call',
+  'Search by title using the TMDB search endpoint',
+  'Genre filter using the TMDB discover endpoint',
+  'Movie detail overlay using React Portals (rendered into #portal-root)',
+  'Cast, rating, overview, and release year in the detail view',
+  'Back navigation without a full page reload',
+  'CSS Modules for scoped, component-level styles',
+  'React Router SPA — Home and Details nested routes',
+]
+
+const codeBlocks = [
+  {
+    name: 'App.jsx',
+    desc: 'Root router. Defines Home and Details routes. Details nested so Home stays mounted and pagination/filter state is preserved on back-navigation.',
+  },
+  {
+    name: 'HomePage.jsx',
+    desc: 'Main state container. Switches between top-rated, search, and genre-discover endpoints based on the active query / genre / page values.',
+  },
+  {
+    name: 'MoviePortal.jsx',
+    desc: 'Renders into #portal-root via ReactDOM.createPortal. Fetches movie details + credits on mount. Handles Escape key and backdrop clicks to close.',
+  },
+  {
+    name: 'tmdbApi.js',
+    desc: 'Single module for all TMDB calls: getTopRated, searchMovies, discoverByGenre, getMovieDetails, getMovieCredits.',
+  },
+]
+---
+
+<Layout
+  title="Movie Browser App — School Project"
+  description="React SPA using TMDB API with search, genre filter, pagination, and React Portals."
+>
+  <Header />
+
+  <main>
+    <section class="section">
+      <div class="container project-container">
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+          <a href="/projects">Projects</a>
+          <span aria-hidden="true">→</span>
+          <a href="/projects/school">School</a>
+          <span aria-hidden="true">→</span>
+          <span>Movie Browser App</span>
+        </nav>
+
+        <header class="project-header">
+          <div class="project-meta">
+            <span class="course-label">Web Programming — React</span>
+            <span class="inst-badge">Bow Valley College · 2026</span>
+          </div>
+          <div class="stack-pills">
+            {['React', 'TMDB API', 'CSS Modules', 'React Router', 'React Portals'].map((s) => (
+              <span class="stack-pill">{s}</span>
+            ))}
+          </div>
+          <h1>Movie Browser App</h1>
+          <p class="project-tagline">
+            A React single-page application that fetches top-rated movies from TMDB with full search, genre filtering, pagination, and detail overlays built on React Portals.
+          </p>
+        </header>
+
+        <div class="project-body">
+          <section class="detail-section">
+            <h2>Project Overview</h2>
+            <p>
+              Assignment 3 for Web Programming (React) at Bow Valley College. The goal was to build a complete SPA using React Router, React Portals, and live external API data. All movie data is fetched from TMDB on the client — no server, no database, pure in-memory React state.
+            </p>
+          </section>
+
+          <section class="detail-section">
+            <h2>Features</h2>
+            <ul class="feature-list">
+              {features.map((f) => <li>{f}</li>)}
+            </ul>
+          </section>
+
+          <section class="detail-section">
+            <h2>Code Structure</h2>
+            <div class="code-blocks">
+              {codeBlocks.map((b) => (
+                <div class="code-block">
+                  <h3>{b.name}</h3>
+                  <p>{b.desc}</p>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          <section class="detail-section">
+            <h2>Data Flow</h2>
+            <p>
+              All data is fetched from TMDB as JSON, mapped into card component props, and held in React state. No database, no server-side rendering — the full lifecycle is client-only fetch → state update → re-render.
+            </p>
+          </section>
+
+          <section class="detail-section">
+            <h2>Links</h2>
+            <div class="links-row">
+              <a
+                href="https://github.com/eddie7ch/SchoolWork-WebProgramming-React"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="btn-outline btn--sm"
+              >GitHub →</a>
+            </div>
+          </section>
+        </div>
+
+        <div class="page-footer">
+          <a href="/projects/school" class="btn-outline btn--sm">← School projects</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</Layout>
+
+<style>
+  .project-container { max-width: 800px; }
+  .breadcrumb {
+    display: flex; gap: .5rem; align-items: center; flex-wrap: wrap;
+    font-size: .8rem; color: var(--muted); margin-bottom: 2.5rem;
+  }
+  .breadcrumb a { color: var(--cyan); text-decoration: none; }
+  .project-header { margin-bottom: 3rem; }
+  .project-meta { display: flex; gap: .75rem; align-items: center; margin-bottom: .75rem; flex-wrap: wrap; }
+  .course-label {
+    font-size: .72rem; font-weight: 600; letter-spacing: .06em;
+    text-transform: uppercase; color: var(--cyan);
+  }
+  .inst-badge { font-size: .72rem; color: var(--muted); }
+  .stack-pills { display: flex; gap: .4rem; flex-wrap: wrap; margin-bottom: 1rem; }
+  .stack-pill {
+    font-size: .68rem; font-weight: 600; padding: .2rem .6rem; border-radius: 99px;
+    background: rgba(255,255,255,.05); border: 1px solid var(--border); color: var(--muted);
+  }
+  .project-header h1 {
+    font-size: clamp(2rem, 5vw, 3rem); font-weight: 700; color: #fff; margin-bottom: .75rem;
+  }
+  .project-tagline { font-size: 1rem; color: var(--muted); line-height: 1.75; max-width: 640px; }
+  .project-body { display: flex; flex-direction: column; gap: 2.5rem; }
+  .detail-section h2 {
+    font-size: 1.15rem; font-weight: 600; color: #fff;
+    margin-bottom: .9rem; padding-bottom: .5rem; border-bottom: 1px solid var(--border);
+  }
+  .detail-section p { font-size: .9rem; color: var(--muted); line-height: 1.8; }
+  .feature-list {
+    display: flex; flex-direction: column; gap: .45rem; margin-left: 1.25rem;
+  }
+  .feature-list li { font-size: .9rem; color: var(--text); }
+  .code-blocks {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1rem; margin-top: .5rem;
+  }
+  .code-block {
+    background: rgba(255,255,255,.03); border: 1px solid var(--border);
+    border-radius: 8px; padding: 1rem;
+  }
+  .code-block h3 {
+    font-size: .85rem; font-weight: 600; color: var(--cyan);
+    margin-bottom: .4rem; font-family: monospace;
+  }
+  .code-block p { font-size: .8rem; color: var(--muted); line-height: 1.6; }
+  .links-row { display: flex; gap: .75rem; flex-wrap: wrap; }
+  .page-footer { margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--border); }
+  .btn--sm { padding: .45rem 1rem; font-size: .8rem; }
+</style>

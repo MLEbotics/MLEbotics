@@ -29,3 +29,22 @@ mlebotics.com/downloads/
 
 # Python virtual environment
 .venv/
+
+# Secret/credential files — never commit these
+.env
+.env.*
+!.env.example
+tokens.json
+*.pem
+*.key
+api_keys.json
+**/api_keys.json
+**/bp_payload*.json
+**/bp_main_payload*.json
+exchange_token.ps1
+**/exchange_token.ps1
+**/zoho_mail.py
+**/.firebase/
+**/.turbo/
+**/.vscode/
+**/node_modules/

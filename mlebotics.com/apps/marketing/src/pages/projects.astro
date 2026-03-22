@@ -1,0 +1,146 @@
+---
+import Layout from '@layouts/Layout.astro'
+import Header from '@components/Header.astro'
+import Footer from '@components/Footer.astro'
+import '../styles/global.css'
+
+const projects = [
+  {
+    id: 'runcompanion',
+    name: 'RunCompanion',
+    status: 'active',
+    stack: ['Flutter', 'Firebase', 'Dart'],
+    summary: 'AI-powered running coach and tracker. Plans training sessions, monitors pace and heart-rate zones, and syncs with robotics training hardware via Bluetooth.',
+    details: [
+      'Cross-platform Flutter app (iOS, Android, Windows, Web)',
+      'Firebase Firestore real-time sync',
+      'BLE robot firmware integration',
+      'Adaptive training plan generation',
+      'Offline-first architecture',
+    ],
+    link: 'https://github.com/eddie7ch/MLEbotics',
+  },
+  {
+    id: 'autoformfiller',
+    name: 'AutoFormFiller',
+    status: 'active',
+    stack: ['Python', 'Flask', 'Chrome Extension', 'OpenAI'],
+    summary: 'Chrome extension + Python backend that reads web forms and fills them automatically using AI — built primarily for job applications and event registrations.',
+    details: [
+      'Chrome extension with sidebar UI',
+      'Flask REST API backend',
+      'PDF resume parsing',
+      'OpenAI-powered field mapping',
+      'Railway-hosted production deployment',
+    ],
+    link: 'https://github.com/eddie7ch/MLEbotics',
+  },
+  {
+    id: 'hey-girl',
+    name: 'Hey Girl',
+    status: 'active',
+    stack: ['Python', 'OpenAI', 'Telegram', 'Tkinter'],
+    summary: 'Voice and text AI assistant for Windows. Handles tasks, reads and summarizes assignments, solves quizzes, and answers questions with full conversation memory.',
+    details: [
+      'Wake-word activation ("Hey Girl")',
+      'Conversation history + memory system',
+      'Assignment reader and quiz solver',
+      'Telegram bot interface for remote access',
+      'Cost tracker for OpenAI API usage',
+    ],
+    link: 'https://github.com/eddie7ch/MLEbotics',
+  },
+  {
+    id: 'computer-use',
+    name: 'Computer Use Agent',
+    status: 'wip',
+    stack: ['Python', 'Anthropic', 'Claude'],
+    summary: 'Anthropic-powered AI desktop agent that sees your screen via screenshots and performs tasks like a human operator — click, type, navigate, and more.',
+    details: [
+      'Anthropic Claude Computer Use API',
+      'Screenshot-based vision loop',
+      'Mouse + keyboard action execution',
+      'Task chaining and retry logic',
+      'Windows desktop automation',
+    ],
+    link: 'https://github.com/eddie7ch/MLEbotics',
+  },
+  {
+    id: 'mlebotics-hub',
+    name: 'MLEbotics Hub',
+    status: 'active',
+    stack: ['Python', 'PyInstaller', 'Tkinter'],
+    summary: 'Unified launcher and dashboard for all MLEbotics tools. Single packaged Windows app for managing, starting, and monitoring all local agents and services.',
+    details: [
+      'Single EXE distributable (PyInstaller)',
+      'Launch and monitor all MLEbotics tools',
+      'Status indicators per service',
+      'Auto-start and tray icon support',
+    ],
+    link: 'https://github.com/eddie7ch/MLEbotics',
+  },
+]
+---
+
+<Layout title="Projects" description="All MLEbotics projects — AI agents, automation tools, robotics firmware, and mobile apps.">
+  <Header />
+
+  <main>
+    <section class="section">
+      <div class="container">
+        <p class="tag">What we've built</p>
+        <h1 class="page-h1">Projects</h1>
+        <p class="page-sub">Every tool here solves a real problem. No demos for the sake of demos.</p>
+
+        <div class="projects">
+          {projects.map(p => (
+            <article id={p.id} class="card project">
+              <div class="project__head">
+                <h2>{p.name}</h2>
+                <span class={`status ${p.status}`}>{p.status === 'active' ? 'Active' : 'In Progress'}</span>
+              </div>
+              <p class="project__summary">{p.summary}</p>
+              <ul class="project__details">
+                {p.details.map(d => <li>{d}</li>)}
+              </ul>
+              <div class="project__foot">
+                <div class="stack">
+                  {p.stack.map(s => <span class="chip">{s}</span>)}
+                </div>
+                <a href={p.link} target="_blank" rel="noopener noreferrer" class="btn-outline btn--sm">View on GitHub &rarr;</a>
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</Layout>
+
+<style>
+  .page-h1  { font-size: clamp(2rem,4vw,3rem); font-weight: 700; color: #fff; margin-bottom: .75rem; }
+  .page-sub { font-size: 1rem; color: var(--muted); margin-bottom: 3.5rem; max-width: 480px; }
+
+  .projects { display: flex; flex-direction: column; gap: 1.5rem; }
+
+  .project { display: flex; flex-direction: column; gap: 1rem; }
+  .project__head { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
+  .project__head h2 { font-size: 1.25rem; font-weight: 700; color: #fff; }
+
+  .status { font-size: .65rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; padding: .2rem .6rem; border-radius: 99px; }
+  .status.active { background: rgba(0,255,136,.12); color: var(--green); }
+  .status.wip    { background: rgba(0,212,255,.12); color: var(--cyan); }
+
+  .project__summary { font-size: .95rem; color: #cbd5e1; line-height: 1.75; }
+
+  .project__details { list-style: none; display: flex; flex-direction: column; gap: .4rem; }
+  .project__details li { font-size: .875rem; color: var(--muted); padding-left: 1.1rem; position: relative; }
+  .project__details li::before { content: '→'; position: absolute; left: 0; color: var(--cyan); font-size: .8rem; }
+
+  .project__foot { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; margin-top: .5rem; }
+  .stack { display: flex; flex-wrap: wrap; gap: .4rem; }
+  .chip { font-size: .7rem; font-weight: 500; color: var(--cyan); border: 1px solid rgba(0,212,255,.25); border-radius: 6px; padding: .2rem .55rem; }
+  .btn--sm { padding: .45rem 1rem; font-size: .8rem; }
+</style>

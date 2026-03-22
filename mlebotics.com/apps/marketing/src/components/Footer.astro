@@ -1,0 +1,86 @@
+---
+const year = new Date().getFullYear()
+---
+
+<footer class="footer">
+  <div class="container footer__inner">
+    <div class="footer__brand">
+      <span class="logo">MLEbotics</span>
+      <p class="footer__tagline">Building modular AI, automation, and robotics tools that remove friction and make life easier.</p>
+    </div>
+    <div class="footer__links">
+      <div class="footer__col">
+        <h4>Platform</h4>
+        <a href="/projects">Projects</a>
+        <a href="/blog">Blog</a>
+        <a href="/about">About</a>
+      </div>
+      <div class="footer__col">
+        <h4>Company</h4>
+        <a href="/vision">Vision</a>
+        <a href="/mission">Mission</a>
+        <a href="/projects/personal">Personal projects</a>
+        <a href="/projects/school">School projects</a>
+      </div>
+      <div class="footer__col">
+        <h4>Connect</h4>
+        <a href="mailto:eddie@mlebotics.com">Contact</a>
+        <a href="https://github.com/eddie7ch/MLEbotics" target="_blank" rel="noopener noreferrer">GitHub</a>
+      </div>
+    </div>
+  </div>
+  <div class="container footer__bottom">
+    <p>&copy; {year} MLEbotics. All rights reserved.</p>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    border-top: 1px solid var(--border);
+    padding: 4rem 0 2rem;
+  }
+  .footer__inner {
+    display: flex;
+    gap: 4rem;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-bottom: 3rem;
+  }
+  .logo {
+    font-family: 'Orbitron', monospace;
+    font-size: .85rem;
+    font-weight: 900;
+    letter-spacing: .06em;
+    color: #fff;
+  }
+  .footer__tagline {
+    margin-top: .75rem;
+    font-size: .8rem;
+    color: var(--muted);
+    max-width: 280px;
+    line-height: 1.7;
+  }
+  .footer__links { display: flex; gap: 3rem; flex-wrap: wrap; }
+  .footer__col {
+    display: flex;
+    flex-direction: column;
+    gap: .55rem;
+  }
+  .footer__col h4 {
+    font-size: .68rem;
+    font-weight: 600;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: .25rem;
+  }
+  .footer__col a {
+    font-size: .85rem;
+    color: #94a3b8;
+    text-decoration: none;
+    transition: color .15s;
+  }
+  .footer__col a:hover { color: #fff; }
+  .footer__bottom { border-top: 1px solid var(--border); padding-top: 1.5rem; }
+  .footer__bottom p { font-size: .78rem; color: var(--muted); }
+</style>

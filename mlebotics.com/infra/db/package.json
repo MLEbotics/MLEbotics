@@ -1,0 +1,23 @@
+{
+  "name": "@mlebotics/db",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "db:push":     "dotenv -e .env -- prisma db push",
+    "db:migrate":  "dotenv -e .env -- prisma migrate dev",
+    "db:studio":   "dotenv -e .env -- prisma studio",
+    "db:generate": "prisma generate",
+    "db:seed":     "dotenv -e .env -- ts-node seed.ts",
+    "db:reset":    "dotenv -e .env -- prisma migrate reset --force && pnpm db:seed"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "dotenv-cli": "^7.0.0",
+    "prisma": "^6.0.0",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.7.0"
+  }
+}

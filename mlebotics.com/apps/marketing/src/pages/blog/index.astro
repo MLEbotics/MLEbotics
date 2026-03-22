@@ -1,0 +1,125 @@
+---
+import Layout from '@layouts/Layout.astro'
+import Header from '@components/Header.astro'
+import Footer from '@components/Footer.astro'
+
+const posts = [
+  {
+    slug: 'building-run-companion',
+    title: 'Building RunCompanion: An AI-Powered Running Coach',
+    date: 'March 1, 2026',
+    excerpt:
+      'How I went from paper training logs to a full cross-platform Flutter app with AI session planning, BLE robot integration, and Firebase Firestore sync.',
+    tags: ['Flutter', 'Firebase', 'AI'],
+    readTime: '7 min read',
+  },
+  {
+    slug: 'ai-automation-workflow',
+    title: 'Why I Built AutoFormFiller: Killing Repetitive Forms',
+    date: 'February 15, 2026',
+    excerpt:
+      'Applying for 30+ positions meant filling the same fields hundreds of times. So I built a Chrome extension + Flask backend powered by OpenAI that does it automatically.',
+    tags: ['Python', 'Chrome Extension', 'OpenAI'],
+    readTime: '5 min read',
+  },
+]
+---
+
+<Layout
+  title="Blog"
+  description="Thoughts on AI, automation, robotics, and building at MLEbotics."
+>
+  <Header />
+
+  <main>
+    <section class="section">
+      <div class="container">
+        <p class="tag">From the lab</p>
+        <h1 class="page-h1">Blog</h1>
+        <p class="page-sub">
+          Thoughts on AI, automation, robotics, and the process of building at MLEbotics.
+        </p>
+
+        <div class="post-list">
+          {posts.map((post) => (
+            <a href={`/blog/${post.slug}`} class="post-card">
+              <div class="post-card__meta">
+                <span class="post-date">{post.date}</span>
+                <span class="post-sep">·</span>
+                <span class="post-read">{post.readTime}</span>
+              </div>
+              <h2 class="post-title">{post.title}</h2>
+              <p class="post-excerpt">{post.excerpt}</p>
+              <div class="post-tags">
+                {post.tags.map((t) => <span class="tag-pill">{t}</span>)}
+              </div>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</Layout>
+
+<style>
+  .page-h1 {
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: .75rem;
+  }
+  .page-sub {
+    font-size: 1rem;
+    color: var(--muted);
+    margin-bottom: 3.5rem;
+    max-width: 580px;
+    line-height: 1.7;
+  }
+  .post-list { display: flex; flex-direction: column; gap: 1.25rem; }
+  .post-card {
+    display: block;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.75rem 2rem;
+    text-decoration: none;
+    transition: border-color .2s, box-shadow .2s;
+  }
+  .post-card:hover {
+    border-color: rgba(0,212,255,.35);
+    box-shadow: 0 0 24px rgba(0,212,255,.08);
+  }
+  .post-card__meta {
+    display: flex;
+    gap: .5rem;
+    align-items: center;
+    margin-bottom: .9rem;
+  }
+  .post-date, .post-read, .post-sep { font-size: .78rem; color: var(--muted); }
+  .post-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: .6rem;
+    line-height: 1.35;
+  }
+  .post-excerpt {
+    font-size: .9rem;
+    color: var(--muted);
+    line-height: 1.7;
+    margin-bottom: 1rem;
+  }
+  .post-tags { display: flex; gap: .5rem; flex-wrap: wrap; }
+  .tag-pill {
+    display: inline-block;
+    font-size: .7rem;
+    font-weight: 500;
+    padding: .2rem .65rem;
+    border-radius: 99px;
+    border: 1px solid rgba(0,212,255,.2);
+    color: var(--cyan);
+    background: rgba(0,212,255,.06);
+  }
+</style>

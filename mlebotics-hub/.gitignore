@@ -1,0 +1,15 @@
+# Secret/credential files
+.env
+.env.*
+!.env.example
+tokens.json
+
+# Build artifacts (already in root .gitignore but explicit here too)
+dist/
+build/
+*.spec.bak
+
+# Python
+__pycache__/
+*.pyc
+.venv/

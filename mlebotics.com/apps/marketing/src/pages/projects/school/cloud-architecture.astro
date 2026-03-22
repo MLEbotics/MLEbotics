@@ -1,0 +1,181 @@
+---
+import Layout from '@layouts/Layout.astro'
+import Header from '@components/Header.astro'
+import Footer from '@components/Footer.astro'
+
+const features = [
+  'Custom VPC with public and private subnets across two availability zones',
+  'EC2 instances in the public subnet running a Node.js web server behind an ALB',
+  'RDS MySQL (free tier) in a private subnet — no direct internet access',
+  'S3 bucket for static assets with a CloudFront distribution for CDN delivery',
+  'IAM roles and policies following the least-privilege principle',
+  'Security groups: ALB → EC2 (80/443), EC2 → RDS (3306), no direct public RDS access',
+  'CloudFormation template to provision the full stack reproducibly',
+]
+
+const tiers = [
+  {
+    label: 'Edge Layer',
+    title: 'CloudFront + S3',
+    desc: 'Static assets stored in S3 and delivered via CloudFront CDN. Cached at edge, HTTPS enforced.',
+  },
+  {
+    label: 'Web Tier',
+    title: 'ALB + EC2',
+    desc: 'Application Load Balancer distributes traffic across EC2 instances in the public subnet. Security group allows 80/443 from the ALB only.',
+  },
+  {
+    label: 'Database Tier',
+    title: 'RDS (Private Subnet)',
+    desc: 'RDS MySQL in a private subnet — no internet gateway route. Reachable only from the EC2 security group on port 3306.',
+  },
+  {
+    label: 'Identity',
+    title: 'IAM Roles',
+    desc: 'EC2 has an instance role with S3 read access scoped to the specific bucket. No hardcoded credentials anywhere in the stack.',
+  },
+]
+---
+
+<Layout
+  title="AWS Cloud Architecture — School Project"
+  description="Multi-tier AWS cloud architecture with VPC, EC2, RDS, S3, CloudFront, and CloudFormation."
+>
+  <Header />
+
+  <main>
+    <section class="section">
+      <div class="container project-container">
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+          <a href="/projects">Projects</a>
+          <span aria-hidden="true">→</span>
+          <a href="/projects/school">School</a>
+          <span aria-hidden="true">→</span>
+          <span>AWS Cloud Architecture</span>
+        </nav>
+
+        <header class="project-header">
+          <div class="project-meta">
+            <span class="course-label">Introduction to Cloud</span>
+            <span class="inst-badge">Bow Valley College · 2026</span>
+          </div>
+          <div class="stack-pills">
+            {['AWS', 'VPC', 'EC2', 'RDS', 'S3', 'CloudFront', 'CloudFormation', 'IAM'].map((s) => (
+              <span class="stack-pill">{s}</span>
+            ))}
+          </div>
+          <h1>AWS Cloud Architecture</h1>
+          <p class="project-tagline">
+            Designed and deployed a production-grade multi-tier cloud architecture on AWS — from a custom VPC to a CloudFront-backed CDN, with least-privilege IAM and a reproducible CloudFormation template.
+          </p>
+        </header>
+
+        <div class="project-body">
+          <section class="detail-section">
+            <h2>Project Overview</h2>
+            <p>
+              A project for Introduction to Cloud at Bow Valley College. The brief was to design and deploy a multi-tier, highly available web architecture on AWS that follows cloud security and reliability best practices. The result is a complete AWS deployment: a web tier on EC2 behind an Application Load Balancer, a database tier on RDS inside a private subnet, and static assets served via CloudFront.
+            </p>
+          </section>
+
+          <section class="detail-section">
+            <h2>Architecture</h2>
+            <div class="tier-blocks">
+              {tiers.map((t) => (
+                <div class="tier-block">
+                  <span class="tier-label">{t.label}</span>
+                  <h3>{t.title}</h3>
+                  <p>{t.desc}</p>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          <section class="detail-section">
+            <h2>Features</h2>
+            <ul class="feature-list">
+              {features.map((f) => <li>{f}</li>)}
+            </ul>
+          </section>
+
+          <section class="detail-section">
+            <h2>What I Learned</h2>
+            <p>
+              This project made the shared responsibility model concrete. Configuring VPC routing tables, NACLs, and security groups manually — before writing the CloudFormation template — gave me the mental model to understand exactly what the IaC was provisioning and why. Least-privilege IAM is not optional; it is the first layer of real cloud security.
+            </p>
+          </section>
+
+          <section class="detail-section">
+            <h2>Links</h2>
+            <div class="links-row">
+              <a
+                href="https://github.com/eddie7ch/SchoolWork-IntroToCloud"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="btn-outline btn--sm"
+              >GitHub →</a>
+            </div>
+          </section>
+        </div>
+
+        <div class="page-footer">
+          <a href="/projects/school" class="btn-outline btn--sm">← School projects</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</Layout>
+
+<style>
+  .project-container { max-width: 800px; }
+  .breadcrumb {
+    display: flex; gap: .5rem; align-items: center; flex-wrap: wrap;
+    font-size: .8rem; color: var(--muted); margin-bottom: 2.5rem;
+  }
+  .breadcrumb a { color: var(--cyan); text-decoration: none; }
+  .project-header { margin-bottom: 3rem; }
+  .project-meta { display: flex; gap: .75rem; align-items: center; margin-bottom: .75rem; flex-wrap: wrap; }
+  .course-label {
+    font-size: .72rem; font-weight: 600; letter-spacing: .06em;
+    text-transform: uppercase; color: var(--cyan);
+  }
+  .inst-badge { font-size: .72rem; color: var(--muted); }
+  .stack-pills { display: flex; gap: .4rem; flex-wrap: wrap; margin-bottom: 1rem; }
+  .stack-pill {
+    font-size: .68rem; font-weight: 600; padding: .2rem .6rem; border-radius: 99px;
+    background: rgba(255,255,255,.05); border: 1px solid var(--border); color: var(--muted);
+  }
+  .project-header h1 {
+    font-size: clamp(2rem, 5vw, 3rem); font-weight: 700; color: #fff; margin-bottom: .75rem;
+  }
+  .project-tagline { font-size: 1rem; color: var(--muted); line-height: 1.75; max-width: 640px; }
+  .project-body { display: flex; flex-direction: column; gap: 2.5rem; }
+  .detail-section h2 {
+    font-size: 1.15rem; font-weight: 600; color: #fff;
+    margin-bottom: .9rem; padding-bottom: .5rem; border-bottom: 1px solid var(--border);
+  }
+  .detail-section p { font-size: .9rem; color: var(--muted); line-height: 1.8; }
+  .tier-blocks {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1rem; margin-top: .5rem;
+  }
+  .tier-block {
+    background: rgba(255,255,255,.03); border: 1px solid var(--border);
+    border-radius: 8px; padding: 1rem;
+  }
+  .tier-label {
+    display: block; font-size: .65rem; font-weight: 700; letter-spacing: .1em;
+    text-transform: uppercase; color: var(--cyan); margin-bottom: .35rem;
+  }
+  .tier-block h3 { font-size: .9rem; font-weight: 600; color: #fff; margin-bottom: .4rem; }
+  .tier-block p { font-size: .8rem; color: var(--muted); line-height: 1.6; }
+  .feature-list {
+    display: flex; flex-direction: column; gap: .45rem; margin-left: 1.25rem;
+  }
+  .feature-list li { font-size: .9rem; color: var(--text); }
+  .links-row { display: flex; gap: .75rem; flex-wrap: wrap; }
+  .page-footer { margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--border); }
+  .btn--sm { padding: .45rem 1rem; font-size: .8rem; }
+</style>

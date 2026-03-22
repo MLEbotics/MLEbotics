@@ -1,0 +1,13 @@
+{
+  "name": "@mlebotics/config",
+  "version": "0.1.0",
+  "private": true,
+  "exports": {
+    "./eslint": "./eslint/index.js",
+    "./prettier": "./prettier/index.js",
+    "./tailwind": "./tailwind/index.js",
+    "./tsconfig/base": "./tsconfig/base.json",
+    "./tsconfig/nextjs": "./tsconfig/nextjs.json",
+    "./tsconfig/astro": "./tsconfig/astro.json"
+  }
+}

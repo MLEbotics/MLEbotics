@@ -1,0 +1,156 @@
+---
+import Layout from '@layouts/Layout.astro'
+import Header from '@components/Header.astro'
+import Footer from '@components/Footer.astro'
+
+const features = [
+  'Cross-platform Flutter app: iOS, Android, Windows, Web from one codebase',
+  'Firebase Firestore real-time, offline-first sync',
+  'BLE (Bluetooth Low Energy) connection to robot treadmill firmware',
+  'AI-driven adaptive session planning via Firebase Cloud Functions',
+  'Live pace, cadence, and heart-rate zone display',
+  'Riverpod state management with watch-based reactivity',
+  'Race countdown and interval training modes',
+]
+---
+
+<Layout
+  title="RunCompanion — Personal Project"
+  description="AI-powered cross-platform running coach built with Flutter and Firebase."
+>
+  <Header />
+
+  <main>
+    <section class="section">
+      <div class="container project-container">
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+          <a href="/projects">Projects</a>
+          <span aria-hidden="true">→</span>
+          <a href="/projects/personal">Personal</a>
+          <span aria-hidden="true">→</span>
+          <span>RunCompanion</span>
+        </nav>
+
+        <header class="project-header">
+          <div class="project-meta">
+            {['Flutter', 'Firebase', 'Dart', 'BLE'].map((s) => (
+              <span class="stack-pill">{s}</span>
+            ))}
+            <span class="status-badge active">Active</span>
+          </div>
+          <h1>RunCompanion</h1>
+          <p class="project-tagline">
+            An AI-powered running coach that adapts to your sessions, syncs across every device, and connects to robot hardware over Bluetooth.
+          </p>
+        </header>
+
+        <div class="project-body">
+          <section class="detail-section">
+            <h2>Overview</h2>
+            <p>
+              RunCompanion was built to solve one problem: static training plans don't work. Real training requires real feedback — adjusting Tuesday's long run based on Monday's effort, or shortening a session when recovery metrics are poor. RunCompanion does this automatically, using a lightweight AI function that analyses session data and returns an updated plan in real time.
+            </p>
+          </section>
+
+          <section class="detail-section">
+            <h2>Features</h2>
+            <ul class="feature-list">
+              {features.map((f) => <li>{f}</li>)}
+            </ul>
+          </section>
+
+          <section class="detail-section">
+            <h2>Architecture</h2>
+            <div class="arch-blocks">
+              <div class="arch-block">
+                <h3>Presentation</h3>
+                <p>Flutter widgets consume Riverpod providers. No business logic in the UI layer.</p>
+              </div>
+              <div class="arch-block">
+                <h3>BLE Adapter</h3>
+                <p>Isolated adapter that discovers GATT services and subscribes to treadmill speed, incline, and cadence characteristics.</p>
+              </div>
+              <div class="arch-block">
+                <h3>Firestore Adapter</h3>
+                <p>Real-time sync with optimistic local writes and automatic conflict resolution.</p>
+              </div>
+              <div class="arch-block">
+                <h3>AI Function</h3>
+                <p>Firebase Cloud Function that receives session metrics and returns updated training recommendations as structured JSON.</p>
+              </div>
+            </div>
+          </section>
+
+          <section class="detail-section">
+            <h2>Links</h2>
+            <div class="links-row">
+              <a
+                href="https://github.com/eddie7ch/MLEbotics"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="btn-outline btn--sm"
+              >GitHub →</a>
+              <a href="/blog/building-run-companion" class="btn-outline btn--sm">
+                Read build post →
+              </a>
+            </div>
+          </section>
+        </div>
+
+        <div class="page-footer">
+          <a href="/projects/personal" class="btn-outline btn--sm">← Personal projects</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</Layout>
+
+<style>
+  .project-container { max-width: 800px; }
+  .breadcrumb {
+    display: flex; gap: .5rem; align-items: center; flex-wrap: wrap;
+    font-size: .8rem; color: var(--muted); margin-bottom: 2.5rem;
+  }
+  .breadcrumb a { color: var(--cyan); text-decoration: none; }
+  .project-header { margin-bottom: 3rem; }
+  .project-meta { display: flex; gap: .5rem; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; }
+  .stack-pill {
+    font-size: .68rem; font-weight: 600; padding: .2rem .6rem; border-radius: 99px;
+    background: rgba(255,255,255,.05); border: 1px solid var(--border); color: var(--muted);
+  }
+  .status-badge {
+    font-size: .68rem; font-weight: 600; padding: .2rem .65rem; border-radius: 99px;
+  }
+  .status-badge.active {
+    background: rgba(0,255,136,.1); border: 1px solid rgba(0,255,136,.25); color: var(--green);
+  }
+  .project-header h1 {
+    font-size: clamp(2rem, 5vw, 3rem); font-weight: 700; color: #fff; margin-bottom: .75rem;
+  }
+  .project-tagline { font-size: 1.05rem; color: var(--muted); line-height: 1.75; max-width: 640px; }
+  .project-body { display: flex; flex-direction: column; gap: 2.5rem; }
+  .detail-section h2 {
+    font-size: 1.15rem; font-weight: 600; color: #fff;
+    margin-bottom: .9rem; padding-bottom: .5rem; border-bottom: 1px solid var(--border);
+  }
+  .detail-section p { font-size: .9rem; color: var(--muted); line-height: 1.8; }
+  .feature-list {
+    display: flex; flex-direction: column; gap: .45rem; margin-left: 1.25rem;
+  }
+  .feature-list li { font-size: .9rem; color: var(--text); }
+  .arch-blocks {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1rem; margin-top: .5rem;
+  }
+  .arch-block {
+    background: rgba(255,255,255,.03); border: 1px solid var(--border);
+    border-radius: 8px; padding: 1rem;
+  }
+  .arch-block h3 { font-size: .85rem; font-weight: 600; color: var(--cyan); margin-bottom: .4rem; }
+  .arch-block p { font-size: .8rem; color: var(--muted); line-height: 1.6; }
+  .links-row { display: flex; gap: .75rem; flex-wrap: wrap; }
+  .page-footer { margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--border); }
+  .btn--sm { padding: .45rem 1rem; font-size: .8rem; }
+</style>

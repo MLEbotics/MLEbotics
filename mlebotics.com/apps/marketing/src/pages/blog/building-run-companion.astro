@@ -1,0 +1,143 @@
+---
+import Layout from '@layouts/Layout.astro'
+import Header from '@components/Header.astro'
+import Footer from '@components/Footer.astro'
+---
+
+<Layout
+  title="Building RunCompanion: An AI-Powered Running Coach"
+  description="How I went from paper training logs to a cross-platform Flutter app with adaptive AI session planning and BLE robot integration."
+>
+  <Header />
+
+  <main>
+    <section class="section">
+      <div class="container post-container">
+        <nav class="breadcrumb" aria-label="Breadcrumb">
+          <a href="/blog">Blog</a>
+          <span aria-hidden="true">→</span>
+          <span>Building RunCompanion</span>
+        </nav>
+
+        <header class="post-header">
+          <div class="post-meta">
+            <span>March 1, 2026</span>
+            <span class="sep">·</span>
+            <span>7 min read</span>
+          </div>
+          <h1>Building RunCompanion: An AI-Powered Running Coach</h1>
+          <div class="post-tags">
+            {['Flutter', 'Firebase', 'Dart', 'AI', 'BLE'].map((t) => (
+              <span class="tag-pill">{t}</span>
+            ))}
+          </div>
+        </header>
+
+        <article class="post-body">
+          <p>
+            Training for a half-marathon without feedback is like coding without a debugger. You know something is wrong, but you have no idea where. That frustration is what pushed me to build RunCompanion — a cross-platform running coach that lives in your pocket and talks to a robot on the treadmill.
+          </p>
+
+          <h2>The Problem</h2>
+          <p>
+            Every training app I tried had the same flaw: static plans. Run 5 km on Tuesday, 8 km on Thursday, <em>rest</em> on Sunday. No adaptation, no feedback loop, no context about how yesterday's session actually went. I wanted something that adjusted in real time.
+          </p>
+
+          <h2>The Stack</h2>
+          <p>
+            RunCompanion is a Flutter app targeting iOS, Android, Windows, and Web from a single codebase. Firebase Firestore handles real-time sync so your plan is available on every device simultaneously. The AI layer lives in a Cloud Function that receives session metrics and returns an updated training recommendation.
+          </p>
+
+          <ul>
+            <li><strong>Flutter 3</strong> — single codebase for all platforms</li>
+            <li><strong>Firebase Firestore</strong> — real-time, offline-first sync</li>
+            <li><strong>Cloud Functions</strong> — AI session analysis endpoint</li>
+            <li><strong>BLE (Bluetooth Low Energy)</strong> — connects to the robot treadmill firmware</li>
+            <li><strong>Riverpod</strong> — state management with watch-based reactivity</li>
+          </ul>
+
+          <h2>The BLE Integration</h2>
+          <p>
+            The most interesting engineering challenge was bridging the Flutter app to custom robot firmware over Bluetooth. The firmware runs on a microcontroller attached to the treadmill and exposes a GATT service with characteristics for speed, incline, cadence, and heart-rate zone. Flutter's BLE library handles discovery and subscription — the app renders live metrics the moment a device connects.
+          </p>
+
+          <h2>Session Planning with AI</h2>
+          <p>
+            After each workout the app sends a summary to the Cloud Function: distance, average pace, heart-rate zones, perceived effort, and how closely the session matched the plan. The function feeds this into a prompt and returns structured JSON — e.g. adjust Tuesday's long run by +1.5 km, or reduce intensity after back-to-back hard days.
+          </p>
+
+          <h2>What I Learned</h2>
+          <p>
+            Building a mobile + robotics hybrid taught me to think in layers. The presentation layer has no business logic; the BLE adapter is fully isolated from the Firestore adapter; the AI function knows nothing about the UI. Each piece can be replaced independently. That modularity is now a design principle across all MLEbotics projects.
+          </p>
+
+          <p class="callout">
+            RunCompanion is open-source and lives in the MLEbotics monorepo on GitHub.
+          </p>
+        </article>
+
+        <div class="post-footer">
+          <a href="/blog" class="btn-outline btn--sm">← Back to blog</a>
+          <a href="/projects/personal/run-companion" class="btn-outline btn--sm">View project →</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</Layout>
+
+<style>
+  .post-container { max-width: 720px; }
+  .breadcrumb {
+    display: flex; gap: .5rem; align-items: center;
+    font-size: .8rem; color: var(--muted); margin-bottom: 2.5rem;
+  }
+  .breadcrumb a { color: var(--cyan); text-decoration: none; }
+  .breadcrumb a:hover { text-decoration: underline; }
+  .post-header { margin-bottom: 3rem; }
+  .post-meta {
+    font-size: .8rem; color: var(--muted); margin-bottom: 1rem;
+    display: flex; gap: .5rem; align-items: center;
+  }
+  .sep { color: var(--muted); }
+  .post-header h1 {
+    font-size: clamp(1.6rem, 4vw, 2.5rem);
+    font-weight: 700; color: #fff; line-height: 1.2; margin-bottom: 1.25rem;
+  }
+  .post-tags { display: flex; gap: .5rem; flex-wrap: wrap; }
+  .tag-pill {
+    display: inline-block; font-size: .7rem; font-weight: 500;
+    padding: .2rem .65rem; border-radius: 99px;
+    border: 1px solid rgba(0,212,255,.2);
+    color: var(--cyan); background: rgba(0,212,255,.06);
+  }
+  .post-body { color: var(--text); line-height: 1.8; }
+  .post-body p { margin-bottom: 1.4rem; }
+  .post-body h2 {
+    font-size: 1.25rem; font-weight: 600; color: #fff;
+    margin: 2.5rem 0 1rem;
+  }
+  .post-body ul {
+    margin: 0 0 1.4rem 1.25rem;
+    display: flex; flex-direction: column; gap: .4rem;
+  }
+  .post-body li { font-size: .95rem; color: var(--text); }
+  .post-body strong { color: #fff; font-weight: 600; }
+  .post-body em { color: var(--cyan); font-style: normal; }
+  .callout {
+    background: rgba(0,212,255,.06);
+    border: 1px solid rgba(0,212,255,.2);
+    border-left: 3px solid var(--cyan);
+    border-radius: 8px;
+    padding: 1rem 1.25rem;
+    font-size: .9rem; color: var(--text);
+    margin: 2rem 0;
+  }
+  .post-footer {
+    margin-top: 3rem; padding-top: 2rem;
+    border-top: 1px solid var(--border);
+    display: flex; gap: 1rem; flex-wrap: wrap;
+  }
+  .btn--sm { padding: .45rem 1rem; font-size: .8rem; }
+</style>
