@@ -8,6 +8,7 @@ const projects = [
   {
     id: 'runcompanion',
     name: 'RunCompanion',
+    category: 'mlebotics',
     status: 'active',
     stack: ['Flutter', 'Firebase', 'Dart'],
     summary: 'AI-powered running coach and tracker. Plans training sessions, monitors pace and heart-rate zones, and syncs with robotics training hardware via Bluetooth.',
@@ -23,6 +24,7 @@ const projects = [
   {
     id: 'autoformfiller',
     name: 'AutoFormFiller',
+    category: 'mlebotics',
     status: 'active',
     stack: ['Python', 'Flask', 'Chrome Extension', 'OpenAI'],
     summary: 'Chrome extension + Python backend that reads web forms and fills them automatically using AI — built primarily for job applications and event registrations.',
@@ -38,6 +40,7 @@ const projects = [
   {
     id: 'hey-girl',
     name: 'Hey Girl',
+    category: 'mlebotics',
     status: 'active',
     stack: ['Python', 'OpenAI', 'Telegram', 'Tkinter'],
     summary: 'Voice and text AI assistant for Windows. Handles tasks, reads and summarizes assignments, solves quizzes, and answers questions with full conversation memory.',
@@ -53,6 +56,7 @@ const projects = [
   {
     id: 'computer-use',
     name: 'Computer Use Agent',
+    category: 'mlebotics',
     status: 'wip',
     stack: ['Python', 'Anthropic', 'Claude'],
     summary: 'Anthropic-powered AI desktop agent that sees your screen via screenshots and performs tasks like a human operator — click, type, navigate, and more.',
@@ -68,6 +72,7 @@ const projects = [
   {
     id: 'mlebotics-hub',
     name: 'MLEbotics Hub',
+    category: 'mlebotics',
     status: 'active',
     stack: ['Python', 'PyInstaller', 'Tkinter'],
     summary: 'Unified launcher and dashboard for all MLEbotics tools. Single packaged Windows app for managing, starting, and monitoring all local agents and services.',
@@ -78,6 +83,70 @@ const projects = [
       'Auto-start and tray icon support',
     ],
     link: 'https://github.com/eddie7ch/MLEbotics',
+  },
+  {
+    id: 'movie-browser',
+    name: 'Movie Browser App',
+    category: 'school',
+    status: 'active',
+    stack: ['React', 'React Router', 'CSS Modules', 'TMDB API'],
+    summary: 'SPA movie browser using the TMDB API. Features top-rated listings, search, genre filtering, pagination, and a detailed overlay via React Portals.',
+    details: [
+      'React Router v6 single-page app',
+      'TMDB REST API integration',
+      'Search, genre filter, and pagination',
+      'Movie details with cast via React Portal',
+      'CSS Modules for scoped styling',
+    ],
+    link: 'https://github.com/eddie7ch/SchoolWork-WebProgramming-React',
+  },
+  {
+    id: 'oop-projects',
+    name: 'OOP Concepts (C#)',
+    category: 'school',
+    status: 'active',
+    stack: ['C#', '.NET', 'Visual Studio'],
+    summary: 'Collection of object-oriented programming assignments and projects in C# — covering inheritance, polymorphism, interfaces, LINQ, and design patterns.',
+    details: [
+      'Class hierarchies and inheritance chains',
+      'Interface implementation and polymorphism',
+      'LINQ queries and collections',
+      'Design patterns (Factory, Observer, Strategy)',
+      'Unit testing with MSTest',
+    ],
+    link: 'https://github.com/eddie7ch/SchoolWork-OOPConcepts',
+  },
+  {
+    id: 'intro-to-cloud',
+    name: 'Intro to Cloud (AWS)',
+    category: 'school',
+    status: 'active',
+    stack: ['AWS', 'EC2', 'S3', 'Lambda', 'CloudFormation'],
+    summary: 'Series of AWS cloud projects — deploying and managing infrastructure, serverless functions, storage, and networking through Bow Valley College coursework.',
+    details: [
+      'EC2 instance setup and management',
+      'S3 static hosting and lifecycle policies',
+      'Lambda functions for serverless processing',
+      'CloudFormation infrastructure-as-code',
+      'IAM roles, VPC, and security groups',
+    ],
+    link: 'https://github.com/eddie7ch/SchoolWork-IntroToCloud',
+  },
+  {
+    id: 'aspnet-projects',
+    name: 'ASP.NET Web Projects',
+    category: 'school',
+    status: 'active',
+    stack: ['ASP.NET', 'C#', 'Razor Pages', 'Entity Framework', 'SQL Server'],
+    summary: 'Web applications built with ASP.NET Core — covering MVC architecture, Razor Pages, Entity Framework ORM, and REST API development.',
+    details: [
+      'MVC pattern with Controllers and Views',
+      'Razor Pages for server-rendered UI',
+      'Entity Framework Core with SQL Server',
+      'REST API endpoints with authentication',
+      'Bootstrap-based responsive layouts',
+    ],
+    link: 'https://github.com/eddie7ch/SchoolWork-WebProgramming-AspNet',
   },
 ]
 ---
@@ -92,9 +161,17 @@ const projects = [
         <h1 class="page-h1">Projects</h1>
         <p class="page-sub">Every tool here solves a real problem. No demos for the sake of demos.</p>
 
-        <div class="projects">
+        <div class="filter-row">
+          <select id="cat-filter" class="cat-select">
+            <option value="all">All projects</option>
+            <option value="mlebotics">MLEbotics</option>
+            <option value="school">School</option>
+          </select>
+        </div>
+
+        <div class="projects" id="projects-list">
           {projects.map(p => (
-            <article id={p.id} class="card project">
+            <article id={p.id} class="card project" data-category={p.category}>
               <div class="project__head">
                 <h2>{p.name}</h2>
                 <span class={`status ${p.status}`}>{p.status === 'active' ? 'Active' : 'In Progress'}</span>
@@ -119,9 +196,39 @@ const projects = [
   <Footer />
 </Layout>
 
+<script>
+  const select = document.getElementById('cat-filter') as HTMLSelectElement
+  const cards = document.querySelectorAll<HTMLElement>('#projects-list .project')
+  select.addEventListener('change', () => {
+    const val = select.value
+    cards.forEach(card => {
+      card.style.display = (val === 'all' || card.dataset.category === val) ? '' : 'none'
+    })
+  })
+</script>
+
 <style>
   .page-h1  { font-size: clamp(2rem,4vw,3rem); font-weight: 700; color: #fff; margin-bottom: .75rem; }
-  .page-sub { font-size: 1rem; color: var(--muted); margin-bottom: 3.5rem; max-width: 480px; }
+  .page-sub { font-size: 1rem; color: var(--muted); margin-bottom: 2rem; max-width: 480px; }
+
+  .filter-row { margin-bottom: 2.5rem; }
+  .cat-select {
+    appearance: none;
+    background: var(--surface, #0f172a);
+    color: #e2e8f0;
+    border: 1px solid rgba(0,212,255,.25);
+    border-radius: 8px;
+    padding: .55rem 2.4rem .55rem 1rem;
+    font-size: .875rem;
+    font-family: inherit;
+    cursor: pointer;
+    outline: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2300d4ff' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right .75rem center;
+    transition: border-color .15s;
+  }
+  .cat-select:hover, .cat-select:focus { border-color: var(--cyan); }
 
   .projects { display: flex; flex-direction: column; gap: 1.5rem; }
 

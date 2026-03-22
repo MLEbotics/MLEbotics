@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import './globals.css'
+import { ChatWidget } from '@/components/ChatWidget'
 
 export const metadata: Metadata = {
   title: 'MLEbotics Docs',
@@ -55,6 +56,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <div className="mx-auto max-w-3xl">{children}</div>
           </main>
         </div>
+        <ChatWidget />
       </body>
     </html>
   )

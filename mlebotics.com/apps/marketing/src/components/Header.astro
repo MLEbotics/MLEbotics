@@ -11,7 +11,10 @@ const current = Astro.url.pathname
 
 <header class="header">
   <div class="container header__inner">
-    <a href="/" class="logo" aria-label="MLEbotics home">MLEbotics</a>
+    <a href="/" class="logo" aria-label="MLEbotics home">
+      <img src="/chevrons.png" alt="" class="logo__mark" width="22" height="22" />
+      <span>MLEbotics</span>
+    </a>
     <nav class="nav" aria-label="Main navigation">
       {links.map(l => (
         <a href={l.href} class={`nav__link${current.startsWith(l.href) ? ' active' : ''}`}>{l.label}</a>
@@ -44,6 +47,14 @@ const current = Astro.url.pathname
     text-decoration: none;
     letter-spacing: .06em;
     flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: .5rem;
+  }
+  .logo__mark {
+    display: block;
+    height: 22px;
+    width: 22px;
   }
   .nav { display: flex; gap: 1.5rem; flex: 1; }
   .nav__link {

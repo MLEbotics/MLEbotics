@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { Globe, GitBranch, Puzzle, LayoutGrid } from 'lucide-react'
+import { ChatWidget } from '@/components/ChatWidget'
 
 const nav = [
   { label: 'Editor',    href: '/editor',     icon: LayoutGrid },
@@ -43,6 +44,7 @@ export default function EditorLayout({ children }: { children: React.ReactNode }
 
       {/* Main area */}
       <main className="flex-1 overflow-auto">{children}</main>
+      <ChatWidget />
     </div>
   )
 }

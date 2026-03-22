@@ -14,6 +14,7 @@ import {
   type LucideIcon,
 } from 'lucide-react'
 import { OrgSwitcher } from './OrgSwitcher'
+import { ChatWidget } from './ChatWidget'
 
 const navItems: { label: string; href: string; icon: LucideIcon; phase?: number }[] = [
   { label: 'Dashboard',  href: '/dashboard',  icon: LayoutDashboard },

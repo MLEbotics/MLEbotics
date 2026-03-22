@@ -54,3 +54,7 @@ exchange_token.ps1
 **/.dart_tool/
 **/build/
 **/dist/
+
+# Large binaries / downloads
+mlebotics.com/apps/marketing/public/downloads/
+mlebotics.com/apps/marketing/public/chevrons.png

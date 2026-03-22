@@ -13,7 +13,7 @@ export default defineConfig({
   output: 'static',
 
   server: {
-    port: 4321,
+    port: 54321,
     host: true,
   },
 })
