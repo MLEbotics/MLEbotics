@@ -48,3 +48,9 @@ exchange_token.ps1
 **/.turbo/
 **/.vscode/
 **/node_modules/
+**/.next/
+**/.astro/
+**/.vercel/
+**/.dart_tool/
+**/build/
+**/dist/
