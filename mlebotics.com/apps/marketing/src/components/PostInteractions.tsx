@@ -152,10 +152,6 @@ function CommentsSection({ postId }: { postId: string }) {
       }}>
         <p style={{ fontSize: '.875rem', color: 'var(--muted)', marginBottom: '1rem', lineHeight: 1.6 }}>
           Leave a comment — no account needed.
-          Want to <strong style={{ color: '#e2e8f0' }}>write for MLEbotics</strong>?{' '}
-          <a href="mailto:eddie@mlebotics.com" style={{ color: 'var(--cyan)', textDecoration: 'none' }}>
-            Contact Eddie Chongtham
-          </a>{' '}to get hired as an employee writer.
         </p>
 
         {submitted ? (
