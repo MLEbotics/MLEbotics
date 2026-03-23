@@ -17,6 +17,7 @@ const year = new Date().getFullYear()
         <a href="/projects">Projects</a>
         <a href="/blog">Blog</a>
         <a href="/about">About</a>
+        <a href="/architecture">Architecture</a>
       </div>
       <div class="footer__col">
         <h4>Company</h4>
@@ -27,7 +28,27 @@ const year = new Date().getFullYear()
       </div>
       <div class="footer__col">
         <h4>Connect</h4>
-        <a href="mailto:eddie@mlebotics.com">Contact</a>
+        <div class="email-wrap">
+          <button id="email-btn" class="email-btn" aria-haspopup="true" aria-expanded="false">
+            eddie@mlebotics.com
+          </button>
+          <div id="email-popup" class="email-popup" role="menu" hidden>
+            <p class="email-popup__label">Open with</p>
+            <a href="https://mail.google.com/mail/?view=cm&to=eddie@mlebotics.com" target="_blank" rel="noopener noreferrer" class="email-popup__option" role="menuitem">
+              Gmail
+            </a>
+            <a href="https://outlook.live.com/mail/0/deeplink/compose?to=eddie@mlebotics.com" target="_blank" rel="noopener noreferrer" class="email-popup__option" role="menuitem">
+              Outlook
+            </a>
+            <a href="mailto:eddie@mlebotics.com" class="email-popup__option" role="menuitem">
+              Default mail app
+            </a>
+            <hr class="email-popup__divider" />
+            <button id="copy-btn" class="email-popup__option email-popup__copy" role="menuitem">
+              Copy address
+            </button>
+          </div>
+        </div>
         <a href="https://github.com/eddie7ch/MLEbotics" target="_blank" rel="noopener noreferrer">GitHub</a>
       </div>
     </div>
@@ -94,4 +115,86 @@ const year = new Date().getFullYear()
   .footer__col a:hover { color: #fff; }
   .footer__bottom { border-top: 1px solid var(--border); padding-top: 1.5rem; }
   .footer__bottom p { font-size: .78rem; color: var(--muted); }
+
+  /* Email popup */
+  .email-wrap { position: relative; }
+  .email-btn {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    font-size: .85rem;
+    color: #94a3b8;
+    font-family: inherit;
+    transition: color .15s;
+    text-align: left;
+  }
+  .email-btn:hover { color: #fff; }
+  .email-popup {
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 0;
+    background: #0f1929;
+    border: 1px solid rgba(0,212,255,.2);
+    border-radius: 10px;
+    padding: .5rem;
+    min-width: 200px;
+    box-shadow: 0 8px 32px rgba(0,0,0,.5);
+    z-index: 100;
+  }
+  .email-popup__label {
+    font-size: .65rem;
+    font-weight: 600;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: .3rem .6rem .5rem;
+    margin: 0;
+  }
+  .email-popup__option {
+    display: block;
+    width: 100%;
+    padding: .5rem .75rem;
+    border-radius: 6px;
+    font-size: .85rem;
+    color: #cbd5e1;
+    text-decoration: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+    text-align: left;
+    transition: background .12s, color .12s;
+  }
+  .email-popup__option:hover { background: rgba(255,255,255,.07); color: #fff; }
+  .email-popup__divider { border: none; border-top: 1px solid rgba(255,255,255,.08); margin: .4rem 0; }
+  .email-popup__copy { color: var(--cyan); }
 </style>
+
+<script>
+  const btn = document.getElementById('email-btn') as HTMLButtonElement
+  const popup = document.getElementById('email-popup') as HTMLDivElement
+  const copyBtn = document.getElementById('copy-btn') as HTMLButtonElement
+
+  btn.addEventListener('click', (e) => {
+    e.stopPropagation()
+    const isOpen = !popup.hidden
+    popup.hidden = isOpen
+    btn.setAttribute('aria-expanded', String(!isOpen))
+  })
+
+  copyBtn.addEventListener('click', async () => {
+    await navigator.clipboard.writeText('eddie@mlebotics.com')
+    copyBtn.textContent = 'Copied!'
+    setTimeout(() => { copyBtn.textContent = 'Copy address' }, 2000)
+    popup.hidden = true
+    btn.setAttribute('aria-expanded', 'false')
+  })
+
+  document.addEventListener('click', () => {
+    popup.hidden = true
+    btn.setAttribute('aria-expanded', 'false')
+  })
+
+  popup.addEventListener('click', (e) => e.stopPropagation())
+</script>

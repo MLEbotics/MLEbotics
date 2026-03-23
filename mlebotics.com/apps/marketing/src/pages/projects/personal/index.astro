@@ -11,6 +11,8 @@ const projects = [
     stack: ['Flutter', 'Firebase', 'Dart', 'BLE'],
     summary:
       'Cross-platform AI running coach. Plans adaptive training sessions, tracks pace and heart-rate zones, and connects to robot treadmill hardware over Bluetooth.',
+    externalLink: 'https://runcompanion.mlebotics.com',
+    externalLink2: 'https://runningcompanion.web.app',
   },
   {
     slug: 'autoformfiller',
@@ -36,9 +38,25 @@ const projects = [
     summary:
       'Anthropic-powered AI desktop agent that sees your screen and completes tasks like a human operator. Currently in active development.',
   },
+  {
+    slug: null,
+    name: 'ChromaShift',
+    status: 'potential',
+    stack: ['Accessibility', 'Computer Vision', 'UI/UX'],
+    summary:
+      'Accessibility tool that converts software interfaces for colour-blind users — removing colour-dependent cues and adapting UI elements so red-green colour blind people can work without difficulty identifying colours.',
+  },
+  {
+    slug: null,
+    name: 'MLEminimalist',
+    status: 'potential',
+    stack: ['Productivity', 'Mindfulness', 'Tech'],
+    summary:
+      'A minimalist life system powered by technology. Designed to reduce distractions, simplify daily tasks, and help you do more with less — technology that gets out of your way.',
+  },
 ]
 
-const statusLabel: Record<string, string> = { active: 'Active', wip: 'In Progress' }
+const statusLabel: Record<string, string> = { active: 'Active', wip: 'In Progress', potential: 'Potential' }
 ---
 
 <Layout
@@ -73,11 +91,23 @@ const statusLabel: Record<string, string> = { active: 'Active', wip: 'In Progres
               </div>
               <h2 class="project-name">{p.name}</h2>
               <p class="project-summary">{p.summary}</p>
-              {p.slug && (
-                <a href={`/projects/personal/${p.slug}`} class="project-link">
-                  Read more →
-                </a>
-              )}
+              <div class="project-links">
+                {p.slug && (
+                  <a href={`/projects/personal/${p.slug}`} class="project-link">
+                    Read more →
+                  </a>
+                )}
+                {p.externalLink && (
+                  <a href={p.externalLink} target="_blank" rel="noopener noreferrer" class="project-link project-link--external">
+                    Visit site ↗
+                  </a>
+                )}
+                {p.externalLink2 && (
+                  <a href={p.externalLink2} target="_blank" rel="noopener noreferrer" class="project-link project-link--external">
+                    Web app ↗
+                  </a>
+                )}
+              </div>
             </div>
           ))}
         </div>
@@ -132,12 +162,19 @@ const statusLabel: Record<string, string> = { active: 'Active', wip: 'In Progres
     border: 1px solid rgba(251,191,36,.25);
     color: #fbbf24;
   }
+  .status-badge.potential {
+    background: rgba(168,85,247,.1);
+    border: 1px solid rgba(168,85,247,.25);
+    color: #c084fc;
+  }
   .project-name {
     font-size: 1.15rem; font-weight: 600; color: #fff; margin-bottom: .6rem;
   }
   .project-summary {
     font-size: .875rem; color: var(--muted); line-height: 1.7; margin-bottom: 1.25rem;
   }
+  .project-links { display: flex; gap: 1rem; flex-wrap: wrap; }
   .project-link { font-size: .85rem; color: var(--cyan); text-decoration: none; }
   .project-link:hover { text-decoration: underline; }
+  .project-link--external { color: var(--green); }
 </style>

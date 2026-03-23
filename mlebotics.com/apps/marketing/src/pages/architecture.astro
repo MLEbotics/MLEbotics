@@ -1,0 +1,441 @@
+---
+import Layout from '@layouts/Layout.astro'
+import Header from '@components/Header.astro'
+import Footer from '@components/Footer.astro'
+
+const apps = [
+  {
+    name: 'marketing',
+    url: 'mlebotics.com',
+    port: '54321',
+    tech: 'Astro 4 + React',
+    role: 'Public-facing site. Static-first, zero JS by default. Fastest possible load for SEO and brand.',
+    status: 'live',
+  },
+  {
+    name: 'console',
+    url: 'console.mlebotics.com',
+    port: '3001',
+    tech: 'Next.js 15 App Router',
+    role: 'User dashboard. Auth-gated, real-time data via Firebase. tRPC API layer connects to shared backend.',
+    status: 'wip',
+  },
+  {
+    name: 'studio',
+    url: 'studio.mlebotics.com',
+    port: '3002',
+    tech: 'Next.js 15 App Router',
+    role: 'Internal content and config editor. Build and manage robots, workflows, and AI task templates.',
+    status: 'wip',
+  },
+  {
+    name: 'docs',
+    url: 'docs.mlebotics.com',
+    port: '3003',
+    tech: 'Next.js 15 (MDX)',
+    role: 'Developer documentation. API references, SDK guides, integration walkthroughs, and changelogs.',
+    status: 'planned',
+  },
+]
+
+const packages = [
+  { name: '@mlebotics/api', desc: 'Shared tRPC router definitions — type-safe API contract used by console, studio, and docs.' },
+  { name: '@mlebotics/ui', desc: 'Component library with shared design tokens, buttons, inputs, and layout primitives.' },
+  { name: '@mlebotics/utils', desc: 'Pure utility functions — date formatting, validation helpers, constants.' },
+  { name: '@mlebotics/config', desc: 'Shared TypeScript, ESLint, Tailwind, and PostCSS configs across all apps.' },
+  { name: '@mlebotics/sdk-js', desc: 'Public JavaScript/TypeScript SDK for interacting with the MLEbotics platform API.' },
+]
+
+const stack = [
+  { layer: 'Monorepo', tool: 'Turborepo + pnpm workspaces', note: 'Parallel builds, shared cache, single dependency graph.' },
+  { layer: 'Language', tool: 'TypeScript 5', note: 'Strict mode across all apps and packages. End-to-end type safety.' },
+  { layer: 'Marketing', tool: 'Astro 4', note: 'Island architecture — React components hydrate only where needed.' },
+  { layer: 'Apps', tool: 'Next.js 15 App Router', note: 'RSC-first. Streaming, server actions, and edge-ready routing.' },
+  { layer: 'API', tool: 'tRPC v11', note: 'Type-safe RPC — no code-gen, no REST spec drift, full inference.' },
+  { layer: 'Database', tool: 'Firebase Firestore', note: 'Real-time sync for live data. Prisma for relational data needs.' },
+  { layer: 'Auth', tool: 'Firebase Auth', note: 'Google/email providers. JWT passed to tRPC context for RBAC.' },
+  { layer: 'Styling', tool: 'Tailwind CSS 3', note: 'Utility-first. Shared config enforces design token consistency.' },
+  { layer: 'Deploy', tool: 'Vercel + Firebase Hosting', note: 'Edge network for all Next.js apps. Astro on Firebase Hosting.' },
+  { layer: 'CI/CD', tool: 'GitHub Actions + Turbo', note: 'Remote cache-aware pipeline. Only affected apps rebuild on push.' },
+]
+
+const phases = [
+  {
+    num: '01',
+    label: 'Foundation',
+    status: 'live',
+    items: [
+      'Turborepo monorepo with pnpm workspaces',
+      'Shared packages: ui, utils, api, config, sdk-js',
+      'Astro marketing site (this site)',
+      'Firebase Auth + Firestore setup',
+      'Vercel deployment pipeline',
+    ],
+  },
+  {
+    num: '02',
+    label: 'Platform Core',
+    status: 'wip',
+    items: [
+      'Console dashboard (project management, live metrics)',
+      'Studio editor (robot/workflow/AI template builder)',
+      'tRPC API layer with shared router',
+      'User auth flows and role-based access',
+      'Firebase real-time listeners in console',
+    ],
+  },
+  {
+    num: '03',
+    label: 'Developer Layer',
+    status: 'planned',
+    items: [
+      'Docs site with full API reference (MDX)',
+      'Public SDK (sdk-js) + npm release',
+      'Webhook system for external integrations',
+      'Plugin/marketplace architecture',
+      'OpenAPI export from tRPC schema',
+    ],
+  },
+  {
+    num: '04',
+    label: 'Scale & Ecosystem',
+    status: 'planned',
+    items: [
+      'Edge-deployed API routes (Vercel Edge Functions)',
+      'Multi-region Firestore + read replicas',
+      'Event bus for cross-app messaging',
+      'Autonomous agent execution environment',
+      'Robot firmware OTA update pipeline',
+    ],
+  },
+]
+
+const scalability = [
+  {
+    title: 'Monorepo isolation',
+    body: 'Each app is fully independent — it can be extracted, scaled, or replaced without touching others. Turborepo\'s task graph ensures only changed packages rebuild.',
+  },
+  {
+    title: 'Edge-first deployment',
+    body: 'All Next.js apps target Vercel\'s edge network. Static pages are served from CDN. Dynamic routes stream from the nearest region to the user.',
+  },
+  {
+    title: 'Type-safe API boundary',
+    body: 'tRPC eliminates the client–server contract drift that breaks scale. A single router file is the source of truth — rename a field and TypeScript catches every call site instantly.',
+  },
+  {
+    title: 'Shared package versioning',
+    body: 'Internal packages use workspace:* resolution. Breaking changes in @mlebotics/ui are caught at compile time before any app deploys. No silent runtime regressions.',
+  },
+  {
+    title: 'Real-time by default',
+    body: 'Firebase Firestore listeners mean the console scales to thousands of concurrent users without polling. State is pushed, not pulled.',
+  },
+  {
+    title: 'CI with remote cache',
+    body: 'Turborepo remote cache means a cold CI run on an unchanged app takes seconds, not minutes. Time-to-deploy stays flat as the codebase grows.',
+  },
+]
+
+const statusLabel: Record<string, string> = { live: 'Live', wip: 'In Progress', planned: 'Planned' }
+---
+
+<Layout
+  title="Platform Architecture"
+  description="How mlebotics.com is built — monorepo structure, tech stack, app breakdown, and the roadmap ahead."
+>
+  <Header />
+
+  <main>
+
+    <!-- Hero -->
+    <section class="section">
+      <div class="container page-container">
+        <p class="tag">Under the hood</p>
+        <h1 class="page-h1">
+          Platform<br />
+          <span class="gradient-text">Architecture.</span>
+        </h1>
+        <p class="page-intro">
+          This site is one app in a four-app Turborepo monorepo. Each app is independently deployable, shares a common type-safe API layer, and is designed to scale without rewriting anything.
+        </p>
+
+        <!-- Monorepo diagram -->
+        <div class="mono-diagram">
+          <div class="mono-root">
+            <span class="mono-label">mlebotics.com</span>
+            <span class="mono-sub">Turborepo monorepo · pnpm workspaces</span>
+          </div>
+          <div class="mono-branches">
+            <div class="mono-col">
+              <p class="mono-col__title">apps/</p>
+              {apps.map(a => (
+                <div class="mono-app">
+                  <span class="mono-app__name">{a.name}</span>
+                  <span class={`status-badge ${a.status}`}>{statusLabel[a.status]}</span>
+                </div>
+              ))}
+            </div>
+            <div class="mono-col">
+              <p class="mono-col__title">packages/</p>
+              {packages.map(p => (
+                <div class="mono-pkg">
+                  <span class="mono-pkg__name">{p.name}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Apps breakdown -->
+    <section class="section section--alt">
+      <div class="container">
+        <p class="tag">Apps</p>
+        <h2 class="section-h2">Four apps. One codebase.</h2>
+        <p class="section-sub">Each app has a single responsibility. They share UI components, utils, and the tRPC API layer — but deploy independently.</p>
+        <div class="apps-grid">
+          {apps.map(a => (
+            <div class="card app-card">
+              <div class="app-card__head">
+                <span class="app-name">{a.name}</span>
+                <span class={`status-badge ${a.status}`}>{statusLabel[a.status]}</span>
+              </div>
+              <p class="app-url">{a.url}</p>
+              <p class="app-role">{a.role}</p>
+              <div class="app-card__foot">
+                <span class="chip">{a.tech}</span>
+                <span class="port">:{a.port}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- Shared packages -->
+    <section class="section">
+      <div class="container">
+        <p class="tag">Shared packages</p>
+        <h2 class="section-h2">One change. Every app benefits.</h2>
+        <p class="section-sub">Shared packages live in <code>packages/</code> and are consumed via pnpm workspace resolution. No duplication, no drift.</p>
+        <div class="pkg-list">
+          {packages.map(p => (
+            <div class="pkg-row">
+              <code class="pkg-name">{p.name}</code>
+              <p class="pkg-desc">{p.desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- Tech stack -->
+    <section class="section section--alt">
+      <div class="container">
+        <p class="tag">Tech stack</p>
+        <h2 class="section-h2">Every choice was deliberate.</h2>
+        <p class="section-sub">No trend-chasing. Each tool was selected because it solves a specific problem at scale.</p>
+        <div class="stack-table">
+          {stack.map(s => (
+            <div class="stack-row">
+              <span class="stack-layer">{s.layer}</span>
+              <span class="stack-tool">{s.tool}</span>
+              <span class="stack-note">{s.note}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- Phases -->
+    <section class="section">
+      <div class="container">
+        <p class="tag">Roadmap</p>
+        <h2 class="section-h2">Built in phases. Shipped continuously.</h2>
+        <p class="section-sub">Each phase builds on the last. Nothing is thrown away — only extended.</p>
+        <div class="phases">
+          {phases.map(ph => (
+            <div class="phase-card">
+              <div class="phase-card__head">
+                <span class="phase-num">{ph.num}</span>
+                <div>
+                  <h3 class="phase-title">{ph.label}</h3>
+                </div>
+                <span class={`status-badge ${ph.status}`}>{statusLabel[ph.status]}</span>
+              </div>
+              <ul class="phase-list">
+                {ph.items.map(item => <li>{item}</li>)}
+              </ul>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- Scalability -->
+    <section class="section section--alt">
+      <div class="container">
+        <p class="tag">Scalability</p>
+        <h2 class="section-h2">Designed to grow without breaking.</h2>
+        <p class="section-sub">Scalability isn't a feature added later — it's a structural property baked in from the start.</p>
+        <div class="scale-grid">
+          {scalability.map((s, i) => (
+            <div class="scale-block">
+              <span class="scale-num">0{i + 1}</span>
+              <h3>{s.title}</h3>
+              <p>{s.body}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="section">
+      <div class="container cta-row">
+        <div>
+          <h2 class="cta-h2">See what runs on this platform</h2>
+          <p class="cta-sub">Every project is a direct product of this architecture.</p>
+        </div>
+        <div class="cta-btn-group">
+          <a href="/projects" class="btn-primary">Browse projects →</a>
+          <a href="/vision" class="btn-outline">Our vision</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <Footer />
+</Layout>
+
+<style>
+  .page-container { max-width: 960px; }
+  .page-h1 {
+    font-size: clamp(2.2rem, 5vw, 3.5rem);
+    font-weight: 700; line-height: 1.1; color: #fff; margin-bottom: 1.5rem;
+  }
+  .page-intro {
+    font-size: 1.05rem; color: var(--muted);
+    max-width: 680px; line-height: 1.85; margin-bottom: 4rem;
+  }
+  .section--alt { background: rgba(13,17,23,.6); }
+  .section-h2 { font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 700; color: #fff; margin-bottom: .6rem; }
+  .section-sub { font-size: .95rem; color: var(--muted); max-width: 580px; line-height: 1.75; margin-bottom: 2.5rem; }
+
+  /* Monorepo diagram */
+  .mono-diagram {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 2rem;
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  }
+  .mono-root {
+    display: flex; align-items: baseline; gap: 1rem;
+    margin-bottom: 1.5rem; padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .mono-label { font-size: 1rem; font-weight: 700; color: var(--cyan); }
+  .mono-sub   { font-size: .75rem; color: var(--muted); }
+  .mono-branches { display: flex; gap: 4rem; flex-wrap: wrap; }
+  .mono-col__title { font-size: .72rem; font-weight: 700; letter-spacing: .1em; color: var(--muted); text-transform: uppercase; margin-bottom: .75rem; }
+  .mono-app, .mono-pkg { display: flex; align-items: center; gap: .75rem; margin-bottom: .4rem; }
+  .mono-app__name { font-size: .85rem; color: #fff; }
+  .mono-pkg__name { font-size: .85rem; color: #94a3b8; }
+
+  /* Status badges */
+  .status-badge {
+    font-size: .62rem; font-weight: 600; letter-spacing: .07em;
+    text-transform: uppercase; padding: .18rem .55rem;
+    border-radius: 99px; flex-shrink: 0;
+  }
+  .status-badge.live    { background: rgba(0,255,136,.1); border: 1px solid rgba(0,255,136,.25); color: var(--green); }
+  .status-badge.wip     { background: rgba(251,191,36,.1); border: 1px solid rgba(251,191,36,.25); color: #fbbf24; }
+  .status-badge.planned { background: rgba(0,212,255,.08); border: 1px solid rgba(0,212,255,.2); color: var(--cyan); }
+
+  /* Apps grid */
+  .apps-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.25rem;
+  }
+  .app-card__head { display: flex; align-items: center; justify-content: space-between; gap: .5rem; margin-bottom: .35rem; }
+  .app-name { font-size: 1rem; font-weight: 700; color: #fff; }
+  .app-url  { font-size: .72rem; color: var(--cyan); margin-bottom: .75rem; font-family: monospace; }
+  .app-role { font-size: .875rem; color: var(--muted); line-height: 1.7; margin-bottom: 1rem; flex: 1; }
+  .app-card { display: flex; flex-direction: column; }
+  .app-card__foot { display: flex; align-items: center; gap: .75rem; margin-top: auto; }
+  .chip { font-size: .7rem; font-weight: 600; background: rgba(255,255,255,.05); border: 1px solid var(--border); border-radius: 99px; padding: .2rem .65rem; color: var(--muted); }
+  .port { font-size: .72rem; color: var(--muted); font-family: monospace; }
+
+  /* Shared packages */
+  .pkg-list { display: flex; flex-direction: column; gap: 0; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+  .pkg-row {
+    display: flex; align-items: baseline; gap: 1.5rem; flex-wrap: wrap;
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid var(--border);
+    transition: background .15s;
+  }
+  .pkg-row:last-child { border-bottom: none; }
+  .pkg-row:hover { background: rgba(0,212,255,.04); }
+  .pkg-name { font-size: .85rem; font-weight: 600; color: var(--cyan); white-space: nowrap; min-width: 200px; }
+  .pkg-desc { font-size: .875rem; color: var(--muted); line-height: 1.65; }
+
+  /* Stack table */
+  .stack-table { display: flex; flex-direction: column; gap: 0; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+  .stack-row {
+    display: grid; grid-template-columns: 110px 220px 1fr;
+    gap: 1rem; align-items: start;
+    padding: .9rem 1.25rem;
+    border-bottom: 1px solid var(--border);
+    transition: background .15s;
+  }
+  .stack-row:last-child { border-bottom: none; }
+  .stack-row:hover { background: rgba(0,212,255,.04); }
+  .stack-layer { font-size: .72rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); padding-top: .1rem; }
+  .stack-tool  { font-size: .9rem; font-weight: 600; color: #fff; }
+  .stack-note  { font-size: .85rem; color: var(--muted); line-height: 1.65; }
+
+  /* Phases */
+  .phases { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem; }
+  .phase-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px; padding: 1.75rem;
+    transition: border-color .2s;
+  }
+  .phase-card:hover { border-color: rgba(0,212,255,.3); }
+  .phase-card__head { display: flex; align-items: center; gap: .85rem; margin-bottom: 1.25rem; }
+  .phase-num { font-size: .65rem; font-weight: 700; letter-spacing: .15em; color: var(--cyan); }
+  .phase-title { font-size: 1rem; font-weight: 700; color: #fff; }
+  .phase-list { list-style: none; display: flex; flex-direction: column; gap: .45rem; }
+  .phase-list li { font-size: .85rem; color: var(--muted); padding-left: 1.1rem; position: relative; line-height: 1.65; }
+  .phase-list li::before { content: '→'; position: absolute; left: 0; color: var(--cyan); font-size: .75rem; top: .1rem; }
+
+  /* Scalability */
+  .scale-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.25rem; }
+  .scale-block {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px; padding: 1.75rem;
+    transition: border-color .2s;
+  }
+  .scale-block:hover { border-color: rgba(0,255,136,.25); }
+  .scale-num { display: block; font-size: .65rem; font-weight: 700; letter-spacing: .15em; color: var(--green); margin-bottom: .7rem; }
+  .scale-block h3 { font-size: 1rem; font-weight: 600; color: #fff; margin-bottom: .6rem; }
+  .scale-block p { font-size: .875rem; color: var(--muted); line-height: 1.75; }
+
+  /* CTA row */
+  .cta-row { display: flex; align-items: center; justify-content: space-between; gap: 2rem; flex-wrap: wrap; }
+  .cta-h2  { font-size: 1.5rem; font-weight: 700; color: #fff; margin-bottom: .4rem; }
+  .cta-sub { font-size: .9rem; color: var(--muted); }
+  .cta-btn-group { display: flex; gap: 1rem; flex-wrap: wrap; }
+
+  /* Responsive */
+  @media (max-width: 640px) {
+    .stack-row { grid-template-columns: 1fr; gap: .25rem; }
+    .stack-layer { display: none; }
+    .mono-branches { gap: 2rem; }
+  }
+</style>

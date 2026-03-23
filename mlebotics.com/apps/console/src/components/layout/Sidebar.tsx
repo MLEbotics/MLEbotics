@@ -11,6 +11,7 @@ import {
   Cpu,
   Puzzle,
   Settings,
+  PenLine,
   type LucideIcon,
 } from 'lucide-react'
 import { OrgSwitcher } from './OrgSwitcher'
@@ -19,6 +20,7 @@ import { ChatWidget } from './ChatWidget'
 const navItems: { label: string; href: string; icon: LucideIcon; phase?: number }[] = [
   { label: 'Dashboard',  href: '/dashboard',  icon: LayoutDashboard },
   { label: 'Projects',   href: '/projects',   icon: FolderOpen },
+  { label: 'Blog',       href: '/blog',       icon: PenLine },
   { label: 'Robots',     href: '/robots',     icon: Bot },
   { label: 'Workflows',  href: '/workflows',  icon: Workflow },
   { label: 'World',      href: '/world',      icon: Globe,   phase: 3 },

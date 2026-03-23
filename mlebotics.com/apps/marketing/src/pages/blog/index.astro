@@ -2,6 +2,7 @@
 import Layout from '@layouts/Layout.astro'
 import Header from '@components/Header.astro'
 import Footer from '@components/Footer.astro'
+import FirestoreBlogList from '@components/FirestoreBlogList'
 
 const posts = [
   {
@@ -40,6 +41,10 @@ const posts = [
           Thoughts on AI, automation, robotics, and the process of building at MLEbotics.
         </p>
 
+        <!-- Dynamic posts from Firestore (written in console) -->
+        <FirestoreBlogList client:load />
+
+        <!-- Static posts -->
         <div class="post-list">
           {posts.map((post) => (
             <a href={`/blog/${post.slug}`} class="post-card">

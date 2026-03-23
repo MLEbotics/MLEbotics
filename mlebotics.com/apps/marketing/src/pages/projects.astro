@@ -19,10 +19,8 @@ const projects = [
       'Adaptive training plan generation',
       'Offline-first architecture',
     ],
-    link: 'https://github.com/eddie7ch/MLEbotics',
-  },
-  {
-    id: 'autoformfiller',
+    link: 'https://runcompanion.mlebotics.com',
+    link2: 'https://runningcompanion.web.app',
     name: 'AutoFormFiller',
     category: 'mlebotics',
     status: 'active',
@@ -81,6 +79,38 @@ const projects = [
       'Launch and monitor all MLEbotics tools',
       'Status indicators per service',
       'Auto-start and tray icon support',
+    ],
+    link: 'https://github.com/eddie7ch/MLEbotics',
+  },
+  {
+    id: 'chromashift',
+    name: 'ChromaShift',
+    category: 'mlebotics',
+    status: 'potential',
+    stack: ['Accessibility', 'Computer Vision', 'UI/UX'],
+    summary: 'Accessibility tool that converts software interfaces for colour-blind users — removing colour-dependent cues and adapting UI elements so red-green colour blind people can work without difficulty identifying colours.',
+    details: [
+      'Real-time colour remapping for any application',
+      'Red-green colour blindness (deuteranopia/protanopia) support',
+      'Removes colour as the sole differentiator in UI elements',
+      'Pattern and texture overlays as colour alternatives',
+      'System-wide or per-app activation',
+    ],
+    link: 'https://github.com/eddie7ch/MLEbotics',
+  },
+  {
+    id: 'mleminimalist',
+    name: 'MLEminimalist',
+    category: 'mlebotics',
+    status: 'potential',
+    stack: ['Productivity', 'Mindfulness', 'Tech'],
+    summary: 'A minimalist life system powered by technology. Designed to reduce distractions, simplify daily tasks, and help you do more with less — technology that gets out of your way.',
+    details: [
+      'Distraction-free daily task management',
+      'Minimal UI — only what you need, nothing more',
+      'Intentional tech use framework',
+      'Focus sessions and digital declutter tools',
+      'Encourages presence over productivity theatre',
     ],
     link: 'https://github.com/eddie7ch/MLEbotics',
   },
@@ -174,7 +204,7 @@ const projects = [
             <article id={p.id} class="card project" data-category={p.category}>
               <div class="project__head">
                 <h2>{p.name}</h2>
-                <span class={`status ${p.status}`}>{p.status === 'active' ? 'Active' : 'In Progress'}</span>
+                <span class={`status ${p.status}`}>{p.status === 'active' ? 'Active' : p.status === 'wip' ? 'In Progress' : 'Potential'}</span>
               </div>
               <p class="project__summary">{p.summary}</p>
               <ul class="project__details">
@@ -184,7 +214,14 @@ const projects = [
                 <div class="stack">
                   {p.stack.map(s => <span class="chip">{s}</span>)}
                 </div>
-                <a href={p.link} target="_blank" rel="noopener noreferrer" class="btn-outline btn--sm">View on GitHub &rarr;</a>
+                <div class="project__links">
+                  <a href={p.link} target="_blank" rel="noopener noreferrer" class="btn-outline btn--sm">
+                    {p.id === 'runcompanion' ? 'Visit site ↗' : 'View on GitHub →'}
+                  </a>
+                  {p.link2 && (
+                    <a href={p.link2} target="_blank" rel="noopener noreferrer" class="btn-outline btn--sm">Web app ↗</a>
+                  )}
+                </div>
               </div>
             </article>
           ))}
@@ -237,8 +274,9 @@ const projects = [
   .project__head h2 { font-size: 1.25rem; font-weight: 700; color: #fff; }
 
   .status { font-size: .65rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; padding: .2rem .6rem; border-radius: 99px; }
-  .status.active { background: rgba(0,255,136,.12); color: var(--green); }
-  .status.wip    { background: rgba(0,212,255,.12); color: var(--cyan); }
+  .status.active    { background: rgba(0,255,136,.12); color: var(--green); }
+  .status.wip        { background: rgba(0,212,255,.12); color: var(--cyan); }
+  .status.potential  { background: rgba(168,85,247,.12); color: #c084fc; }
 
   .project__summary { font-size: .95rem; color: #cbd5e1; line-height: 1.75; }
 
@@ -247,6 +285,7 @@ const projects = [
   .project__details li::before { content: '→'; position: absolute; left: 0; color: var(--cyan); font-size: .8rem; }
 
   .project__foot { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem; margin-top: .5rem; }
+  .project__links { display: flex; gap: .6rem; flex-wrap: wrap; }
   .stack { display: flex; flex-wrap: wrap; gap: .4rem; }
   .chip { font-size: .7rem; font-weight: 500; color: var(--cyan); border: 1px solid rgba(0,212,255,.25); border-radius: 6px; padding: .2rem .55rem; }
   .btn--sm { padding: .45rem 1rem; font-size: .8rem; }
