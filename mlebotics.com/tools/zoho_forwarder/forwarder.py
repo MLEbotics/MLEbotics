@@ -19,9 +19,15 @@ IMAP_PORT = 993
 SMTP_HOST = "smtp.zoho.com"
 SMTP_PORT = 587
 
-ZOHO_USER = os.environ["ZOHO_USER"]
-ZOHO_APP_PASSWORD = os.environ["ZOHO_APP_PASSWORD"]
-FORWARD_TO = os.environ["FORWARD_TO"]
+ZOHO_USER = os.environ.get("ZOHO_USER", "")
+ZOHO_APP_PASSWORD = os.environ.get("ZOHO_APP_PASSWORD", "")
+FORWARD_TO = os.environ.get("FORWARD_TO", "")
+
+missing = [k for k, v in {"ZOHO_USER": ZOHO_USER, "ZOHO_APP_PASSWORD": ZOHO_APP_PASSWORD, "FORWARD_TO": FORWARD_TO}.items() if not v]
+if missing:
+    print(f"ERROR: Missing required environment variables: {', '.join(missing)}")
+    print("Set these as GitHub Actions secrets in the repo settings.")
+    sys.exit(1)
 
 
 def fetch_unseen_messages(imap):
