@@ -46,5 +46,10 @@ foreach ($app in $apps) {
 }
 
 Write-Host "`nAll 4 servers launched in separate windows." -ForegroundColor Green
+
+# Open the MLEbotics workspace in VS Code
+Write-Host "Opening VS Code workspace..." -ForegroundColor White
+Start-Process "code" -ArgumentList "`"D:\MLEbotics\MLEbotics.code-workspace`""
+
 Write-Host "This window will close in 5 seconds..." -ForegroundColor DarkGray
 Start-Sleep 5
