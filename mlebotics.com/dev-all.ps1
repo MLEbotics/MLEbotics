@@ -22,6 +22,16 @@ $apps = @(
 
 Write-Host "Launching all MLEbotics dev servers..." -ForegroundColor White
 
+# Kill any leftover node processes on our ports before launching
+$ports = @(3001, 3002, 3003, 54321)
+foreach ($port in $ports) {
+    $conn = Get-NetTCPConnection -LocalPort $port -ErrorAction SilentlyContinue
+    if ($conn) {
+        Stop-Process -Id $conn.OwningProcess -Force -ErrorAction SilentlyContinue
+        Write-Host "  [~] Cleared old process on port $port" -ForegroundColor DarkYellow
+    }
+}
+
 foreach ($app in $apps) {
     $title = $app.title
     $cmd   = $app.cmd
