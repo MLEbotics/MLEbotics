@@ -30,6 +30,7 @@ import 'screens/onboarding_screen.dart';
 import 'screens/support_screen.dart';
 import 'screens/robot_setup_screen.dart';
 import 'widgets/evening_river_scene.dart';
+import 'app_config.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -69,8 +70,7 @@ void main() async {
       defaultTargetPlatform == TargetPlatform.android ||
       defaultTargetPlatform == TargetPlatform.iOS) {
     try {
-      Stripe.publishableKey =
-          'pk_test_51T5ZQRFOfNksyV0v2DhLprJnBaC9hVxj7wC98n9YbfmpIDCqPw0i89Q6LQmo53NXHXqPqNDK8iIdd4jZRP6QFq4k00wQ7g7O90';
+      Stripe.publishableKey = stripePublishableKey;
       await Stripe.instance.applySettings();
     } catch (e) {
       debugPrint('Stripe init warning: $e');

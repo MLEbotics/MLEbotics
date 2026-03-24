@@ -75,7 +75,6 @@
   };
   const LOCAL_DRAFT_KEY   = 'mlebotics_chat_draft';
   const LOCAL_NAME_KEY    = 'mlebotics_chat_name';
-  const LOCAL_DISMISS_KEY = 'mlebotics_chat_dismissed';
   const LOCAL_OPEN_KEY    = 'mlebotics_chat_open';
   const FB_VER = '10.12.2';
 
@@ -83,6 +82,7 @@
   const panel     = document.getElementById('chat-panel');
   const fab       = document.getElementById('chat-fab');
   const dismissBtn = document.getElementById('chat-dismiss');
+  const openBtn  = document.getElementById('open-chat-btn');
   const minBtn    = document.getElementById('min-chat');
   const closeBtn  = document.getElementById('close-chat');
   const input     = document.getElementById('chat-input');
@@ -95,10 +95,30 @@
   const nameDisplay = document.getElementById('chat-name-display');
   const nameEditBtn = document.getElementById('chat-name-edit');
   const inputRow    = document.getElementById('chat-input-row');
+  const panelHeader = panel ? panel.querySelector('.chat-panel__header') : null;
 
-  // Don't show if user dismissed it
-  if (localStorage.getItem(LOCAL_DISMISS_KEY) === '1') return;
+  const LOCAL_POS_KEY = 'mlebotics_chat_pos';
+
+  function clamp(val, min, max) {
+    return Math.max(min, Math.min(max, val));
+  }
+
+  function applySavedPosition() {
+    const raw = localStorage.getItem(LOCAL_POS_KEY);
+    if (!raw) return;
+    try {
+      const pos = JSON.parse(raw);
+      if (typeof pos.x === 'number' && typeof pos.y === 'number') {
+        widget.style.left = pos.x + 'px';
+        widget.style.top = pos.y + 'px';
+        widget.style.right = 'auto';
+        widget.style.bottom = 'auto';
+      }
+    } catch {}
+  }
+
   widget.hidden = false;
+  applySavedPosition();
 
   let currentName = localStorage.getItem(LOCAL_NAME_KEY) || '';
   input.value = localStorage.getItem(LOCAL_DRAFT_KEY) || '';
@@ -208,18 +228,86 @@
   // Restore open state across pages
   if (localStorage.getItem(LOCAL_OPEN_KEY) === '1') togglePanel(true);
 
-  fab.addEventListener('click', () => togglePanel(panel.hidden));
+  fab.addEventListener('click', (e) => {
+    if (movedDuringDrag) {
+      e.preventDefault();
+      e.stopPropagation();
+      movedDuringDrag = false;
+      return;
+    }
+    togglePanel(panel.hidden);
+  });
   // Minimise — close panel, keep FAB
   minBtn.addEventListener('click', () => togglePanel(false));
   // × on panel — same as minimise
   closeBtn.addEventListener('click', () => togglePanel(false));
-  // Dismiss button on FAB — fully hides the whole widget
+  // Dismiss button on FAB — minimize panel only
   dismissBtn.addEventListener('click', (e) => {
     e.stopPropagation();
-    localStorage.setItem(LOCAL_DISMISS_KEY, '1');
     localStorage.setItem(LOCAL_OPEN_KEY, '0');
-    widget.hidden = true;
+    togglePanel(false);
   });
+
+  // Drag support (header + FAB)
+  let dragging = false;
+  let dragOffsetX = 0;
+  let dragOffsetY = 0;
+  let movedDuringDrag = false;
+
+  function rectWidth() { return widget.getBoundingClientRect().width; }
+  function rectHeight() { return widget.getBoundingClientRect().height; }
+
+  function startDrag(e) {
+    const point = e.touches ? e.touches[0] : e;
+    dragging = true;
+    movedDuringDrag = false;
+    const rect = widget.getBoundingClientRect();
+    dragOffsetX = point.clientX - rect.left;
+    dragOffsetY = point.clientY - rect.top;
+    widget.classList.add('chat-widget--dragging');
+  }
+
+  function onDrag(e) {
+    if (!dragging) return;
+    const point = e.touches ? e.touches[0] : e;
+    const maxX = window.innerWidth - rectWidth();
+    const maxY = window.innerHeight - rectHeight();
+    const x = clamp(point.clientX - dragOffsetX, 8, maxX - 8);
+    const y = clamp(point.clientY - dragOffsetY, 8, maxY - 8);
+    widget.style.left = x + 'px';
+    widget.style.top = y + 'px';
+    widget.style.right = 'auto';
+    widget.style.bottom = 'auto';
+    movedDuringDrag = true;
+  }
+
+  function endDrag() {
+    if (!dragging) return;
+    dragging = false;
+    widget.classList.remove('chat-widget--dragging');
+    const rect = widget.getBoundingClientRect();
+    localStorage.setItem(LOCAL_POS_KEY, JSON.stringify({ x: rect.left, y: rect.top }));
+  }
+
+  if (panelHeader) {
+    panelHeader.style.cursor = 'move';
+    panelHeader.addEventListener('mousedown', startDrag);
+    panelHeader.addEventListener('touchstart', startDrag, { passive: true });
+  }
+  fab.addEventListener('mousedown', startDrag);
+  fab.addEventListener('touchstart', startDrag, { passive: true });
+
+  window.addEventListener('mousemove', onDrag);
+  window.addEventListener('touchmove', onDrag, { passive: true });
+  window.addEventListener('mouseup', endDrag);
+  window.addEventListener('touchend', endDrag);
+
+  if (openBtn) {
+    openBtn.addEventListener('click', () => {
+      togglePanel(true);
+      setTimeout(() => widget.scrollIntoView({ behavior: 'smooth', block: 'end' }), 50);
+    });
+  }
 
   const renderedIds = new Set();
   function renderMsg(id, text, fromType, senderName, tsSeconds) {
@@ -301,18 +389,22 @@
     position: fixed; bottom: 1.5rem; right: 1.5rem;
     z-index: 9999; display: flex; flex-direction: column; align-items: flex-end; gap: .75rem;
   }
+  .chat-widget--dragging {
+    cursor: move;
+    user-select: none;
+  }
   .chat-fab {
-    display: inline-flex; align-items: center; gap: .5rem;
+    display: inline-flex; align-items: center; gap: .4rem;
     background: var(--cyan, #00d4ff); color: #02050a;
-    border: none; border-radius: 999px; padding: .75rem 1.25rem;
-    font-size: .875rem; font-weight: 600; font-family: inherit;
+    border: none; border-radius: 999px; padding: .55rem 1rem;
+    font-size: .78rem; font-weight: 600; font-family: inherit;
     cursor: pointer; box-shadow: 0 6px 24px rgba(0,212,255,.3);
     transition: background .15s, transform .15s;
   }
   .chat-fab:hover { background: #22e5ff; transform: scale(1.05); }
   .chat-fab:active { transform: scale(.97); }
   .chat-panel {
-    width: 320px; border-radius: 18px; overflow: hidden;
+    width: 380px; border-radius: 18px; overflow: hidden;
     border: 1px solid rgba(255,255,255,.1); background: #0f172a;
     box-shadow: 0 24px 60px rgba(0,0,0,.5);
   }
@@ -325,7 +417,7 @@
   .chat-panel__badge { background: rgba(0,255,136,.15); color: #4ade80; border-radius: 999px; padding: .15rem .55rem; font-size: .65rem; font-weight: 600; }
   .chat-close { background: none; border: none; color: #94a3b8; font-size: 1.1rem; cursor: pointer; line-height: 1; padding: 0 2px; }
   .chat-close:hover { color: #fff; }
-  .chat-messages { max-height: 280px; overflow-y: auto; padding: .75rem; display: flex; flex-direction: column; gap: .5rem; }
+  .chat-messages { max-height: 360px; overflow-y: auto; padding: .75rem; display: flex; flex-direction: column; gap: .5rem; }
   .chat-input-row { display: flex; gap: .5rem; padding: .65rem; border-top: 1px solid rgba(255,255,255,.07); }
   .chat-input {
     flex: 1; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.1);

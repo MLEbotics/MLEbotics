@@ -26,10 +26,7 @@ export default function LoginPage() {
     setLoading(true)
     try {
       const { user } = await fn()
-      if (!isAuthorized(user)) {
-        setError('This account is not authorized. Only hired employee writers can access the console. Contact Eddie Chongtham at eddie@mlebotics.com to apply.')
-        return
-      }
+      if (!isAuthorized(user)) return
       router.replace('/dashboard')
     } catch (e: unknown) {
       const msg = e instanceof Error ? e.message : String(e)
@@ -46,10 +43,7 @@ export default function LoginPage() {
     try {
       const fn = mode === 'sign-in' ? signInWithEmail : registerWithEmail
       const { user } = await fn(email, password)
-      if (!isAuthorized(user)) {
-        setError('This email is not authorized. Only hired employee writers can access the console. Contact Eddie Chongtham at eddie@mlebotics.com to apply.')
-        return
-      }
+      if (!isAuthorized(user)) return
       router.replace('/dashboard')
     } catch (e: unknown) {
       setError(e instanceof Error ? e.message : String(e))
@@ -65,7 +59,7 @@ export default function LoginPage() {
         {/* Logo */}
         <div className="mb-8 text-center">
           <span className="logo-glow text-xl tracking-tight">MLEbotics</span>
-          <p className="mt-2 text-sm text-gray-500">Console — authorized access only</p>
+          <p className="mt-2 text-sm text-gray-500">Console — sign in to continue</p>
         </div>
 
         <div className="rounded-xl border border-gray-800 bg-gray-900 p-8 shadow-xl">
@@ -154,7 +148,7 @@ export default function LoginPage() {
         </div>
 
         <p className="mt-6 text-center text-xs text-gray-600">
-          Access is restricted to authorized MLEbotics team members.
+          Access is open during this testing window.
         </p>
       </div>
     </main>

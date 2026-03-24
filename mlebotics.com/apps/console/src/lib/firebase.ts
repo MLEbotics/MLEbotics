@@ -92,11 +92,16 @@ export async function sendChatMessage(text: string, name = 'Anonymous') {
 
 export const auth = getAuth(app)
 
-/** Emails allowed to access the console. Add more here or move to Firestore. */
-const AUTHORIZED_EMAILS = ['eddie@mlebotics.com']
+/**
+ * Access control (temporary): allow any authenticated user.
+ * TODO: Reinstate allowlist/role checks when needed.
+ */
+const AUTHORIZED_EMAILS: string[] = []
 
 export function isAuthorized(user: User | null): boolean {
-  if (!user?.email) return false
+  if (!user) return false
+  if (AUTHORIZED_EMAILS.length === 0) return true
+  if (!user.email) return false
   return AUTHORIZED_EMAILS.includes(user.email.toLowerCase())
 }
 

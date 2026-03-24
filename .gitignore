@@ -27,6 +27,9 @@ hub_venv/
 # Generated website download artifacts
 mlebotics.com/downloads/
 
+# Flutter web build output (committed in error — tracked via git rm --cached)
+Running app/runcompanion-web/
+
 # Python virtual environment
 .venv/
 
