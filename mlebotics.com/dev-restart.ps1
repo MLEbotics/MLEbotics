@@ -21,20 +21,34 @@ Write-Host ""
 
 $choice = Read-Host "Enter choice"
 
-function Start-Server($app) {
-    # Kill anything already on that port
-    $conn = Get-NetTCPConnection -LocalPort $app.port -ErrorAction SilentlyContinue
-    if ($conn) {
-        Stop-Process -Id $conn.OwningProcess -Force -ErrorAction SilentlyContinue
-        Write-Host "  [~] Killed old process on port $($app.port)" -ForegroundColor DarkYellow
-        Start-Sleep -Milliseconds 500
+function Find-FreePort($startPort) {
+    $port = $startPort
+    while (Get-NetTCPConnection -LocalPort $port -ErrorAction SilentlyContinue) {
+        $port++
     }
-    Write-Host "  [+] Launching $($app.title)..." -ForegroundColor Cyan
+    return $port
+}
+
+function Start-Server($app) {
+    $port = Find-FreePort $app.port
+    $cmd  = $app.cmd
+
+    if ($port -ne $app.port) {
+        Write-Host "  [~] Port $($app.port) busy, using $port instead" -ForegroundColor DarkYellow
+        # Inject the new port into the turbo command
+        if ($cmd -match '--port \d+') {
+            $cmd = $cmd -replace '--port \d+', "--port $port"
+        } else {
+            $cmd = "$cmd -- --port $port"
+        }
+    }
+
+    Write-Host "  [+] Launching $($app.title) on port $port..." -ForegroundColor Cyan
     Start-Process powershell -ArgumentList @(
         "-NoProfile", "-ExecutionPolicy", "Bypass", "-NoExit",
         "-File", "`"$root\dev-server.ps1`"",
         "-Title", "`"$($app.title)`"",
-        "-Cmd", "`"$($app.cmd)`""
+        "-Cmd", "`"$cmd`""
     )
 }
 
