@@ -13,22 +13,35 @@ if (-not (Test-Path "$root\node_modules")) {
     Write-Host "Install complete." -ForegroundColor Green
 }
 
+# Read ports dynamically from each app's package.json so this script
+# always stays in sync if a port is changed there.
+function Get-AppPort($appFolder, $defaultPort) {
+    $pkg = Get-Content "$root\apps\$appFolder\package.json" -Raw | ConvertFrom-Json
+    $devScript = $pkg.scripts.dev
+    if ($devScript -match '--port\s+(\d+)') { return [int]$Matches[1] }
+    return $defaultPort
+}
+
 $apps = @(
-    @{ title="Marketing"; cmd="pnpm run dev:marketing" },
-    @{ title="Console";   cmd="pnpm run dev:console"   },
-    @{ title="Studio";    cmd="pnpm run dev:studio"    },
-    @{ title="Docs";      cmd="pnpm run dev:docs"      }
+    @{ title="Marketing"; cmd="pnpm run dev:marketing"; folder="marketing"; defaultPort=54321 },
+    @{ title="Console";   cmd="pnpm run dev:console";   folder="console";   defaultPort=3001  },
+    @{ title="Studio";    cmd="pnpm run dev:studio";    folder="studio";    defaultPort=3002  },
+    @{ title="Docs";      cmd="pnpm run dev:docs";      folder="docs";      defaultPort=3003  }
 )
+
+# Resolve actual ports from package.json (falls back to defaultPort if not found)
+foreach ($app in $apps) {
+    $app.port = Get-AppPort $app.folder $app.defaultPort
+}
 
 Write-Host "Launching all MLEbotics dev servers..." -ForegroundColor White
 
 # Kill any leftover node processes on our ports before launching
-$ports = @(3001, 3002, 3003, 54321)
-foreach ($port in $ports) {
-    $conn = Get-NetTCPConnection -LocalPort $port -ErrorAction SilentlyContinue
+foreach ($app in $apps) {
+    $conn = Get-NetTCPConnection -LocalPort $app.port -ErrorAction SilentlyContinue
     if ($conn) {
         Stop-Process -Id $conn.OwningProcess -Force -ErrorAction SilentlyContinue
-        Write-Host "  [~] Cleared old process on port $port" -ForegroundColor DarkYellow
+        Write-Host "  [~] Cleared old process on port $($app.port)" -ForegroundColor DarkYellow
     }
 }
 
@@ -50,6 +63,33 @@ Write-Host "`nAll 4 servers launched in separate windows." -ForegroundColor Gree
 # Open the MLEbotics workspace in VS Code
 Write-Host "Opening VS Code workspace..." -ForegroundColor White
 Start-Process "code" -ArgumentList "`"D:\MLEbotics\MLEbotics.code-workspace`""
+
+# Wait for servers to be ready, then open all sites in Edge
+Write-Host "Waiting for servers to be ready..." -ForegroundColor DarkGray
+$edgePath = "C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe"
+$timeout = 60
+foreach ($site in $apps) {
+    $ready = $false
+    $elapsed = 0
+    while (-not $ready -and $elapsed -lt $timeout) {
+        try {
+            $tcp = New-Object System.Net.Sockets.TcpClient
+            $tcp.Connect("localhost", $site.port)
+            $tcp.Close()
+            $ready = $true
+        } catch {
+            Start-Sleep -Seconds 1
+            $elapsed++
+        }
+    }
+    if ($ready) {
+        Write-Host "  [>] Opening $($site.title) at localhost:$($site.port)" -ForegroundColor Cyan
+        Start-Process $edgePath -ArgumentList "http://localhost:$($site.port)"
+        Start-Sleep -Milliseconds 400
+    } else {
+        Write-Host "  [!] $($site.title) did not respond after ${timeout}s — skipping" -ForegroundColor Yellow
+    }
+}
 
 Write-Host "This window will close in 5 seconds..." -ForegroundColor DarkGray
 Start-Sleep 5
