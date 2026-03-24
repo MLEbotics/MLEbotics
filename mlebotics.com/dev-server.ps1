@@ -31,11 +31,14 @@ while ($true) {
     Write-Host "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" -ForegroundColor DarkGray
 
     if ($exitCode -eq 0) {
-        Write-Host "  [$Title] Server stopped cleanly (exit: 0)." -ForegroundColor Green
-        Write-Host "  Not restarting. Close this window or press Enter." -ForegroundColor DarkGray
+        Write-Host "  [$Title] Server stopped cleanly." -ForegroundColor Green
         Write-Host "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━" -ForegroundColor DarkGray
-        Read-Host
-        break
+        $resp = Read-Host "  Press R to restart, or Enter to close"
+        if ($resp -match '^[Rr]$') {
+            continue
+        } else {
+            break
+        }
     } else {
         Write-Host "  [$Title] Server crashed (exit: $exitCode)" -ForegroundColor Yellow
         Write-Host "  Restarting in 3 seconds..." -ForegroundColor DarkGray
