@@ -2,10 +2,10 @@
 $root = "D:\MLEbotics\mlebotics.com"
 
 $apps = @(
-    @{ num=1; title="Marketing"; cmd="pnpm run dev:marketing" },
-    @{ num=2; title="Console";   cmd="pnpm run dev:console"   },
-    @{ num=3; title="Studio";    cmd="pnpm run dev:studio"    },
-    @{ num=4; title="Docs";      cmd="pnpm run dev:docs"      }
+    @{ num=1; title="Marketing"; cmd="pnpm run dev:marketing"; port=54321 },
+    @{ num=2; title="Console";   cmd="pnpm run dev:console";   port=3001  },
+    @{ num=3; title="Studio";    cmd="pnpm run dev:studio";    port=3002  },
+    @{ num=4; title="Docs";      cmd="pnpm run dev:docs";      port=3003  }
 )
 
 Write-Host ""
@@ -22,7 +22,14 @@ Write-Host ""
 $choice = Read-Host "Enter choice"
 
 function Start-Server($app) {
-    Write-Host "  Launching $($app.title)..." -ForegroundColor Cyan
+    # Kill anything already on that port
+    $conn = Get-NetTCPConnection -LocalPort $app.port -ErrorAction SilentlyContinue
+    if ($conn) {
+        Stop-Process -Id $conn.OwningProcess -Force -ErrorAction SilentlyContinue
+        Write-Host "  [~] Killed old process on port $($app.port)" -ForegroundColor DarkYellow
+        Start-Sleep -Milliseconds 500
+    }
+    Write-Host "  [+] Launching $($app.title)..." -ForegroundColor Cyan
     Start-Process powershell -ArgumentList @(
         "-NoProfile", "-ExecutionPolicy", "Bypass", "-NoExit",
         "-File", "`"$root\dev-server.ps1`"",
