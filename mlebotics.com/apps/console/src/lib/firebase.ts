@@ -29,12 +29,16 @@ import {
 } from 'firebase/auth'
 
 const firebaseConfig = {
-  apiKey: 'AIzaSyDTJWhkRNMa5lOSdwxGLUGrpvWXrLuljfc', // pragma: allowlist secret
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY || '',
   authDomain: 'running-companion-a935f.firebaseapp.com',
   projectId: 'running-companion-a935f',
   storageBucket: 'running-companion-a935f.firebasestorage.app',
   messagingSenderId: '618174257557',
   appId: '1:618174257557:web:29ca5df050bd6daae9be9c',
+}
+
+if (!firebaseConfig.apiKey) {
+  throw new Error('Missing NEXT_PUBLIC_FIREBASE_API_KEY')
 }
 
 const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0]

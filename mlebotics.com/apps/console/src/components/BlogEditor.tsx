@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { createBlogPost, updateBlogPost, useAuth, type BlogPost } from '@/lib/firebase'
+import { createBlogPost, updateBlogPost, type BlogPost } from '@/lib/firebase'
 import { useAuth as useAuthCtx } from '@/lib/auth-context'
 import { ArrowLeft, Save, Eye, EyeOff } from 'lucide-react'
 import Link from 'next/link'
