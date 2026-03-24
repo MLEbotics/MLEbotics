@@ -15,13 +15,19 @@ Install these before anything else:
 
 ---
 
-## Step 1 — Clone the repo
+## Step 1 — Pull the latest code
 
-Open PowerShell and run:
+If the repo is already on the machine, just pull:
 
 ```powershell
-git clone https://github.com/eddie7ch/MLEbotics.git D:\MLEbotics
+cd D:\MLEbotics
+git pull origin main
 ```
+
+> If the repo isn't there yet, clone it first:
+> ```powershell
+> git clone https://github.com/eddie7ch/MLEbotics.git D:\MLEbotics
+> ```
 
 ---
 
