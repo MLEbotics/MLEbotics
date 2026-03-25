@@ -1,0 +1,30 @@
+name: Web CI - mlebotics.com
+
+on:
+  push:
+    paths:
+      - "mlebotics.com/**"
+  pull_request:
+    paths:
+      - "mlebotics.com/**"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: mlebotics.com
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: latest
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "pnpm"
+          cache-dependency-path: mlebotics.com/pnpm-lock.yaml
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Build
+        run: pnpm turbo build
