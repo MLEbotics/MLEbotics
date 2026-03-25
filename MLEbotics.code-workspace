@@ -51,7 +51,8 @@
             "**/node_modules/**": true,
             "**/build/**": true,
             "**/dist/**": true
-        }
+        },
+        "powershell.cwd": "MLEbotics (root)"
     },
     "extensions": {
         "recommendations": [
