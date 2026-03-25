@@ -1,0 +1,20 @@
+name: Python CI — hey-girl
+
+on:
+  push:
+    paths: ["hey-girl/**"]
+  pull_request:
+    paths: ["hey-girl/**"]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install dependencies
+        run: pip install -r hey-girl/requirements.txt
+      - name: Lint
+        run: pip install flake8 && flake8 hey-girl/ --max-line-length=120 --ignore=E501,W503 --exclude=hey-girl/.venv
