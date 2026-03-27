@@ -8,6 +8,7 @@ const projects = [
   {
     id: 'runcompanion',
     name: 'RunCompanion',
+    isExternalSite: true,
     category: 'mlebotics',
     status: 'active',
     stack: ['Flutter', 'Firebase', 'Dart'],
@@ -21,6 +22,26 @@ const projects = [
     ],
     link: 'https://runcompanion.mlebotics.com',
     link2: 'https://runningcompanion.web.app',
+  },
+  {
+    id: 'pacerpro',
+    name: 'PacerPro',
+    isExternalSite: true,
+    category: 'mlebotics',
+    status: 'active',
+    stack: ['Flutter', 'Dart'],
+    summary: 'Running pace calculator built into RunCompanion. Enter a target race time or distance and instantly get per-km/mile splits, finish time projections, and training pace zones.',
+    details: [
+      'Part of the RunCompanion app (iOS, Android, Windows, Web)',
+      'Target time → per-split pace conversion',
+      'Target pace → finish time projection',
+      'Supports km and mile units',
+      'Training zone calculator (easy, tempo, threshold, VO₂max)',
+    ],
+    link: 'https://runningcompanion.web.app',
+  },
+  {
+    id: 'autoformfiller',
     name: 'AutoFormFiller',
     category: 'mlebotics',
     status: 'active',
@@ -216,7 +237,7 @@ const projects = [
                 </div>
                 <div class="project__links">
                   <a href={p.link} target="_blank" rel="noopener noreferrer" class="btn-outline btn--sm">
-                    {p.id === 'runcompanion' ? 'Visit site ↗' : 'View on GitHub →'}
+                    {p.isExternalSite ? 'Visit site ↗' : 'View on GitHub →'}
                   </a>
                   {p.link2 && (
                     <a href={p.link2} target="_blank" rel="noopener noreferrer" class="btn-outline btn--sm">Web app ↗</a>
