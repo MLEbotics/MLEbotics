@@ -9,10 +9,12 @@ Requirements:
 
 import json
 import os
+import smtplib
 import sys
 import time
 import urllib.parse
 from datetime import datetime
+from email.mime.text import MIMEText
 
 # ── Config ────────────────────────────────────────────────────────────────────
 POSTAL_CODE   = "T3L0M4"       # Calgary NW (no space)
@@ -230,6 +232,60 @@ def main():
     })
     save_json(LOG_FILE, log)
     print(f"Log saved -> {LOG_FILE}")
+
+    # Send notification only if new listings were found
+    if new_found:
+        send_notification(new_found)
+
+
+def send_notification(new_listings: list[dict]) -> None:
+    """
+    Send email (and optionally SMS) when new listings are found.
+    Reads credentials from environment variables set as GitHub Secrets:
+      GMAIL_USER     — your Gmail address (sender)
+      GMAIL_APP_PASS — Gmail app password (not your regular password)
+      NOTIFY_EMAIL   — recipient email address
+      NOTIFY_SMS     — (optional) your carrier SMS gateway, e.g. 4031234567@txt.bell.ca
+    """
+    gmail_user = os.environ.get("GMAIL_USER")
+    gmail_pass = os.environ.get("GMAIL_APP_PASS")
+    notify_email = os.environ.get("NOTIFY_EMAIL")
+
+    if not all([gmail_user, gmail_pass, notify_email]):
+        print("[NOTIFY] Skipping — email env vars not set (GMAIL_USER, GMAIL_APP_PASS, NOTIFY_EMAIL).")
+        return
+
+    recipients = [notify_email]
+    sms_address = os.environ.get("NOTIFY_SMS")
+    if sms_address:
+        recipients.append(sms_address)
+
+    # Build message body
+    lines = [f"{len(new_listings)} new Tesla Model Y Grey AWD listing(s) near Calgary!\n"]
+    for car in new_listings:
+        price_str = f"${car['price']:,}" if isinstance(car["price"], (int, float)) else str(car["price"])
+        lines.append(
+            f"  {car['year']} Model Y | {car['trim']} | {price_str} | {car['city']} ~{car['distance']}km"
+        )
+        lines.append(f"  Link: {car['url']}\n")
+
+    body = "\n".join(lines)
+    subject = f"Tesla Model Y Alert: {len(new_listings)} new listing(s) near Calgary"
+
+    for recipient in recipients:
+        try:
+            msg = MIMEText(body)
+            msg["Subject"] = subject
+            msg["From"] = gmail_user
+            msg["To"] = recipient
+
+            with smtplib.SMTP_SSL("smtp.gmail.com", 465) as smtp:
+                smtp.login(gmail_user, gmail_pass)
+                smtp.sendmail(gmail_user, recipient, msg.as_string())
+
+            print(f"[NOTIFY] Sent to {recipient}")
+        except Exception as e:
+            print(f"[NOTIFY] Failed to send to {recipient}: {e}")
 
 
 if __name__ == "__main__":
